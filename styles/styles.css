@@ -4,6 +4,12 @@ body {
   font-family: Arial, sans-serif;
 }
 
+#logo{
+width: 70px;
+max-width: 70px;
+height: 50px;
+max-height: 50px;
+}
 
 .hero {
   height: 80vh;
