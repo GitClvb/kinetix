@@ -1,0 +1,33 @@
+
+body {
+  background-color: #f4f4f4;
+  font-family: Arial, sans-serif;
+}
+
+
+.hero {
+  height: 80vh;
+  background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+              url('https://images.unsplash.com/photo-1517836357463-d25dfeac3438');
+  background-size: cover;
+  background-position: center;
+}
+
+
+.card {
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-10px);
+}
+
+
+.btn-warning {
+  background-color: #f97316;
+  border: none;
+}
+
+.btn-warning:hover {
+  background-color: #ea580c;
+}
