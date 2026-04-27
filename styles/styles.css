@@ -1,23 +1,31 @@
-
 body {
-  background-color: #f4f4f4;
   font-family: Arial, sans-serif;
 }
 
-#logo{
-width: 70px;
-max-width: 70px;
-height: 50px;
-max-height: 50px;
-}
 
 .hero {
-  height: 80vh;
+  min-height: 60vh;
   background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
               url('https://images.unsplash.com/photo-1517836357463-d25dfeac3438');
   background-size: cover;
   background-position: center;
 }
+
+
+#logo {
+  width: 120px;
+}
+
+
+.card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-10px) scale(1.03);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+}
+
 
 .card img {
   height: 250px;
@@ -25,20 +33,22 @@ max-height: 50px;
 }
 
 
-.card {
-  transition: transform 0.3s ease;
+.btn-success {
+  transition: transform 0.2s ease, background 0.3s;
 }
 
-.card:hover {
-  transform: translateY(-10px);
+.btn-success:hover {
+  transform: scale(1.1);
+  background: #28a745cc;
 }
 
 
-.btn-warning {
-  background-color: #f97316;
-  border: none;
+@keyframes pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.4); }
+  100% { transform: scale(1); }
 }
 
-.btn-warning:hover {
-  background-color: #ea580c;
+.pop {
+  animation: pop 0.3s ease;
 }

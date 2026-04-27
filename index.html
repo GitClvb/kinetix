@@ -11,22 +11,17 @@
 
 <body>
 
+
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4">
   <img src="/img/MBM Logo.png" id="logo">
 
-
-  <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#menu">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-
-  <div class="collapse navbar-collapse justify-content-end" id="menu">
-    <ul class="navbar-nav">
-      <li class="nav-item">
-        <a class="nav-link btn btn-warning text-dark px-3" href="#">Carrito 🛒</a>
-      </li>
-    </ul>
+  <div class="ms-auto">
+    <a class="btn btn-warning text-dark" href="carrito.html">
+      Carrito <span id="contador" class="badge bg-dark">0</span>
+    </a>
   </div>
 </nav>
+
 
 <section class="hero d-flex align-items-center text-center text-white">
   <div class="container">
@@ -35,137 +30,138 @@
   </div>
 </section>
 
+
 <section class="container py-5 text-center">
   <h2 class="mb-4">Productos Destacados</h2>
 
   <div class="row g-4">
 
-    <!-- Producto 1 -->
+
     <div class="col-md-4">
       <div class="card shadow h-100">
         <img src="/pic/NikePegasus40.jpg" class="card-img-top">
         <div class="card-body">
-          <h5 class="card-title">Nike Pegasus 40</h5>
-          <p class="card-text">$2,999 MXN</p>
+          <h5>Nike Pegasus 40</h5>
+          <p>$2999 MXN</p>
           <p class="small">Tenis de correr con Air Zoom y espuma React. Pisada enérgica y cómoda.</p>
-          <button class="btn btn-success">Agregar al carrito</button>
+          <button class="btn btn-success agregar-carrito" data-nombre="Nike Pegasus 40" data-precio="2999">Agregar</button>
         </div>
       </div>
     </div>
 
-    <!-- Producto 2 -->
+    
     <div class="col-md-4">
       <div class="card shadow h-100">
         <img src="/pic/AdidasCorrerUltraboost.jpg" class="card-img-top">
         <div class="card-body">
-          <h5 class="card-title">Adidas Ultraboost 5</h5>
-          <p class="card-text">$4,099 MXN</p>
+          <h5>Adidas Ultraboost 5</h5>
+          <p>$4099 MXN</p>
           <p class="small">Tecnología BOOST con gran retorno de energía y máxima comodidad.</p>
-          <button class="btn btn-success">Agregar al carrito</button>
+          <button class="btn btn-success agregar-carrito" data-nombre="Adidas Ultraboost 5" data-precio="4099">Agregar</button>
         </div>
       </div>
     </div>
 
-    <!-- Producto 3 -->
+    
     <div class="col-md-4">
       <div class="card shadow h-100">
         <img src="/pic/PumaDeviateNitro.jpg" class="card-img-top">
         <div class="card-body">
-          <h5 class="card-title">Puma Deviate Nitro 2</h5>
-          <p class="card-text">$1,619.90 MXN</p>
+          <h5>Puma Deviate Nitro 2</h5>
+          <p>$1619.90 MXN</p>
           <p class="small">Tenis ligeros con tecnología innovadora para correr.</p>
-          <button class="btn btn-success">Agregar al carrito</button>
+          <button class="btn btn-success agregar-carrito" data-nombre="Puma Deviate Nitro 2" data-precio="1619.90">Agregar</button>
         </div>
       </div>
     </div>
 
-    <!-- Producto 4 -->
+  
     <div class="col-md-4">
       <div class="card shadow h-100">
         <img src="/pic/AsicsGel-Kayano30.jpg" class="card-img-top">
         <div class="card-body">
-          <h5 class="card-title">Asics Gel Kayano 30</h5>
-          <p class="card-text">$1,869.15 MXN</p>
+          <h5>Asics Gel Kayano 30</h5>
+          <p>$1869.15 MXN</p>
           <p class="small">Calzado de estabilidad ideal para pronación.</p>
-          <button class="btn btn-success">Agregar al carrito</button>
+          <button class="btn btn-success agregar-carrito" data-nombre="Asics Gel Kayano 30" data-precio="1869.15">Agregar</button>
         </div>
       </div>
     </div>
 
-    <!-- Producto 5 -->
+
     <div class="col-md-4">
       <div class="card shadow h-100">
         <img src="/pic/NikeMilerPlayera.jpg" class="card-img-top">
         <div class="card-body">
-          <h5 class="card-title">Nike Miler Dri-FIT</h5>
-          <p class="card-text">$479.40 MXN</p>
+          <h5>Nike Miler Dri-FIT</h5>
+          <p>$479.40 MXN</p>
           <p class="small">Playera ligera, transpirable y con protección UV.</p>
-          <button class="btn btn-success">Agregar al carrito</button>
+          <button class="btn btn-success agregar-carrito" data-nombre="Nike Miler Dri-FIT" data-precio="479.40">Agregar</button>
         </div>
       </div>
     </div>
 
-    <!-- Producto 6 -->
+    
     <div class="col-md-4">
       <div class="card shadow h-100">
         <img src="/pic/NikeTotalityShorts.jpg" class="card-img-top">
         <div class="card-body">
-          <h5 class="card-title">Nike Totality Shorts</h5>
-          <p class="card-text">$559.30 MXN</p>
-          <p class="small">Shorts cómodos, frescos y de ajuste relajado.</p>
-          <button class="btn btn-success">Agregar al carrito</button>
+          <h5>Nike Totality Shorts</h5>
+          <p>$559.30 MXN</p>
+           <p class="small">Shorts cómodos, frescos y de ajuste relajado.</p>
+          <button class="btn btn-success agregar-carrito" data-nombre="Nike Totality Shorts" data-precio="559.30">Agregar</button>
         </div>
       </div>
     </div>
 
-    <!-- Producto 7 -->
+    
     <div class="col-md-4">
       <div class="card shadow h-100">
         <img src="/pic/PlayeraPumaCloudspun.jpg" class="card-img-top">
         <div class="card-body">
-          <h5 class="card-title">Puma Cloudspun Tee</h5>
-          <p class="card-text">$659 MXN</p>
-          <p class="small">Playera cómoda, ligera y sostenible para entrenamiento.</p>
-          <button class="btn btn-success">Agregar al carrito</button>
+          <h5>Puma Cloudspun Tee</h5>
+          <p>$659 MXN</p>
+           <p class="small">Playera cómoda, ligera y sostenible para entrenamiento.</p>
+          <button class="btn btn-success agregar-carrito" data-nombre="Puma Cloudspun Tee" data-precio="659">Agregar</button>
         </div>
       </div>
     </div>
 
-    <!-- Producto 8 -->
+    
     <div class="col-md-4">
       <div class="card shadow h-100">
         <img src="/pic/BalónWilsonDrive.jpg" class="card-img-top">
         <div class="card-body">
-          <h5 class="card-title">Balón Wilson NBA #7</h5>
-          <p class="card-text">$668 MXN</p>
-          <p class="small">Balón resistente ideal para interior y exterior.</p>
-          <button class="btn btn-success">Agregar al carrito</button>
+          <h5>Balón Wilson NBA #7</h5>
+          <p>$668 MXN</p>
+           <p class="small">Playera cómoda, ligera y sostenible para entrenamiento.</p>
+          <button class="btn btn-success agregar-carrito" data-nombre="Balón Wilson NBA #7" data-precio="668">Agregar</button>
         </div>
       </div>
     </div>
 
-    <!-- Producto 9 -->
+    
     <div class="col-md-4">
       <div class="card shadow h-100">
         <img src="/pic/Lentes.jpg" class="card-img-top">
         <div class="card-body">
-          <h5 class="card-title">Oakley Radar EV</h5>
-          <p class="card-text">$4,199 MXN</p>
+          <h5>Oakley Radar EV</h5>
+          <p>$4199 MXN</p>
           <p class="small">Lentes con protección UV y alta claridad.</p>
-          <button class="btn btn-success">Agregar al carrito</button>
+          <button class="btn btn-success agregar-carrito" data-nombre="Oakley Radar EV" data-precio="4199">Agregar</button>
         </div>
       </div>
     </div>
 
-    <!-- Producto 10 -->
+    
     <div class="col-md-4">
       <div class="card shadow h-100">
         <img src="/pic/CorosPace3.jpg" class="card-img-top">
         <div class="card-body">
-          <h5 class="card-title">Coros Pace 3</h5>
-          <p class="card-text">$6,879.24 MXN</p>
-          <p class="small">Reloj GPS con monitoreo y batería de larga duración.</p>
-          <button class="btn btn-success">Agregar al carrito</button>
+          <h5>Coros Pace 3</h5>
+          <p>$6879.24 MXN</p>
+            <p class="small">Reloj GPS con monitoreo y batería de larga duración.</p>
+          <button class="btn btn-success agregar-carrito" data-nombre="Coros Pace 3" data-precio="6879.24">Agregar</button>
         </div>
       </div>
     </div>
@@ -173,12 +169,12 @@
   </div>
 </section>
 
-
+<!-- FOOTER -->
 <footer class="bg-dark text-white text-center py-3">
   <p class="mb-0">© 2026 MBM - Todos los derechos reservados</p>
 </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="js/script.js"></script>
 
 </body>
 </html>
