@@ -1,0 +1,133 @@
+/* BASE.CSS - KinetixFit - Estilos compartidos entre todas las páginas */
+
+/* Tipografías */
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.cdnfonts.com/css/post-no-bills-colombo');
+
+/* VARIABLES GLOBALES */
+:root {
+    --naranja: #FF6B35;
+    --negro-profundo: #1C1C1C;
+    --gris-carbono: #2E2E2E;
+    --gris-nube: #F2F2F2;
+    --blanco: #FFFFFF;
+    --font-main: "Work Sans", sans-serif;
+    --font-heading: 'Post No Bills Colombo', sans-serif;
+}
+
+/* ESTILOS GENERALES */
+body {
+    font-family: var(--font-main);
+    color: var(--negro-profundo);
+}
+
+h1, h2 {
+    font-family: var(--font-main);
+    text-transform: uppercase;
+}
+
+/* CLASES UTILITARIAS GLOBALES */
+.text-orange {
+    color: var(--naranja);
+}
+
+.highlight {
+    color: var(--naranja);
+    font-weight: bold;
+}
+
+.bg-gris-nube {
+    background-color: var(--gris-nube);
+}
+
+/* BARRA DE ANUNCIO */
+.announcement-bar {
+    background-color: var(--negro-profundo);
+}
+
+.apertura {
+    color: var(--naranja);
+    letter-spacing: 15px;
+    font-size: 1.2rem;
+}
+
+/* HEADER / NAVBAR */
+.logo {
+    height: 40px;
+}
+
+.nav-active {
+    color: var(--naranja) !important;
+}
+
+#btn-registro {
+    background-color: var(--naranja);
+    color: var(--blanco);
+    border-radius: 6px;
+    padding: 8px 20px;
+    font-weight: 600;
+}
+
+#btn-registro:hover {
+    background-color: #e05a28;
+    color: var(--blanco);
+}
+
+.cart-icon {
+    color: var(--negro-profundo);
+    font-size: 1.2rem;
+}
+
+.cart-icon:hover {
+    color: var(--naranja);
+}
+
+/* BOTÓN CTA GLOBAL */
+.btn-cta {
+    background-color: var(--naranja);
+    color: var(--blanco);
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 12px 32px;
+    border-radius: 6px;
+    letter-spacing: 1px;
+    transition: background 0.3s ease;
+}
+
+.btn-cta:hover {
+    background-color: #e05a28;
+    color: var(--blanco);
+}
+
+/* FOOTER */
+.footer-custom {
+    background-color: var(--negro-profundo);
+}
+
+.footer-link {
+    color: rgba(255, 255, 255, 0.6);
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.footer-link:hover {
+    color: var(--naranja);
+}
+
+/* Navbar móvil */
+@media (max-width: 991px) {
+  #navbarNav {
+    border-top: 1px solid var(--gris-nube);
+    padding-top: 0.5rem;
+  }
+
+  #navbarNav .navbar-nav {
+    padding-left: 0 !important;
+  }
+
+  #btn-registro {
+    width: 100%;
+    text-align: center;
+    margin-top: 0.5rem;
+  }
+}
