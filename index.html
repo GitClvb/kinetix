@@ -1,187 +1,143 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MBM - Tienda deportiva</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="styles/styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>KinetixFit</title>
+
+<!-- =========================
+BOOTSTRAP
+========================= -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- =========================
+BOOTSTRAP ICONS
+========================= -->
+<link rel="stylesheet"
+href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+<!-- =========================
+FUENTES
+========================= -->
+<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+
+<link href="https://fonts.cdnfonts.com/css/post-no-bills-colombo" rel="stylesheet">
+
+<!-- =========================
+ESTILOS GLOBALES 
+========================= -->
+<link rel="stylesheet" href="./css/base.css">
+
+<!-- =========================
+ESTILO DE LA PÁGINA
+========================= -->
+<link rel="stylesheet" href="./css/index.css">
+<!-- cambiar dependiendo la página -->
+
 </head>
-
 <body>
-<header class="header">
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4">
-    <img src="/img/MBM Logo.png" id="logo">
 
-    <div class="ms-auto">
-      <button class="btn btn-warning text-dark" type="button" data-bs-toggle="offcanvas" data-bs-target="#carritoMenu">
-        Carrito <span id="contador-badge" class="badge bg-dark">0</span>
-      </button>
-    </div>
-  </nav>
-</header>
+<div id="header-container"></div>
 
-<section class="hero d-flex align-items-center text-center text-white productos">
-  <div class="container">
-    <h1 class="display-4 fw-bold">Entrena y esfuérzate</h1>
-    <p class="lead">Los mejores productos para deportes</p>
-    <button id="boton-ver-mas" class="btn btn-warning btn-lg px-5 fw-bold shadow rounded-pill">Ver productos</button>
-  </div>
-</section>
+    <main>
+        <!-- Hero Section -->
+        <section class="hero-home">
+            <div class="container text-center text-white">
+                <h1 class="display-3 fw-bold italic">SUPERA TUS LÍMITES</h1>
+                <p class="lead">Nueva colección de entrenamiento 2026 disponible ahora</p>
+            </div>
+        </section>
 
-<section class="container py-5 text-center ver-productos">
-  <h2 class="mb-4">Productos Destacados</h2>
-
-  <div class="row g-4">
-
-    <div class="col-md-4">
-      <div class="card shadow h-100">
-        <img src="/pic/NikePegasus40.jpg" class="card-img-top">
-        <div class="card-body">
-          <h5>Nike Pegasus 40</h5>
-          <p>$2999 MXN</p>
-          <p class="small">Tenis de correr con Air Zoom y espuma React. Pisada enérgica y cómoda.</p>
-          <button class="btn btn-success agregar-carrito btn-agregar" data-nombre="Nike Pegasus 40" data-precio="2999">Agregar</button>
+        <!-- Marquesina Opening -->
+        <div class="ticker-wrapper py-2">
+            <div class="ticker-content">
+                <span>ENVÍO GRATIS POR OPENING • ENVÍO GRATIS POR OPENING • ENVÍO GRATIS POR OPENING • ENVÍO GRATIS POR
+                    OPENING •ENVÍO GRATIS POR OPENING • ENVÍO GRATIS POR OPENING • ENVÍO GRATIS POR OPENING • ENVÍO
+                    GRATIS POR
+                    OPENING • </span>
+                <span>ENVÍO GRATIS POR OPENING • ENVÍO GRATIS POR OPENING • ENVÍO GRATIS POR OPENING • ENVÍO GRATIS POR
+                    OPENING •ENVÍO GRATIS POR OPENING • ENVÍO GRATIS POR OPENING • ENVÍO GRATIS POR OPENING • ENVÍO
+                    GRATIS POR
+                    OPENING • </span>
+            </div>
         </div>
-      </div>
-    </div>
 
-    <div class="col-md-4">
-      <div class="card shadow h-100">
-        <img src="/pic/AdidasCorrerUltraboost.jpg" class="card-img-top">
-        <div class="card-body">
-          <h5>Adidas Ultraboost 5</h5>
-          <p>$4099 MXN</p>
-          <p class="small">Tecnología BOOST con gran retorno de energía y máxima comodidad.</p>
-          <button class="btn btn-success agregar-carrito btn-agregar" data-nombre="Adidas Ultraboost 5" data-precio="4099">Agregar</button>
-        </div>
-      </div>
-    </div>
+        <!-- Categorías Principales -->
+        <section class="container py-5">
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="tarjeta-categoria shadow-sm">
+                        <img src="./img/mujer.png" alt="Mujeres">
+                        <div class="overlay-texto">MUJERES</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="tarjeta-categoria shadow-sm">
+                        <img src="./img/hombre.png" alt="Hombres">
+                        <div class="overlay-texto">HOMBRES</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="tarjeta-categoria shadow-sm">
+                        <img src="./img/ofertas.webp" alt="Ofertas">
+                        <div class="overlay-texto">OFERTAS</div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-4">
+                <a href="#" class="btn btn-outline-dark rounded-pill px-4">VER TODOS LOS PRODUCTOS</a>
+            </div>
+        </section>
 
-    <div class="col-md-4">
-      <div class="card shadow h-100">
-        <img src="/pic/PumaDeviateNitro.jpg" class="card-img-top">
-        <div class="card-body">
-          <h5>Puma Deviate Nitro 2</h5>
-          <p>$1619.90 MXN</p>
-          <p class="small">Tenis ligeros con tecnología innovadora para correr.</p>
-          <button class="btn btn-success agregar-carrito btn-agregar" data-nombre="Puma Deviate Nitro 2" data-precio="1619.90">Agregar</button>
-        </div>
-      </div>
-    </div>
+        <!-- Sección Más Vendidos -->
+        <section class="bg-gris-nube py-5">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-md-4 text-center text-md-start">
+                        <h2 class="titulo-heavy display-5"><span class="text-orange">Prueba</span><br>los más vendidos
+                        </h2>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="row g-4">
+                            <!-- Producto 1 -->
+                            <div class="col-6 col-md-6">
+                                <div class="card border-0 shadow-sm p-3 text-center h-100">
+                                    <img src="./img/sudadera.avif" class="img-fluid mb-3" alt="Playera">
+                                    <h5>Playera</h5>
+                                    <small class="text-muted">Estampada para hombre</small>
+                                </div>
+                            </div>
+                            <!-- Producto 2 -->
+                            <div class="col-6 col-md-6">
+                                <div class="card border-0 shadow-sm p-3 text-center h-100">
+                                    <img src="./img/sudadera.avif" class="img-fluid mb-3" alt="Sudadera">
+                                    <h5 class="fw-bold mb-0">Sudadera</h5>
+                                    <small class="text-muted">Medio cierre</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-    <div class="col-md-4">
-      <div class="card shadow h-100">
-        <img src="/pic/AsicsGel-Kayano30.jpg" class="card-img-top">
-        <div class="card-body">
-          <h5>Asics Gel Kayano 30</h5>
-          <p>$1869.15 MXN</p>
-          <p class="small">Calzado de estabilidad ideal para pronación.</p>
-          <button class="btn btn-success agregar-carrito btn-agregar" data-nombre="Asics Gel Kayano 30" data-precio="1869.15">Agregar</button>
-        </div>
-      </div>
-    </div>
+        <!-- Banner Únete al Team -->
+        <section class="join-team py-5 text-white">
+            <div class="container text-start">
+                <div class="col-md-6">
+                    <h2 class="display-5 fw-bold">ÚNETE AL TEAM</h2>
+                    <p class="mb-4">Se parte del sport streetwear</p>
+                    <a href="#" class="btn btn-cta">Regístrate</a>
+                </div>
+            </div>
+        </section>
+    </main>
 
-    <div class="col-md-4">
-      <div class="card shadow h-100">
-        <img src="/pic/NikeMilerPlayera.jpg" class="card-img-top">
-        <div class="card-body">
-          <h5>Nike Miler Dri-FIT</h5>
-          <p>$479.40 MXN</p>
-          <p class="small">Playera ligera, transpirable y con protección UV.</p>
-          <button class="btn btn-success agregar-carrito btn-agregar" data-nombre="Nike Miler Dri-FIT" data-precio="479.40">Agregar</button>
-        </div>
-      </div>
-    </div>
+<div id="footer-container"></div>
 
-    <div class="col-md-4">
-      <div class="card shadow h-100">
-        <img src="/pic/NikeTotalityShorts.jpg" class="card-img-top">
-        <div class="card-body">
-          <h5>Nike Totality Shorts</h5>
-          <p>$559.30 MXN</p>
-          <p class="small">Shorts cómodos, frescos y de ajuste relajado.</p>
-          <button class="btn btn-success agregar-carrito btn-agregar" data-nombre="Nike Totality Shorts" data-precio="559.30">Agregar</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-md-4">
-      <div class="card shadow h-100">
-        <img src="/pic/PlayeraPumaCloudspun.jpg" class="card-img-top">
-        <div class="card-body">
-          <h5>Puma Cloudspun Tee</h5>
-          <p>$659 MXN</p>
-          <p class="small">Playera cómoda, ligera y sostenible para entrenamiento.</p>
-          <button class="btn btn-success agregar-carrito btn-agregar" data-nombre="Puma Cloudspun Tee" data-precio="659">Agregar</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-md-4">
-      <div class="card shadow h-100">
-        <img src="/pic/BalónWilsonDrive.jpg" class="card-img-top">
-        <div class="card-body">
-          <h5>Balón Wilson NBA #7</h5>
-          <p>$668 MXN</p>
-          <p class="small">Playera cómoda, ligera y sostenible para entrenamiento.</p>
-          <button class="btn btn-success agregar-carrito btn-agregar" data-nombre="Balón Wilson NBA #7" data-precio="668">Agregar</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-md-4">
-      <div class="card shadow h-100">
-        <img src="/pic/Lentes.jpg" class="card-img-top">
-        <div class="card-body">
-          <h5>Oakley Radar EV</h5>
-          <p>$4199 MXN</p>
-          <p class="small">Lentes con protección UV y alta claridad.</p>
-          <button class="btn btn-success agregar-carrito btn-agregar" data-nombre="Oakley Radar EV" data-precio="4199">Agregar</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-md-4">
-      <div class="card shadow h-100">
-        <img src="/pic/CorosPace3.jpg" class="card-img-top">
-        <div class="card-body">
-          <h5>Coros Pace 3</h5>
-          <p>$6879.24 MXN</p>
-          <p class="small">Reloj GPS con monitoreo y batería de larga duración.</p>
-          <button class="btn btn-success agregar-carrito btn-agregar" data-nombre="Coros Pace 3" data-precio="6879.24">Agregar</button>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<footer class="bg-dark text-white text-center py-3">
-  <p class="mb-0">© 2026 MBM - Todos los derechos reservados</p>
-</footer>
-
-<div class="offcanvas offcanvas-end" tabindex="-1" id="carritoMenu" aria-labelledby="carritoLabel">
-  <div class="offcanvas-header bg-dark text-white">
-    <h5 id="carritoLabel">Tu Pedido MBM</h5>
-    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-  </div>
-  <div class="offcanvas-body">
-    <ul id="lista-carrito" class="list-group mb-3">
-      <li class="list-group-item text-center text-muted">El carrito está vacío</li>
-    </ul>
-    
-    <div class="d-flex justify-content-between fw-bold fs-5 border-top pt-3">
-      <span>Total:</span>
-      <span id="carrito-total">$0.00</span>
-    </div>
-    
-    <a href="carrito.html" class="btn btn-warning w-100 mt-4 fw-bold shadow-sm text-dark" style="text-decoration: none; display: block; text-align: center;">Finalizar Compra</a>
-  </div>
-</div>
-
+<script src="./js/layout.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="js/script.js"></script>
 
 </body>
 </html>
