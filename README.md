@@ -1,4 +1,4 @@
-# repositorio_mbm
+# repositorio KinetixFit
 Descripción
 
 Desarrollo de una landing page interactiva que presenta los principales productos y servicios de una tienda deportiva, priorizando la experiencia del usuario y el diseño responsivo.
