@@ -1,0 +1,65 @@
+/* Estilo para las tarjetas del catálogo */
+.product-card {
+    border: none;
+    transition: transform 0.3s ease;
+    position: relative;
+}
+
+.product-image-wrapper {
+    position: relative;
+    overflow: hidden;
+    background-color: var(--gris-nube);
+}
+
+.product-image-wrapper img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.badge-new {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: #ccff00; /* Color limón de referencia */
+    color: black;
+    font-weight: bold;
+    padding: 2px 10px;
+    font-size: 0.7rem;
+}
+
+/* Botón flotante "Añadir al carrito" al hacer hover */
+.add-to-cart-overlay {
+    position: absolute;
+    bottom: -50px;
+    width: 100%;
+    background: rgba(28, 28, 28, 0.9);
+    color: white;
+    text-align: center;
+    padding: 10px;
+    transition: bottom 0.3s ease;
+    cursor: pointer;
+    border: none;
+}
+
+.product-card:hover .add-to-cart-overlay {
+    bottom: 0;
+}
+
+.product-info h5 {
+    font-size: 1rem;
+    margin-top: 15px;
+    font-weight: 700;
+}
+
+.product-price {
+    color: var(--naranja);
+    font-weight: bold;
+}
+
+/* Ajustes para móviles */
+@media (max-width: 991px) {
+    .filter-sidebar {
+        margin-bottom: 20px;
+    }
+}
