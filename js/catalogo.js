@@ -1,53 +1,241 @@
-const productosCatalogo = [
-    { id: 1, nombre: "Playera deportiva", precio: 500, img: "./img/playera.jpg", nuevo: true },
+/* =========================
+PRODUCTOS
+========================= */
 
-    { id: 2, nombre: "Sudadera técnica", precio: 850, img: "./img/sudadera.avif", nuevo: false },
+const productos = {
 
-    { id: 3, nombre: "Short de entrenamiento", precio: 400, img: "./img/sudadera.avif", nuevo: true },
+    hombre: [
 
-    { id: 4, nombre: "Playera Pro Black", precio: 500, img: "./img/playera.jpg", nuevo: false },
+        {
+            nombre: "Playera Oversize Black",
+            categoria: "Playera",
+            precio: "$599",
+            imagen: "./img/hombre1.jpg"
+        },
 
-    { id: 5, nombre: "Tank Top Elite", precio: 350, img: "./img/playera.jpg", nuevo: true },
+        {
+            nombre: "Short Performance",
+            categoria: "Short",
+            precio: "$499",
+            imagen: "./img/hombre2.jpg"
+        },
 
-    { id: 6, nombre: "Jogger Fit", precio: 700, img: "./img/sudadera.avif", nuevo: false },
+        {
+            nombre: "Sudadera Urban Fit",
+            categoria: "Sudadera",
+            precio: "$899",
+            imagen: "./img/hombre3.jpg"
+        },
 
-    { id: 7, nombre: "Short Runner", precio: 450, img: "./img/sudadera.avif", nuevo: true },
+        {
+            nombre: "Tank Essential",
+            categoria: "Tank",
+            precio: "$450",
+            imagen: "./img/hombre4.jpg"
+        },
 
-    { id: 8, nombre: "Sudadera Oversize", precio: 950, img: "./img/sudadera.avif", nuevo: true },
+        {
+            nombre: "Jogger Elite",
+            categoria: "Jogger",
+            precio: "$799",
+            imagen: "./img/hombre5.jpg"
+        },
 
-    { id: 9, nombre: "Playera DryFit", precio: 550, img: "./img/playera.jpg", nuevo: false },
+        {
+            nombre: "Hoodie Motion",
+            categoria: "Sudadera",
+            precio: "$999",
+            imagen: "./img/hombre6.jpg"
+        },
 
-    { id: 10, nombre: "Conjunto Sport", precio: 1200, img: "./img/playera.jpg", nuevo: true }
-];
+        {
+            nombre: "Compression Tee",
+            categoria: "Playera",
+            precio: "$650",
+            imagen: "./img/hombre7.jpg"
+        },
 
-function renderizarProductos() {
-    const grid = document.getElementById('catalogo-grid');
-    if (!grid) return;
+        {
+            nombre: "Short Alpha",
+            categoria: "Short",
+            precio: "$520",
+            imagen: "./img/hombre8.jpg"
+        },
 
-    grid.innerHTML = productosCatalogo.map(prod => `
-        <div class="col-6 col-md-4">
-            <div class="product-card h-100">
+        {
+            nombre: "Playera Kinetix Core",
+            categoria: "Playera",
+            precio: "$580",
+            imagen: "./img/hombre9.jpg"
+        },
 
-                <div class="product-image-wrapper">
-                    ${prod.nuevo ? '<span class="badge-new">NUEVO</span>' : ''}
+        {
+            nombre: "Pants Active",
+            categoria: "Pants",
+            precio: "$850",
+            imagen: "./img/hombre10.jpg"
+        }
 
-                    <img src="${prod.img}" alt="${prod.nombre}">
+    ],
 
-                    <button class="add-to-cart-overlay btn-agregar" 
-                            data-nombre="${prod.nombre}" 
-                            data-precio="${prod.precio}">
-                        + Añadir al carrito
-                    </button>
-                </div>
+    mujer: [
+
+        {
+            nombre: "Top Energy",
+            categoria: "Top",
+            precio: "$549",
+            imagen: "./img/mujer1.jpg"
+        },
+
+        {
+            nombre: "Leggings Sculpt",
+            categoria: "Leggings",
+            precio: "$799",
+            imagen: "./img/mujer2.jpg"
+        },
+
+        {
+            nombre: "Playera Fit Motion",
+            categoria: "Playera",
+            precio: "$599",
+            imagen: "./img/mujer3.jpg"
+        },
+
+        {
+            nombre: "Short Flex",
+            categoria: "Short",
+            precio: "$499",
+            imagen: "./img/mujer4.jpg"
+        },
+
+        {
+            nombre: "Sudadera Active",
+            categoria: "Sudadera",
+            precio: "$950",
+            imagen: "./img/mujer5.jpg"
+        },
+
+        {
+            nombre: "Top Seamless",
+            categoria: "Top",
+            precio: "$620",
+            imagen: "./img/mujer6.jpg"
+        },
+
+        {
+            nombre: "Leggings Motion",
+            categoria: "Leggings",
+            precio: "$850",
+            imagen: "./img/mujer7.jpg"
+        },
+
+        {
+            nombre: "Jogger Balance",
+            categoria: "Jogger",
+            precio: "$770",
+            imagen: "./img/mujer8.jpg"
+        },
+
+        {
+            nombre: "Playera Energy",
+            categoria: "Playera",
+            precio: "$560",
+            imagen: "./img/mujer9.jpg"
+        },
+
+        {
+            nombre: "Hoodie Premium",
+            categoria: "Sudadera",
+            precio: "$1050",
+            imagen: "./img/mujer10.jpg"
+        }
+
+    ]
+};
+
+/* =========================
+GRID
+========================= */
+
+const grid = document.getElementById("catalogo-grid");
+
+/* =========================
+MOSTRAR PRODUCTOS
+========================= */
+
+function mostrarProductos(genero){
+
+    grid.innerHTML = "";
+
+    productos[genero].forEach(producto => {
+
+        grid.innerHTML += `
+
+        <div class="col-md-6 col-xl-4">
+
+            <div class="product-card">
+
+                <img src="${producto.imagen}" alt="${producto.nombre}">
 
                 <div class="product-info">
-                    <h5>${prod.nombre}</h5>
-                    <p class="product-price">$${prod.precio.toFixed(2)}</p>
+
+                    <span class="product-category">
+                        ${producto.categoria}
+                    </span>
+
+                    <h5 class="product-title">
+                        ${producto.nombre}
+                    </h5>
+
+                    <p class="product-price">
+                        ${producto.precio}
+                    </p>
+
+                    <button class="product-btn">
+
+                        <i class="bi bi-bag-plus"></i>
+
+                        Agregar al carrito
+
+                    </button>
+
                 </div>
 
             </div>
+
         </div>
-    `).join('');
+
+        `;
+    });
+
 }
 
-document.addEventListener('DOMContentLoaded', renderizarProductos);
+/* =========================
+MOSTRAR HOMBRE AL INICIO
+========================= */
+
+mostrarProductos("hombre");
+
+/* =========================
+BOTONES GENERO
+========================= */
+
+const botonesGenero = document.querySelectorAll(".categoria-btn");
+
+botonesGenero.forEach(btn => {
+
+    btn.addEventListener("click", () => {
+
+        botonesGenero.forEach(b => {
+
+            b.classList.remove("active-genero");
+
+        });
+
+        btn.classList.add("active-genero");
+
+        mostrarProductos(btn.dataset.genero);
+
+    });
+
+});
