@@ -1,0 +1,62 @@
+/* ==========================================
+   ESTILOS KINETIXFIT - MODAL Y FORMULARIOS
+   ========================================== */
+.text-orange {
+    color: #ff5722 !important; /* Ajusta este hex al naranja exacto de tu logo */
+}
+
+/* Inputs oscuros estilo deportivo */
+.input-kinetix {
+    background-color: #1a1a1a;
+    color: #ffffff;
+    border: 1px solid #333333;
+    padding: 0.75rem 1rem;
+}
+
+/* Placeholder un poco más oscuro */
+.input-kinetix::placeholder {
+    color: #888888;
+}
+
+/* Efecto focus con el naranja de la marca */
+.input-kinetix:focus {
+    background-color: #222222;
+    color: #ffffff;
+    border-color: #ff5722;
+    box-shadow: 0 0 0 0.25rem rgba(255, 87, 34, 0.25);
+}
+
+/* Botón principal Kinetix */
+.btn-kinetix {
+    background-color: #ff5722;
+    color: #ffffff;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.btn-kinetix:hover {
+    background-color: #e64a19; /* Un naranja más oscuro al pasar el mouse */
+    color: #ffffff;
+}
+
+.alert {
+    border-radius: 12px;
+    font-weight: 500;
+}
+
+.alert-danger {
+    background: #1a1a1a;
+    color: #fff;
+    border-left: 5px solid #ff6a00;
+}
+
+.alert-success {
+    background: #111;
+    color: #00ff9d;
+    border-left: 5px solid #00ff9d;
+}
+
+.form-control:focus {
+    border-color: #ff6a00;
+    box-shadow: 0 0 10px rgba(255,106,0,.5);
+}
