@@ -1,0 +1,40 @@
+.form-container {
+    max-width: 700px;
+    margin: 50px auto;
+}
+
+.text-orange {
+    color: var(--naranja);
+}
+
+.btn-kinetix-crear {
+    background-color: var(--naranja);
+    color: var(--blanco);
+    border: none;
+
+    width: 100%;
+
+    letter-spacing: 0.6em;
+    text-indent: 0.6em;
+}
+
+.btn-kinetix-crear:hover {
+    background-color: var(--naranja);
+    color: var(--blanco);
+
+    width: 100%;
+
+    letter-spacing: 0.6em;
+    text-indent: 0.6em;
+}
+
+.btn-borrar {
+    background-color: var(--blanco);
+    border: 3px solid var(--gris-carbono);
+    color: var(--gris-carbono);
+}
+
+.btn-borrar:hover {
+    background-color: var(--gris-nube);
+    color: var(--gris-carbono);
+}
