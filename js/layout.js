@@ -1,18 +1,41 @@
 async function loadComponent(id, file) {
+
+    const container = document.getElementById(id);
+
+    // Verifica si el contenedor existe
+    if (!container) return;
+
     const response = await fetch(file);
     const data = await response.text();
-    document.getElementById(id).innerHTML = data;
+
+    container.innerHTML = data;
+
+    // Activa nav
+    activateNav();
+
+    // navbar cliente
+    if (id === "header-container") {
+
+        renderClienteNavbar();
+
+        // Evento para modal de registro
+        document.dispatchEvent(
+            new CustomEvent("headerCargado")
+        );
+    }
 }
 
-// cargar header
-loadComponent("header-container", "./components/header.html");
+// Header cliente
+loadComponent("header-container", "./components/header-usuario.html");
 
-// cargar footer
+// Header admin
+loadComponent("header-container-admin", "./components/header-admin.html");
+
+// Footer
 loadComponent("footer-container", "./components/footer.html");
 
-// ==========================
-// ACTIVE NAV LINK
-// ==========================
+
+// Activa nav
 function activateNav() {
 
     const links = document.querySelectorAll(".nav-link");
@@ -27,4 +50,44 @@ function activateNav() {
         }
 
     });
+}
+
+
+//Crea el boton salir aliniciar sesión un usuario
+function renderClienteNavbar() {
+
+    const authButtons =
+        document.getElementById("auth-buttons");
+
+    if (!authButtons) return;
+
+    const isAuthenticated =
+        localStorage.getItem("isAuthenticated");
+
+    const currentUser =
+        JSON.parse(localStorage.getItem("currentUser"));
+
+    // SOLO clientes autenticados
+    if (
+        isAuthenticated === "true" &&
+        currentUser &&
+        currentUser.role === "cliente"
+    ) {
+
+        authButtons.innerHTML = `
+            <a class="btn-cta w-100 w-lg-auto" id="btnLogout" href="#"> SALIR </a>
+        `;
+
+        // Logout
+        document
+        .getElementById("btnLogout")
+        .addEventListener("click", () => {
+
+            localStorage.removeItem("isAuthenticated");
+            localStorage.removeItem("currentUser");
+
+            window.location.replace("index.html");
+
+        });
+    }
 }

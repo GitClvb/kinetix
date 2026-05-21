@@ -1,46 +1,49 @@
 <div class="modal fade" id="registroModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-        <!-- bg-dark y border-0 para quitar el borde feo por defecto -->
-        <div class="modal-content bg-dark text-white border-0 shadow-lg">
-            
-            <div class="modal-header border-bottom border-secondary">
-                <h5 class="modal-title fw-bold text-uppercase" style="letter-spacing: 1px;">
-                    <span class="text-orange">Únete</span> al Team
-                </h5>
-                <!-- btn-close-white invierte el color de la X -->
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content custom-modal-bg border-0 shadow-lg">
+      
+      <div class="modal-header border-bottom border-secondary px-4">
+        <h5 class="modal-title fw-bold text-uppercase" style="letter-spacing:1px;">
+          <span class="text-orange">Únete</span> al Team
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
 
-            <div class="modal-body p-4">
-                <!-- Aquí aparecerá la notificación de éxito -->
-                <div id="alertContainer"></div>
+      <div class="modal-body p-4">
+        <div id="alertContainer"></div>
+        
+        <form id="registerForm" autocomplete="off">
+          <div class="mb-3">
+            <input type="text" id="nombre" class="form-control input-kinetix" placeholder="Nombre completo">
+          </div>
+          <div class="mb-3">
+            <input type="tel" id="telefono" class="form-control input-kinetix" placeholder="Teléfono">
+          </div>
+          <div class="mb-3">
+            <input type="email" id="correo" class="form-control input-kinetix" placeholder="Correo electrónico">
+          </div>
+          <div class="mb-3">
+            <input type="password" id="password" class="form-control input-kinetix" placeholder="Contraseña" autocomplete="new-password">
+          </div>
+          <div class="mb-4">
+            <input type="password" id="confirmPassword" class="form-control input-kinetix" placeholder="Confirmar contraseña" autocomplete="new-password">
+          </div>
 
-                <form id="registerForm">
-                    <div class="mb-3">
-                        <input type="text" id="nombre" class="form-control input-kinetix" placeholder="Nombre completo">
-                    </div>
-                    
-                    <div class="mb-3">
-                        <input type="tel" id="telefono" class="form-control input-kinetix" placeholder="Teléfono">
-                    </div>
-                    
-                    <div class="mb-3">
-                        <input type="email" id="correo" class="form-control input-kinetix" placeholder="Correo electrónico">
-                    </div>
-                    
-                    <div class="mb-3">
-                        <input type="password" id="password" class="form-control input-kinetix" placeholder="Contraseña">
-                    </div>
+          <button type="button" id="btnCrearCuenta" class="btn-registro-modal w-100 py-2 fw-bold text-uppercase">
+            Crear cuenta
+          </button>
 
-                    <div class="mb-4">
-                        <input type="password" id="confirmPassword" class="form-control input-kinetix" placeholder="Confirmar contraseña">
-                    </div>
+          <div class="text-center mt-3">
+            <p class="text-white mb-0" style="font-size: 0.9rem;">
+                ¿Ya tienes una cuenta? 
+              <a href="login.html" id="linkIrALogin" class="text-orange text-decoration-none fw-bold" style="cursor: pointer;">
+                Inicia sesión aquí
+              </a>
+            </p>
+          </div>
+        </form>
 
-                    <button type="button" id="btnCrearCuenta" class="btn btn-kinetix w-100 py-2 fw-bold text-uppercase">
-                        Crear cuenta
-                    </button>
-                </form>
-            </div>
-        </div>
+      </div>
     </div>
+  </div>
 </div>

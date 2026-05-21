@@ -1,0 +1,190 @@
+/* LOGIN.CSS - KinetixFit- Estilos exclusivos de la página de login */
+
+body {
+    overflow: hidden;
+}
+
+.login-container {
+    display: flex;
+    width: 100%;
+    min-height: 100vh;
+}
+
+/* Lado izquierdo */
+.login-visual {
+    flex: 1;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 4rem;
+    color: var(--blanco);
+    background:linear-gradient(rgba(28,28,28,.82),rgba(28,28,28,.72)),url("../img/benner2.png");
+    background-size: cover;
+    background-position: center;
+}
+
+.brand {
+    position: absolute;
+    top: 40px;
+    left: 40px;
+    text-decoration: none;
+    color: var(--blanco);
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    letter-spacing: 2px;
+}
+
+.brand span {
+    color: var(--naranja);
+}
+
+.visual-content h1 {
+    font-family: var(--font-heading);
+    font-size: 4rem;
+    line-height: 1;
+    margin-bottom: 1.5rem;
+}
+
+.visual-content h1 span {
+    color: var(--naranja);
+}
+
+.visual-content p {
+    max-width: 450px;
+    font-size: 1.1rem;
+    color: rgba(255,255,255,.85);
+    line-height: 1.7;
+}
+
+.visual-line {
+    width: 70px;
+    height: 4px;
+    background: var(--naranja);
+    margin-top: 2rem;
+}
+
+/* Lado derecho */
+.login-form-section {
+    width: 480px;
+    background: var(--blanco);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 4rem;
+    position: relative;
+}
+
+.close-login {
+    position: absolute;
+    top: 35px;
+    right: 35px;
+    text-decoration: none;
+    color: var(--gris-carbono);
+    font-size: .85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.login-header {
+    margin-bottom: 2.5rem;
+}
+
+.login-header h2 {
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+    color: var(--negro-profundo);
+}
+
+.login-header p {
+    color:var(--gris-carbono);
+    margin-top: .5rem;
+}
+
+/* Formulario */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: .6rem;
+    font-size: .8rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--gris-carbono);
+}
+
+.form-group input {
+    width: 100%;
+    height: 56px;
+    padding: 0 1rem;
+    border: 2px solid var(--gris-nube);
+    background: var(--blanco);
+    font-size: 1rem;
+    outline: none;
+    transition: .25s ease;
+}
+
+.form-group input:focus {
+    border-color: var(--naranja);
+    background: var(--blanco);
+}
+
+.btn-ini {
+    width: 100%;
+    height: 56px;
+    border: none;
+    background: var(--negro-profundo);
+    color: var(--blanco);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: .25s ease;
+}
+
+.btn-ini:hover {
+    background-color: var(--naranja);
+    color: var(--blanco);
+}
+
+/* Usuario demo*/
+.demo-box {
+    margin-top: 2rem;
+    padding: 1rem;
+    border-radius: 10px;
+    background: var(--gris-nube);
+    font-size: .95rem;
+    color: var(--gris-carbono);
+}
+
+.demo-title{
+    color: var(--naranja);
+    font-weight: 700;
+    margin-bottom: .5rem;
+}
+
+/* Alertas */
+.alert {
+    margin-bottom: 1.5rem;
+}
+
+
+@media (max-width: 992px) {
+    .login-visual {
+        display: none;
+    }
+    .login-form-section {
+        width: 100%;
+    }
+}
+
+@media (max-width: 576px) {
+    .login-form-section {
+        padding: 2rem;
+    }
+    .login-header h2 {
+        font-size: 2rem;
+    }
+}

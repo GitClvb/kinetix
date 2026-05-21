@@ -15,6 +15,11 @@
     font-style: italic;
 }
 
+.lead {
+    color: var(--negro-profundo);
+    font-family: var(--font-main);
+}
+
 /* TEXTO ESPECÍFICO DE NOSOTROS */
 .text-orange-heading {
     color: var(--naranja);

@@ -18,7 +18,7 @@
 /* ESTILOS GENERALES */
 body {
     font-family: var(--font-main);
-    color: var(--negro-profundo);
+    color: var(--blanco);
 }
 
 h1, h2 {
@@ -60,15 +60,16 @@ h1, h2 {
     color: var(--naranja) !important;
 }
 
-#btn-registro {
+#btn-registro{
     background-color: var(--naranja);
     color: var(--blanco);
     border-radius: 6px;
     padding: 8px 20px;
     font-weight: 600;
+    text-decoration: none;
 }
 
-#btn-registro:hover {
+#btn-registro:hover{
     background-color: #e05a28;
     color: var(--blanco);
 }
@@ -92,6 +93,7 @@ h1, h2 {
     border-radius: 6px;
     letter-spacing: 1px;
     transition: background 0.3s ease;
+    text-decoration: none;
 }
 
 .btn-cta:hover {
