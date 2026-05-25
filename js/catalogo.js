@@ -154,67 +154,163 @@ const productos = {
 };
 
 /* =========================
-GRID
+VARIABLES
 ========================= */
 
 const grid = document.getElementById("catalogo-grid");
+const contenedorCategorias = document.getElementById("contenedor-categorias");
+
+let generoActual = "hombre";
+let categoriaActual = "Todas";
 
 /* =========================
-MOSTRAR PRODUCTOS
+OBTENER CATEGORIAS
 ========================= */
 
-function mostrarProductos(genero){
+function obtenerCategorias(genero) {
 
-    grid.innerHTML = "";
+    const categorias = productos[genero].map(producto => producto.categoria);
 
-    productos[genero].forEach(producto => {
+    return ["Todas", ...new Set(categorias)];
 
-        grid.innerHTML += `
+}
 
-        <div class="col-md-6 col-xl-4">
+/* =========================
+RENDER CATEGORIAS
+========================= */
 
-            <div class="product-card">
+function renderCategorias(genero) {
 
-                <img src="${producto.imagen}" alt="${producto.nombre}">
+    const categorias = obtenerCategorias(genero);
 
-                <div class="product-info">
+    contenedorCategorias.innerHTML = "";
 
-                    <span class="product-category">
-                        ${producto.categoria}
-                    </span>
+    categorias.forEach((categoria, index) => {
 
-                    <h5 class="product-title">
-                        ${producto.nombre}
-                    </h5>
+        contenedorCategorias.innerHTML += `
 
-                    <p class="product-price">
-                        ${producto.precio}
-                    </p>
+            <button
+                class="categoria-producto ${index === 0 ? "active-btn" : ""}"
+                data-categoria="${categoria}">
 
-                    <button class="product-btn">
+                ${categoria}
 
-                        <i class="bi bi-bag-plus"></i>
-
-                        Agregar al carrito
-
-                    </button>
-
-                </div>
-
-            </div>
-
-        </div>
+            </button>
 
         `;
+
+    });
+
+    const botonesCategoria = document.querySelectorAll(".categoria-producto");
+
+    botonesCategoria.forEach(btn => {
+
+        btn.addEventListener("click", () => {
+
+            botonesCategoria.forEach(b => {
+                b.classList.remove("active-btn");
+            });
+
+            btn.classList.add("active-btn");
+
+            categoriaActual = btn.dataset.categoria;
+
+            mostrarProductos(generoActual, categoriaActual);
+
+        });
+
     });
 
 }
 
 /* =========================
-MOSTRAR HOMBRE AL INICIO
+MOSTRAR PRODUCTOS
 ========================= */
 
-mostrarProductos("hombre");
+function mostrarProductos(genero, categoria = "Todas") {
+
+    const loader = document.getElementById("loader-catalogo");
+
+    /* ACTIVAR ESTADO LOADING */
+
+    loader.classList.remove("d-none");
+
+    grid.classList.add("grid-loading");
+
+    setTimeout(() => {
+
+        let productosFiltrados = productos[genero];
+
+        if(categoria !== "Todas"){
+
+            productosFiltrados = productosFiltrados.filter(producto => {
+                return producto.categoria === categoria;
+            });
+
+        }
+
+        let html = "";
+
+        productosFiltrados.forEach(producto => {
+
+            html += `
+
+            <div class="col-md-6 col-xl-4">
+
+                <div class="product-card">
+
+                    <img src="${producto.imagen}" alt="${producto.nombre}">
+
+                    <div class="product-info">
+
+                        <span class="product-category">
+                            ${producto.categoria}
+                        </span>
+
+                        <h5 class="product-title">
+                            ${producto.nombre}
+                        </h5>
+
+                        <p class="product-price">
+                            ${producto.precio}
+                        </p>
+
+                        <button class="product-btn">
+
+                            <i class="bi bi-bag-plus"></i>
+
+                            Agregar al carrito
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            `;
+
+        });
+
+        grid.innerHTML = html;
+
+        /* QUITAR LOADING */
+
+        loader.classList.add("d-none");
+
+        grid.classList.remove("grid-loading");
+
+    }, 350);
+
+}
+
+/* =========================
+INICIALIZAR
+========================= */
+
+renderCategorias(generoActual);
+mostrarProductos(generoActual);
 
 /* =========================
 BOTONES GENERO
@@ -227,14 +323,16 @@ botonesGenero.forEach(btn => {
     btn.addEventListener("click", () => {
 
         botonesGenero.forEach(b => {
-
             b.classList.remove("active-genero");
-
         });
 
         btn.classList.add("active-genero");
 
-        mostrarProductos(btn.dataset.genero);
+        generoActual = btn.dataset.genero;
+        categoriaActual = "Todas";
+
+        renderCategorias(generoActual);
+        mostrarProductos(generoActual);
 
     });
 

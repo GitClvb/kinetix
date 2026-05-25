@@ -2,22 +2,13 @@
 HERO
 ========================= */
 
-.catalogo-hero{
-    height: 320px;
-
-    background:
-    linear-gradient(rgba(0,0,0,.6), rgba(0,0,0,.6)),
-    url('../img/banner-index.png');
-
+.hero-home {
+    min-height: 60vh;
+    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.4)), url('../img/banner-index.png');
     background-size: cover;
     background-position: center;
-}
-
-.catalogo-hero h1{
-    font-family: var(--font-heading);
-    font-size: 5rem;
-    letter-spacing: 4px;
-    color: var(--blanco);
+    display: flex;
+    align-items: center;
 }
 
 .catalogo-hero p{
@@ -168,4 +159,134 @@ RESPONSIVE
         height: 260px;
     }
 
+}
+
+/* =========================
+LOADER CATALOGO
+========================= */
+
+.loader-catalogo{
+    min-height: 300px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    gap: 18px;
+    background: var(--blanco);
+    border-radius: 24px;
+    border: 1px solid #ececec;
+    box-shadow: 0 5px 20px rgba(0,0,0,.06);
+    animation: fadeLoader .35s ease;
+}
+
+.loader-catalogo p{
+    margin: 0;
+    color: var(--gris-carbono);
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-size: .9rem;
+}
+
+.loader-spinner{
+    width: 55px;
+    height: 55px;
+
+    border-radius: 50%;
+    border: 4px solid rgba(0,0,0,.08);
+    border-top-color: var(--naranja);
+
+    animation: spin .8s linear infinite;
+}
+
+/* =========================
+ANIMACION PRODUCTOS
+========================= */
+
+.product-card{
+    animation: productFade .45s ease;
+}
+
+.product-card img{
+    transition: transform .5s ease;
+}
+
+.product-card:hover img{
+    transform: scale(1.04);
+}
+
+/* =========================
+KEYFRAMES
+========================= */
+
+@keyframes spin{
+    to{
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes fadeLoader{
+    from{
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to{
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+}
+
+@keyframes productFade{
+    from{
+        opacity: 0;
+        transform: translateY(25px);
+    }
+    to{
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* =========================
+TRANSICION GRID
+========================= */
+
+#catalogo-grid{
+    transition: opacity .25s ease;
+}
+
+.grid-loading{
+    opacity: .15;
+    pointer-events: none;
+}
+
+/* =========================
+LOADER OVERLAY
+========================= */
+
+.catalogo-wrapper{
+    position: relative;
+}
+
+.loader-catalogo{
+    position: absolute;
+
+    inset: 0;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    gap: 18px;
+
+    background: rgba(255,255,255,.65);
+    backdrop-filter: blur(2px);
+    border-radius: 24px;
+    z-index: 20;
+
+    animation: fadeLoader .25s ease;
 }
