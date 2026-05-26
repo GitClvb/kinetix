@@ -38,3 +38,79 @@
     background-color: var(--gris-nube);
     color: var(--gris-carbono);
 }
+
+/* REDES SOCIALES FOOTER */
+
+.social-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.social-link {
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    gap: 15px;
+
+    color: white;
+    text-decoration: none;
+
+    transition: 
+        transform 0.25s ease,
+        color 0.25s ease,
+        text-shadow 0.25s ease;
+
+    width: fit-content;
+
+    margin-left: auto;
+}
+
+/* LINKS GENERALES FOOTER */
+
+.footer-link {
+
+    display: inline-flex;
+    align-items: center;
+
+    color: white;
+    text-decoration: none;
+
+    padding: 8px 12px;
+
+    border-radius: 10px;
+
+    transition: all 0.3s ease;
+
+    margin-bottom: 6px;
+}
+
+/* Hover elegante */
+
+.social-link:hover {
+
+    color: #d9d9d9;
+
+    transform: scale(1.02);
+
+    text-shadow: 0 0 8px rgba(160, 160, 160, 0.6);
+}
+
+/* TITULOS FOOTER */
+
+.footer-custom h6 {
+    letter-spacing: 1px;
+    font-weight: 700;
+}
+
+/* LISTAS */
+
+.footer-custom ul {
+    padding-left: 0;
+}
+
+.footer-custom li {
+    list-style: none;
+}
