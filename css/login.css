@@ -19,7 +19,7 @@ body {
     justify-content: center;
     padding: 4rem;
     color: var(--blanco);
-    background:linear-gradient(rgba(28,28,28,.82),rgba(28,28,28,.72)),url("../img/benner2.png");
+    background:linear-gradient(rgba(28,28,28,.82),rgba(28,28,28,.72)),url("../img/benner2.webp");
     background-size: cover;
     background-position: center;
 }
