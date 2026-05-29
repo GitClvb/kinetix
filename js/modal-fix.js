@@ -1,9 +1,9 @@
 // Función autoejecutable asíncrona - se ejecuta inmediatamente cuando el script se carga
 (async function () {
   const REGLAS = [
-  // Se definen las reglas de validación para la contraseña que usara el formulario de registro
-  // Cada regla tiene un texto descriptivo y una función de prueba (test)
-  //.test() es un método de los objetos RegExp (Expresiones Regulares) en JavaScript que verifica si existe una coincidencia en un texto y retorna true o false.
+    // Se definen las reglas de validación para la contraseña que usara el formulario de registro
+    // Cada regla tiene un texto descriptivo y una función de prueba (test)
+    //.test() es un método de los objetos RegExp (Expresiones Regulares) en JavaScript que verifica si existe una coincidencia en un texto y retorna true o false.
     { texto: "Mínimo 6 caracteres", test: p => p.length >= 6 },
     { texto: "Al menos una letra MAYÚSCULA", test: p => /[A-Z]/.test(p) },
     { texto: "Al menos una letra minúscula", test: p => /[a-z]/.test(p) },
@@ -41,13 +41,21 @@
 
   // Función que conecta el botón de registro del header con el modal
   function conectarBotonRegistro() {
-    const btn = document.getElementById("btn-registro");
-    if (!btn) return false;
-    // Se eliminan atributos de Bootstrap que podrían interferir
-    btn.removeAttribute("data-bs-toggle");
-    btn.removeAttribute("data-bs-target");
-    // Se creaun event listener para abrir el modal al hacer clic
-    btn.addEventListener("click", e => { e.preventDefault(); gestionarModal("show"); });
+    const btns = document.querySelectorAll(".btn-registro-trigger");
+    if (!btns.length) return false;
+
+    btns.forEach(btn => {
+
+      btn.removeAttribute("data-bs-toggle");
+      btn.removeAttribute("data-bs-target");
+
+      btn.addEventListener("click", e => {
+        e.preventDefault();
+        gestionarModal("show");
+      });
+
+    });
+
     return true;
   }
 
@@ -66,7 +74,7 @@
       campo.parentNode.insertBefore(indicador, campo.nextSibling);
     }
 
-     // Si no hay contraseña, ocultamos el indicador
+    // Si no hay contraseña, ocultamos el indicador
     if (!password) return indicador.style.display = "none";
 
     // Semuestra el indicador y genera el HTML con cada requisito
@@ -96,14 +104,27 @@
   // Función principal que procesa el registro de un nuevo usuario
   function registrarUsuario() {
     // Lista de campos que se tienen que validar
-    const campos = ["nombre", "telefono", "correo", "password", "confirmPassword"];
+    const campos = ["nombre", "apellido", "telefono", "correo", "password", "confirmPassword"];
     const val = id => (document.getElementById(id)?.value || "").trim();
     // Array para almacenar los mensajes de error
     let errores = [];
+    // VALIDACIÓN SOLO LETRAS
+    if (!/^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ\s]+$/.test(val("nombre"))) {
+      errores.push("El nombre solo debe contener letras");
+    }
+
+    if (!/^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ\s]+$/.test(val("apellido"))) {
+      errores.push("El apellido solo debe contener letras");
+    }
+
+    // TELEFONO 10 DIGITOS
+    if (!/^\d{10}$/.test(val("telefono"))) {
+      errores.push("El teléfono debe contener exactamente 10 números");
+    }
     // Validar para que los primeros 4 campos no estén vacíos
     campos.slice(0, 4).forEach(c => { if (!val(c)) errores.push(`Ingresa tu ${c === 'password' ? 'contraseña' : c}`); });
     if (val("password") && val("password") !== val("confirmPassword")) errores.push("Las contraseñas no coinciden");
-    
+
     if (val("password")) {
       const pwErrors = REGLAS.filter(r => !r.test(val("password"))).map(r => r.texto);
       errores = [...errores, ...pwErrors];
@@ -116,7 +137,7 @@
     if (users.some(u => u.correo === val("correo"))) return mostrarAlerta(["Este correo ya está registrado"], "danger");
 
     // Agregamos al usuario y guarda en localStorage
-    users.push({ nombre: val("nombre"), telefono: val("telefono"), correo: val("correo"), password: val("password"), role: "cliente" });
+    users.push({ nombre: val("nombre"), apellido: val("apellido"), telefono: val("telefono"), correo: val("correo"), password: val("password"), role: "cliente" });
     localStorage.setItem("users", JSON.stringify(users));
 
     mostrarAlerta([`¡Cuenta creada exitosamente! Bienvenido, ${val("nombre")}.`], "success");
@@ -143,7 +164,7 @@
       const targetId = e.target?.id;
       if (targetId === "btnCrearCuenta") registrarUsuario();
       if (targetId === "linkIrALogin") { e.preventDefault(); gestionarModal("hide"); window.location.href = "./login.html"; }
-      
+
       const trigger = e.target.closest('[data-bs-target="#registroModal"]');
       if (trigger) { e.preventDefault(); gestionarModal("show"); }
     });
