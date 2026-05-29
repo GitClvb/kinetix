@@ -18,11 +18,6 @@ body {
     color: var(--blanco);
 }
 
-h1, h2 {
-    font-family: var(--font-main);
-    text-transform: uppercase;
-}
-
 /* CLASES UTILITARIAS GLOBALES */
 .text-orange {
     color: var(--naranja);
@@ -57,28 +52,58 @@ h1, h2 {
     color: var(--naranja) !important;
 }
 
-#btn-registro{
+.btn-registro-trigger {
     background-color: var(--naranja);
     color: var(--blanco);
     border-radius: 6px;
     padding: 8px 20px;
     font-weight: 600;
     text-decoration: none;
+    white-space: nowrap;
 }
 
-#btn-registro:hover{
+.btn-registro-trigger:hover {
     background-color: #e05a28;
     color: var(--blanco);
 }
 
 .cart-icon {
     color: var(--negro-profundo);
-    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .cart-icon:hover {
     color: var(--naranja);
 }
+
+.avatar-circle {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background-color: var(--naranja);
+    color: var(--blanco);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+
+.btn-profile {
+    background: transparent;
+    border: none;
+    padding: 0;
+}
+
+.btn-profile:focus {
+    box-shadow: none;
+}
+
+.dropdown {
+        margin: 0px 15px 0px 15px;
+    }
 
 /* BOTÓN CTA GLOBAL */
 .btn-cta {
@@ -103,106 +128,105 @@ h1, h2 {
     background-color: var(--negro-profundo);
 }
 
-.footer-link {
-    color: rgba(255, 255, 255, 0.6);
-    text-decoration: none;
-    font-size: 0.9rem;
-}
-
-.footer-link:hover {
-    color: var(--naranja);
-}
-
-/* Navbar móvil */
-@media (max-width: 991px) {
-  #navbarNav {
-    border-top: 1px solid var(--gris-nube);
-    padding-top: 0.5rem;
-  }
-
-  #navbarNav .navbar-nav {
-    padding-left: 0 !important;
-  }
-
-  #btn-registro {
-    width: 100%;
-    text-align: center;
-    margin-top: 0.5rem;
-  }
-}
-
-/* REDES SOCIALES FOOTER */
-
-.social-container {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.social-link {
-
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-
-    gap: 15px;
-
-    color: white;
-    text-decoration: none;
-
-    transition: 
-        transform 0.25s ease,
-        color 0.25s ease,
-        text-shadow 0.25s ease;
-
-    width: fit-content;
-
-    margin-left: auto;
-}
-
-/* LINKS GENERALES FOOTER */
-
-.footer-link {
-
-    display: inline-flex;
-    align-items: center;
-
-    color: white;
-    text-decoration: none;
-
-    padding: 8px 12px;
-
-    border-radius: 10px;
-
-    transition: all 0.3s ease;
-
-    margin-bottom: 6px;
-}
-
-/* Hover elegante */
-
-.social-link:hover {
-
-    color: #d9d9d9;
-
-    transform: scale(1.02);
-
-    text-shadow: 0 0 8px rgba(160, 160, 160, 0.6);
-}
-
-/* TITULOS FOOTER */
-
 .footer-custom h6 {
-    letter-spacing: 1px;
     font-weight: 700;
-}
-
-/* LISTAS */
-
-.footer-custom ul {
-    padding-left: 0;
+    letter-spacing: 5px;
+    margin-bottom: 1.5rem;
 }
 
 .footer-custom li {
     list-style: none;
+}
+
+.footer-link,
+.social-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    width: fit-content;
+    padding: 2px 10px;
+    color: var(--blanco);
+    text-decoration: none;
+}
+
+.footer-link:hover,
+.social-link:hover {
+    color: var(--naranja);
+}
+
+.social-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-end;
+}
+
+/* Navbar móvil */
+@media (max-width: 991px) {
+    #navbarNav {
+        border-top: 1px solid var(--gris-nube);
+        padding-top: 0.5rem;
+    }
+
+    .btn-registro-trigger {
+        width: 100%;
+        text-align: center;
+        margin-top: 0.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+
+    .logo {
+        height: 30px;
+        margin-left: 4px;
+    }
+
+    .btn-registro-trigger {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+        line-height: 1.2;
+        margin: 0;
+        white-space: nowrap;
+    }
+
+    .cart-icon {
+        padding: 4px 6px;
+    }
+
+    #auth-buttons-mobile .avatar-circle {
+        width: 32px;
+        height: 32px;
+        font-size: 0.8rem;
+    }
+
+    .dropdown {
+        margin: 15px 15px 0px 15px;
+    }
+
+    .navbar-toggler {
+        margin-right: 5px;
+    }
+
+    #navbarNav {
+        border-top: 1px solid var(--gris-nube);
+        margin-top: 0.5rem;
+        padding-top: 0.8rem;
+    }
+
+
+    .footer-custom {
+        text-align: left;
+    }
+
+    .social-container {
+        margin-top: 1rem;
+    }
+
+    .footer-link,
+    .social-link {
+        justify-content: left;
+        width: 100%;
+        font-size: .8rem;
+    }
 }
