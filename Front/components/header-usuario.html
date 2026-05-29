@@ -5,44 +5,59 @@
 
 <!-- HEADER / NAVBAR -->
 <header class="header sticky-top bg-white shadow-sm">
+
     <nav class="navbar navbar-expand-lg navbar-light container">
-        <!-- Logo -->
-        <a class="navbar-brand" href="index.html">
-            <img src="./img/logo-KIFI.png" alt="KinetixFit Logo" class="logo">
-        </a>
 
-        <!-- Mobile Controls-->
-        <div class="d-flex align-items-center justify-content-end gap-2 d-lg-none">
-            <!-- Carrito -->
-            <a class="btn cart-icon p-1" href="#">
-                <i class="bi bi-cart4 fs-5"></i>
-            </a>
-
-            <!-- Avatar/Registro (cambia según sesión) -->
-            <div id="auth-buttons-mobile">
-                <a class="btn btn-registro-trigger" href="#">
-                    Registro
-                </a>
-            </div>
+        <!-- FILA SUPERIOR -->
+        <div class="w-100 d-flex align-items-center">
 
             <!-- Hamburguesa -->
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+
+            <!-- Logo -->
+            <a class="navbar-brand ms-2" href="index.html">
+                <img src="./img/logo-KIFI.png" alt="KinetixFit Logo" class="logo">
+            </a>
+
+            <!-- Controles Mobile -->
+            <div class="mobile-controls d-flex align-items-center gap-2 d-lg-none ms-auto">
+
+                <!-- Carrito -->
+                <a class="btn cart-icon p-1" href="#">
+                    <i class="bi bi-cart4 fs-5"></i>
+                </a>
+
+                <!-- Registro -->
+                <div id="auth-buttons-mobile">
+                    <a class="btn btn-registro-trigger" href="#">
+                        Registro
+                    </a>
+                </div>
+
+            </div>
+
         </div>
 
-        <!-- Menú desktop -->
+        <!-- MENÚ -->
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto px-4">
+
+            <ul class="navbar-nav ms-auto px-lg-4">
+
                 <li class="nav-item">
                     <a class="nav-link" href="./index.html">Inicio</a>
                 </li>
+
                 <li class="nav-item">
                     <a class="nav-link" href="./nosotros.html">Nosotros</a>
                 </li>
+
                 <li class="nav-item">
                     <a class="nav-link" href="./contact.html">Contáctanos</a>
                 </li>
+
                 <li class="nav-item">
                     <a class="nav-link" href="./catalogo.html">Catálogo</a>
                 </li>
@@ -62,7 +77,11 @@
                         </a>
                     </div>
                 </li>
+
             </ul>
+
         </div>
+
     </nav>
+
 </header>
