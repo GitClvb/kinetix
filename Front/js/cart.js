@@ -52,6 +52,19 @@ document.addEventListener('click', (e) => {
         localStorage.removeItem('kinetix_cart');
         actualizarCarritoUI();
     }
+
+    // MODIFICACIÓN: Captura del botón "Finalizar Compra" de forma segura
+    if (e.target.id === 'btn-pagar-carrito' || e.target.closest('#btn-pagar-carrito')) {
+        e.preventDefault();
+
+        if (miCarrito.length === 0) {
+            alert("Tu carrito está vacío. Agrega prendas antes de proceder al pago.");
+            return;
+        }
+
+        // Redirección directa al formulario que creamos
+        window.location.href = "checkout.html";
+    }
 });
 
 function abrirModalCarrito() {
@@ -88,9 +101,4 @@ function actualizarCarritoUI() {
         });
     }
     totalElemento.innerText = `$${total.toFixed(2)} MXN`;
-
-    // Conexion con formulario de pago
-    btnPagarCarrito.addEventListener("click", () => {
-    window.location.href = "checkout.html";
-});
 }

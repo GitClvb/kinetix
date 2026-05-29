@@ -4,94 +4,126 @@ document.addEventListener("DOMContentLoaded", () => {
     const cartCountBadge = document.getElementById("checkout-cart-count");
     const alertContainer = document.getElementById("checkout-alert-container");
 
-    // 1. Cargar datos del carrito desde LocalStorage
-    let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+    // 1. Cargar datos usando la clave exacta de tu proyecto
+    let miCarrito = JSON.parse(localStorage.getItem("kinetix_cart")) || [];
 
     function renderResumenCompra() {
+        if (!itemsContainer || !cartCountBadge) return;
+        
         itemsContainer.innerHTML = "";
-        if (carrito.length === 0) {
+        
+        if (miCarrito.length === 0) {
             itemsContainer.innerHTML = `<li class="list-group-item text-center text-muted py-3">Tu carrito está vacío</li>`;
+            cartCountBadge.textContent = "0";
             return;
         }
 
-        let total = 0;
-        let totalProductos = 0;
+        // 2. Agrupar productos repetidos para contabilizar cantidades dinámicamente
+        const productosAgrupados = {};
+        let totalGeneral = 0;
 
-        carrito.forEach(producto => {
-            total += producto.precio * producto.cantidad;
-            totalProductos += producto.cantidad;
+        miCarrito.forEach(producto => {
+            totalGeneral += producto.precio;
+            
+            if (productosAgrupados[producto.nombre]) {
+                productosAgrupados[producto.nombre].cantidad += 1;
+                productosAgrupados[producto.nombre].subtotal += producto.precio;
+            } else {
+                productosAgrupados[producto.nombre] = {
+                    precio: producto.precio,
+                    cantidad: 1,
+                    subtotal: producto.precio
+                };
+            }
+        });
 
+        // 3. Renderizar los productos agrupados con sus datos correctos
+        Object.keys(productosAgrupados).forEach(nombre => {
+            const item = productosAgrupados[nombre];
             itemsContainer.innerHTML += `
-                <li class="list-group-item d-flex justify-content-between lh-sm">
+                <li class="list-group-item d-flex justify-content-between lh-sm py-3">
                     <div>
-                        <h6 class="my-0 fw-bold">${producto.nombre}</h6>
-                        <small class="text-muted">Cantidad: ${producto.cantidad}</small>
+                        <h6 class="my-0 fw-bold text-dark">${nombre}</h6>
+                        <small class="text-muted">Cantidad: ${item.cantidad}</small>
                     </div>
-                    <span class="text-muted">$${(producto.precio * producto.cantidad).toFixed(2)}</span>
+                    <span class="text-muted fw-semibold">$${item.subtotal.toFixed(2)} MXN</span>
                 </li>
             `;
         });
 
-        // Fila del Total
+        // Fila final del Total de la Orden
         itemsContainer.innerHTML += `
-            <li class="list-group-item d-flex justify-content-between bg-light">
-                <span class="fw-bold">Total (MXN)</span>
-                <strong class="text-orange">$${total.toFixed(2)}</strong>
+            <li class="list-group-item d-flex justify-content-between bg-light py-3 border-top">
+                <span class="fw-bold text-dark">Total (MXN)</span>
+                <strong style="color: #EA9230; font-size: 1.2rem;">$${totalGeneral.toFixed(2)} MXN</strong>
             </li>
         `;
 
-        cartCountBadge.textContent = totalProductos;
+        // Actualizar el contador superior del badge
+        cartCountBadge.textContent = miCarrito.length;
     }
 
-    // 2. Validación y envío del formulario
-    checkoutForm.addEventListener("submit", (e) => {
-        e.preventDefault();
+    // 4. Validación y procesamiento del formulario
+    // 4. Validación y procesamiento del formulario en js/checkout.js
+    if (checkoutForm) {
+        checkoutForm.addEventListener("submit", (e) => {
+            e.preventDefault();
 
-        // Si el formulario no es válido ante las reglas de Bootstrap
-        if (!checkoutForm.checkValidity()) {
-            e.stopPropagation();
-            checkoutForm.classList.add("was-validated");
-            mostrarAlerta("Por favor, rellena todos los campos requeridos correctamente.", "danger");
-            return;
-        }
+            // Validación nativa de Bootstrap
+            if (!checkoutForm.checkValidity()) {
+                e.stopPropagation();
+                checkoutForm.classList.add("was-validated");
+                mostrarAlerta("Por favor, rellena todos los campos requeridos correctamente.", "danger");
+                return;
+            }
 
-        if (carrito.length === 0) {
-            mostrarAlerta("No puedes procesar un pago con el carrito vacío.", "warning");
-            return;
-        }
+            if (miCarrito.length === 0) {
+                mostrarAlerta("No puedes procesar un pago con el carrito vacío.", "warning");
+                return;
+            }
 
-        // Simulación de Pasarela de Pago Exitosa
-        mostrarAlerta("¡Procesando pago... por favor espera!", "info");
-        
-        setTimeout(() => {
-            // Vaciar carrito tras la compra exitosa
-            localStorage.removeItem("carrito");
-            
-            alertContainer.innerHTML = `
-                <div class="alert alert-success text-center py-4" role="alert">
-                    <i class="bi bi-check-circle-fill display-4 d-block mb-2"></i>
-                    <h4 class="alert-heading fw-bold">¡PAGO PROCESADO CON ÉXITO!</h4>
-                    <p>Gracias por unirte al Team KinetixFit. Tu orden está en camino.</p>
-                    <hr>
-                    <a href="index.html" class="btn btn-dark rounded-pill px-4">Volver al inicio</a>
-                </div>
-            `;
-            checkoutForm.reset();
-            checkoutForm.classList.remove("was-validated");
-            carrito = [];
-            renderResumenCompra();
-        }, 2500);
-    });
+            // Cambiar visualmente el botón "PAGAR AHORA" para denotar carga
+            const botonEnvio = checkoutForm.querySelector('button[type="submit"]');
+            if (botonEnvio) {
+                botonEnvio.disabled = true;
+                botonEnvio.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> PROCESANDO PAGO...';
+            }
 
-    function mostrarAlerta(mensaje, tipo) {
-        alertContainer.innerHTML = `
-            <div class="alert alert-${tipo} alert-dismissible fade show" role="alert">
-                ${mensaje}
-                <button type="button" class="btn-close" data-bs-dismiss="dropdown" data-bs-bleed="true" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        `;
+            // Simulación de pasarela segura (2.5 segundos)
+            setTimeout(() => {
+                // 1. Limpiar el carrito de la persistencia local
+                localStorage.removeItem("kinetix_cart");
+                miCarrito = [];
+                renderResumenCompra(); // Actualiza la UI a ceros atrás del modal
+
+                // 2. Levantar el modal de éxito de Bootstrap de forma nativa
+                const modalElement = document.getElementById('modalExitoPago');
+                if (modalElement) {
+                    const modalExito = bootstrap.Modal.getOrCreateInstance(modalElement);
+                    modalExito.show();
+                }
+
+                // 3. Capturar el botón de cierre del modal para forzar la redirección a index.html
+                const btnCerrarExito = document.getElementById('btn-cerrar-exito');
+                if (btnCerrarExito) {
+                    btnCerrarExito.addEventListener('click', () => {
+                        window.location.href = "index.html";
+                    });
+                }
+
+                // Respaldo de seguridad: si cierran el modal de otra forma alternativa, redirigir
+                modalElement.addEventListener('hidden.bs.modal', () => {
+                    window.location.href = "index.html";
+                });
+
+                // Limpieza estética del formulario base
+                checkoutForm.reset();
+                checkoutForm.classList.remove("was-validated");
+
+            }, 2500);
+        });
     }
 
-    // Ejecutar al cargar la página
+    // Ejecución inicial al montar el componente
     renderResumenCompra();
 });
