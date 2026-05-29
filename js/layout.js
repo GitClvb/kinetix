@@ -1,9 +1,9 @@
-// 1. COMPROBACIÓN DE SESIÓN INMEDIATA (Antes de pintar algo)
+// control de sesión
 const isAuthenticated = localStorage.getItem("isAuthenticated") === "true";
 const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 const paginaActual = window.location.pathname.split("/").pop();
 
-// 2. PROTECCIÓN DE RUTAS (Seguridad básica)
+// proteccion de rutas
 if (paginaActual === "admin-producto.html") {
     // Si intenta entrar a admin pero no está logueado O no es admin, se manda al login
     if (!isAuthenticated || !currentUser || currentUser.role !== "admin") {
@@ -11,26 +11,32 @@ if (paginaActual === "admin-producto.html") {
     }
 }
 
-// 3. FUNCIÓN DE CARGA OPTIMIZADA
-async function inicializarLayout() {
-    // Si es la página de administración, cargamos su header dedicado
-    if (paginaActual === "admin-producto.html") {
-        await loadComponent("header-container-admin", "./components/header-admin.html");
-    } else {
-        // Para todas las demás se carga el header de usuario
-        await loadComponent("header-container", "./components/header-usuario.html");
-        
-        // Ejecutamos la lógica del cliente INMEDIATAMENTE después de que el header cargó
-        gestionarInterfazUsuario(isAuthenticated, currentUser);
+function activateNav() {
+    const links = document.querySelectorAll(".nav-link");
+    let currentPath = window.location.pathname.split("/").pop();
+    
+    if (currentPath === "" || currentPath === "/") {
+        currentPath = "index.html";
     }
 
-    // El footer se carga para todos de manera independiente
-    if (paginaActual !== "admin-producto.html") {
-        await loadComponent("footer-container", "./components/footer.html");
-    }
+    links.forEach(link => {
+        const linkHref = link.getAttribute("href");
+        if (!linkHref) return;
+
+        // Limpiamos barras iniciales
+        const linkPage = linkHref.replace(/^\//, "");
+
+        // Limpiamos estados previos
+        link.classList.remove("nav-active", "fw-bold");
+
+        // Comparación exacta de la página
+        if (currentPath === linkPage) {
+            link.classList.add("nav-active", "fw-bold");
+        }
+    });
 }
 
-// 4. CONTROLADOR DE INTERFAZ (Une Login y Logout en un solo lugar)
+// controla la interfaz
 function gestionarInterfazUsuario(isLogged, user) {
     const mobileContainer = document.getElementById("auth-buttons-mobile");
     const desktopContainer = document.getElementById("auth-buttons-desktop");
@@ -62,15 +68,6 @@ function gestionarInterfazUsuario(isLogged, user) {
     }
 }
 
-// 5. ESCUCHA GLOBAL DE EVENTOS (Logout único para toda la app)
-document.addEventListener("click", (e) => {
-    if (e.target && e.target.id === "globalBtnLogout") {
-        e.preventDefault();
-        localStorage.clear(); // Limpia todo 
-        window.location.replace("index.html");
-    }
-});
-
 // Auxiliar para cargar componentes 
 async function loadComponent(id, file) {
     const container = document.getElementById(id);
@@ -85,5 +82,35 @@ async function loadComponent(id, file) {
     }
 }
 
-// Arrancar toda la lógica
+async function inicializarLayout() {
+    // Si es la página de administración, cargamos su header dedicado
+    if (paginaActual === "admin-producto.html") {
+        await loadComponent("header-container-admin", "./components/header-admin.html");
+    } else {
+        // Para todas las demás se carga el header de usuario
+        await loadComponent("header-container", "./components/header-usuario.html");
+        
+        // Ejecutamos la lógica del cliente INMEDIATAMENTE después de que el header cargó
+        gestionarInterfazUsuario(isAuthenticated, currentUser);
+    }
+
+    // El footer se carga para todos de manera independiente
+    if (paginaActual !== "admin-producto.html") {
+        await loadComponent("footer-container", "./components/footer.html");
+    }
+}
+
+// 5. ESCUCHA GLOBAL DE EVENTOS (Logout único para toda la app)
+document.addEventListener("click", (e) => {
+    if (e.target && e.target.id === "globalBtnLogout") {
+        e.preventDefault();
+        localStorage.removeItem("isAuthenticated");
+        localStorage.removeItem("currentUser");
+        window.location.replace("index.html");
+    }
+});
+
+
+
+// Arranca toda la lógica
 inicializarLayout();
