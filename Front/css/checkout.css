@@ -1,0 +1,25 @@
+.text-orange {
+    color: #EA9230 !important;
+}
+
+.btn-checkout-submit {
+    background-color: #EA9230;
+    border: none;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    letter-spacing: 1px;
+}
+
+.btn-checkout-submit:hover {
+    background-color: #d47d22;
+    transform: translateY(-2px);
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #EA9230;
+    box-shadow: 0 0 0 0.25rem rgba(234, 146, 48, 0.25);
+}
+
+.list-group-item {
+    background-color: #ffffff;
+    border: 1px solid rgba(0,0,0,.125);
+}

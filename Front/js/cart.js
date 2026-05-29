@@ -88,4 +88,9 @@ function actualizarCarritoUI() {
         });
     }
     totalElemento.innerText = `$${total.toFixed(2)} MXN`;
+
+    // Conexion con formulario de pago
+    btnPagarCarrito.addEventListener("click", () => {
+    window.location.href = "checkout.html";
+});
 }
