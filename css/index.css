@@ -78,7 +78,7 @@
 
 /* BANNER ÚNETE AL TEAM */
 .join-team {
-    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../img/unete.png');
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../img/unete.webp');
     background-size: cover;
     background-position: center;
     margin-top: 20px;
