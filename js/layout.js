@@ -110,7 +110,5 @@ document.addEventListener("click", (e) => {
     }
 });
 
-
-
 // Arranca toda la lógica
 inicializarLayout();

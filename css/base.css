@@ -52,7 +52,7 @@ body {
     color: var(--naranja) !important;
 }
 
-.btn-registro-trigger {
+.btn-registro-trigger, .btn-enviar{
     background-color: var(--naranja);
     color: var(--blanco);
     border-radius: 6px;
@@ -62,7 +62,7 @@ body {
     white-space: nowrap;
 }
 
-.btn-registro-trigger:hover {
+.btn-registro-trigger:hover, .btn-enviar:hover {
     background-color: #e05a28;
     color: var(--blanco);
 }
@@ -102,8 +102,8 @@ body {
 }
 
 .dropdown {
-        margin: 0px 15px 0px 15px;
-    }
+    margin: 0px 15px 0px 15px;
+}
 
 /* BOTÓN CTA GLOBAL */
 .btn-cta {
@@ -163,35 +163,41 @@ body {
 
 /* Navbar móvil */
 @media (max-width: 991px) {
-    #navbarNav {
-        border-top: 1px solid var(--gris-nube);
-        padding-top: 0.5rem;
+    .navbar-toggler {
+        border: none;
+        box-shadow: none;
     }
 
-    .btn-registro-trigger {
+    #navbarNav {
         width: 100%;
-        text-align: center;
-        margin-top: 0.5rem;
+        margin-top: 10px;
+        border-top: 1px solid var(--gris-nube);
+        padding-top: 10px;
+    }
+
+    .mobile-controls {
+        padding-right: 10px;
+    }
+
+    .mobile-controls #auth-buttons-mobile {
+        margin-right: 6px;
     }
 }
 
 @media (max-width: 768px) {
 
     .logo {
-        height: 30px;
-        margin-left: 4px;
+        height: 25px;
     }
 
     .btn-registro-trigger {
         padding: 6px 12px;
         font-size: 0.8rem;
         line-height: 1.2;
-        margin: 0;
-        white-space: nowrap;
     }
 
     .cart-icon {
-        padding: 4px 6px;
+        padding: 6px 8px;
     }
 
     #auth-buttons-mobile .avatar-circle {
@@ -205,13 +211,26 @@ body {
     }
 
     .navbar-toggler {
-        margin-right: 5px;
+        margin-left: 5px;
+        border-color: var(--blanco);
     }
 
     #navbarNav {
         border-top: 1px solid var(--gris-nube);
         margin-top: 0.5rem;
         padding-top: 0.8rem;
+    }
+
+      /* Hero section */
+    .hero-section {
+        min-height: 40vh;
+        background-size: cover;
+        background-position: 60% center;
+        padding: 40px 0;
+    }
+
+    .hero-section h1 {
+        font-size: 1.8rem;
     }
 
 

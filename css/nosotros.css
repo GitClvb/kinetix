@@ -97,35 +97,6 @@
     color: var(--naranja);
 }
 
-/* REDES SOCIALES FOOTER */
-
-.social-container {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.social-link {
-
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-
-    gap: 15px;
-
-    color: white;
-    text-decoration: none;
-
-    transition:
-        transform 0.25s ease,
-        color 0.25s ease,
-        text-shadow 0.25s ease;
-
-    width: fit-content;
-
-    margin-left: auto;
-}
-
 /* Responsive */
 
 /* TABLET */
@@ -141,8 +112,9 @@
     /* Hero section */
     .hero-section {
         min-height: 40vh;
-        background-position: center center;
-        margin-bottom: 0;
+        background-size: cover;
+        background-position: 60% center;
+        padding: 40px 0;
     }
 
     .hero-section h1 {
@@ -187,22 +159,4 @@
         padding: 0;
     }
 
-}
-
-@media (max-width: 820px) {
-    /* Hero section */
-    .hero-section {
-        min-height: 20vh;
-        background-position: center center;
-        margin-bottom: 0;
-    }
-}
-
-@media (max-width: 1024px) {
-    /* Hero section */
-    .hero-section {
-        min-height: 20vh;
-        background-position: center center;
-        margin-bottom: 0;
-    }
 }
