@@ -3,7 +3,7 @@
 /* HERO PRINCIPAL */
 .hero-home {
     min-height: 60vh;
-    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.4)), url('../img/banner-index.png');
+    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.4)), url('../img/banner-index.webp');
     background-size: cover;
     background-position: center;
     display: flex;
@@ -62,7 +62,7 @@
     text-align: center;
     color: var(--blanco);
     font-family: var(--font-heading);
-    font-size: 2rem;
+    font-size: 3rem;
     font-weight: bold;
     text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
 }
@@ -78,86 +78,9 @@
 
 /* BANNER ÚNETE AL TEAM */
 .join-team {
-    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../img/unete.png');
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../img/unete.webp');
     background-size: cover;
     background-position: center;
     margin-top: 20px;
     margin-bottom: 20px;
-}
-
-
-/* REDES SOCIALES FOOTER */
-
-.social-container {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.social-link {
-
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-
-    gap: 15px;
-
-    color: white;
-    text-decoration: none;
-
-    transition: 
-        transform 0.25s ease,
-        color 0.25s ease,
-        text-shadow 0.25s ease;
-
-    width: fit-content;
-
-    margin-left: auto;
-}
-
-/* LINKS GENERALES FOOTER */
-
-.footer-link {
-
-    display: inline-flex;
-    align-items: center;
-
-    color: white;
-    text-decoration: none;
-
-    padding: 8px 12px;
-
-    border-radius: 10px;
-
-    transition: all 0.3s ease;
-
-    margin-bottom: 6px;
-}
-
-/* Hover elegante */
-
-.social-link:hover {
-
-    color: #d9d9d9;
-
-    transform: scale(1.02);
-
-    text-shadow: 0 0 8px rgba(160, 160, 160, 0.6);
-}
-
-/* TITULOS FOOTER */
-
-.footer-custom h6 {
-    letter-spacing: 1px;
-    font-weight: 700;
-}
-
-/* LISTAS */
-
-.footer-custom ul {
-    padding-left: 0;
-}
-
-.footer-custom li {
-    list-style: none;
 }
