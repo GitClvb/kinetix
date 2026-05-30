@@ -61,7 +61,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // Login exitoso
             if (userFound) {
-                // Guarda la sesión
+                // MODIFICACIÓN PASO 1: Guarda la sesión global para desbloquear la compra
+                localStorage.setItem("kinetix_user_logged", "true");
+
+                // Tus banderas de sesión actuales
                 localStorage.setItem("isAuthenticated", "true");
                 localStorage.setItem("currentUser", JSON.stringify(userFound));
 
@@ -87,9 +90,12 @@ document.addEventListener("DOMContentLoaded", () => {
         const btnLogout = e.target.closest("#btnLogout");
         if (!btnLogout) return;
         e.preventDefault();
-        // Eliminar sesión
+        
+        // Eliminar sesión completa al salir
+        localStorage.removeItem("kinetix_user_logged"); // Quita el permiso de compra
         localStorage.removeItem("isAuthenticated");
         localStorage.removeItem("currentUser");
+        
         // Redireccionar
         window.location.replace("index.html");
     });

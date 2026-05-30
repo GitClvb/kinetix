@@ -53,16 +53,26 @@ document.addEventListener('click', (e) => {
         actualizarCarritoUI();
     }
 
-    // MODIFICACIÓN: Captura del botón "Finalizar Compra" de forma segura
+    // MODIFICACIÓN PASO 2: Captura del botón "Finalizar Compra" con bloqueo de usuario invitado
     if (e.target.id === 'btn-pagar-carrito' || e.target.closest('#btn-pagar-carrito')) {
         e.preventDefault();
 
+        // 1. Validar si el usuario ha iniciado sesión
+        const isLogged = localStorage.getItem('kinetix_user_logged');
+
+        if (!isLogged) {
+            alert("¡Atención! Para finalizar tu compra en KinetixFit, necesitas iniciar sesión o registrarte.");
+            window.location.href = "login.html"; // Redirección inmediata a la vista de acceso
+            return; // Detiene la ejecución para bloquear la compra
+        }
+
+        // 2. Si está logueado, validar que tenga prendas en el carrito
         if (miCarrito.length === 0) {
             alert("Tu carrito está vacío. Agrega prendas antes de proceder al pago.");
             return;
         }
 
-        // Redirección directa al formulario que creamos
+        // Redirección directa al formulario si el usuario está registrado y tiene productos
         window.location.href = "checkout.html";
     }
 });

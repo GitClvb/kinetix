@@ -104,13 +104,18 @@ async function inicializarLayout() {
 document.addEventListener("click", (e) => {
     if (e.target && e.target.id === "globalBtnLogout") {
         e.preventDefault();
+        
+        // MODIFICACIÓN PASO 4: Limpiar bandera global de permisos de compra
+        localStorage.removeItem("kinetix_user_logged");
+        
+        // Limpieza de banderas de autenticación nativas del sitio
         localStorage.removeItem("isAuthenticated");
         localStorage.removeItem("currentUser");
+        
+        // Redireccionar al usuario de forma segura a la Landing Page
         window.location.replace("index.html");
     }
 });
-
-
 
 // Arranca toda la lógica
 inicializarLayout();

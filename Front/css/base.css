@@ -1,8 +1,6 @@
-/* BASE.CSS - KinetixFit - Estilos compartidos entre todas las páginas */
-
 /* VARIABLES GLOBALES */
 :root {
-    --naranja: #FF6B35;
+    --naranja: #EA9230; /* Ajustado al tono naranja exacto de tu marca */
     --verde: #A3FF00;
     --negro-profundo: #1C1C1C;
     --gris-carbono: #2E2E2E;
@@ -43,13 +41,9 @@ body {
     font-size: 1.2rem;
 }
 
-/* HEADER / NAVBAR */
+/* HEADER / NAVBAR GLOBAL */
 .logo {
     height: 40px;
-}
-
-.nav-active {
-    color: var(--naranja) !important;
 }
 
 .btn-registro-trigger {
@@ -63,7 +57,7 @@ body {
 }
 
 .btn-registro-trigger:hover {
-    background-color: #e05a28;
+    background-color: #d67f22;
     color: var(--blanco);
 }
 
@@ -102,8 +96,34 @@ body {
 }
 
 .dropdown {
-        margin: 0px 15px 0px 15px;
-    }
+    margin: 0px 15px 0px 15px;
+}
+
+/* ==========================================================================
+   INDICADOR DE PÁGINA ACTIVA (Funciona de forma global en Desktop y Mobile)
+   ========================================================================== */
+
+/* 1. Cambiar el color del texto a naranja y hacerlo notar más */
+.nav-link.nav-active {
+    color: var(--naranja) !important;
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+/* 2. Añadir una sutil línea inferior brillante (efecto sombreado/indicador) */
+.nav-link.nav-active::after {
+    content: "";
+    position: absolute;
+    bottom: -4px;
+    left: 10%;
+    width: 80%;
+    height: 3px;
+    background-color: var(--naranja);
+    border-radius: 2px;
+    /* Sombrear la línea indicadora para darle profundidad */
+    box-shadow: 0 2px 8px rgba(234, 146, 48, 0.6);
+}
+
 
 /* BOTÓN CTA GLOBAL */
 .btn-cta {
@@ -119,7 +139,7 @@ body {
 }
 
 .btn-cta:hover {
-    background-color: #e05a28;
+    background-color: #d67f22;
     color: var(--blanco);
 }
 
@@ -161,7 +181,11 @@ body {
     align-items: flex-end;
 }
 
-/* Navbar móvil */
+/* ==========================================================================
+   RESPONSIVE / MEDIA QUERIES
+   ========================================================================== */
+
+/* Navbar en Tablets y pantallas medianas */
 @media (max-width: 991px) {
     #navbarNav {
         border-top: 1px solid var(--gris-nube);
@@ -175,6 +199,7 @@ body {
     }
 }
 
+/* Navbar y Footer en Dispositivos Móviles */
 @media (max-width: 768px) {
 
     .logo {
@@ -209,24 +234,4 @@ body {
     }
 
     #navbarNav {
-        border-top: 1px solid var(--gris-nube);
-        margin-top: 0.5rem;
-        padding-top: 0.8rem;
-    }
-
-
-    .footer-custom {
-        text-align: left;
-    }
-
-    .social-container {
-        margin-top: 1rem;
-    }
-
-    .footer-link,
-    .social-link {
-        justify-content: left;
-        width: 100%;
-        font-size: .8rem;
-    }
-}
+        border-top: 1px solid

@@ -1,28 +1,36 @@
 document.addEventListener("DOMContentLoaded", () => {
+    // Filtro pára saber si un user esta loggeado
+    const isLogged = localStorage.getItem('kinetix_user_logged');
+    
+    if (!isLogged) {
+        // Redirección inmediata al login si un invitado intenta entrar directo por URL
+        window.location.href = "login.html";
+        return; // Frena por completo el resto del script
+    }
+
     const checkoutForm = document.getElementById("checkoutForm");
     const itemsContainer = document.getElementById("checkout-cart-items");
     const cartCountBadge = document.getElementById("checkout-cart-count");
     const alertContainer = document.getElementById("checkout-alert-container");
 
-    // 1. Cargar datos usando la clave exacta de tu proyecto
-    let miCarrito = JSON.parse(localStorage.getItem("kinetix_cart")) || [];
+    // Sincronizado con la clave exacta de tu carrito
+    let carrito = JSON.parse(localStorage.getItem("kinetix_cart")) || [];
 
     function renderResumenCompra() {
         if (!itemsContainer || !cartCountBadge) return;
-        
         itemsContainer.innerHTML = "";
         
-        if (miCarrito.length === 0) {
+        if (carrito.length === 0) {
             itemsContainer.innerHTML = `<li class="list-group-item text-center text-muted py-3">Tu carrito está vacío</li>`;
             cartCountBadge.textContent = "0";
             return;
         }
 
-        // 2. Agrupar productos repetidos para contabilizar cantidades dinámicamente
+        // Agrupación dinámica en caliente para corregir cantidades "undefined" y errores NaN
         const productosAgrupados = {};
         let totalGeneral = 0;
 
-        miCarrito.forEach(producto => {
+        carrito.forEach(producto => {
             totalGeneral += producto.precio;
             
             if (productosAgrupados[producto.nombre]) {
@@ -37,7 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
-        // 3. Renderizar los productos agrupados con sus datos correctos
+        // Renderizado estético de productos agrupados
         Object.keys(productosAgrupados).forEach(nombre => {
             const item = productosAgrupados[nombre];
             itemsContainer.innerHTML += `
@@ -51,7 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
             `;
         });
 
-        // Fila final del Total de la Orden
+        // Fila del Total General de la Orden
         itemsContainer.innerHTML += `
             <li class="list-group-item d-flex justify-content-between bg-light py-3 border-top">
                 <span class="fw-bold text-dark">Total (MXN)</span>
@@ -59,17 +67,16 @@ document.addEventListener("DOMContentLoaded", () => {
             </li>
         `;
 
-        // Actualizar el contador superior del badge
-        cartCountBadge.textContent = miCarrito.length;
+        // Setea el total de artículos en el badge contador
+        cartCountBadge.textContent = carrito.length;
     }
 
-    // 4. Validación y procesamiento del formulario
-    // 4. Validación y procesamiento del formulario en js/checkout.js
+    // 2. Validación y envío del formulario
     if (checkoutForm) {
         checkoutForm.addEventListener("submit", (e) => {
             e.preventDefault();
 
-            // Validación nativa de Bootstrap
+            // Si el formulario no es válido ante las reglas de Bootstrap
             if (!checkoutForm.checkValidity()) {
                 e.stopPropagation();
                 checkoutForm.classList.add("was-validated");
@@ -77,33 +84,33 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
             }
 
-            if (miCarrito.length === 0) {
+            if (carrito.length === 0) {
                 mostrarAlerta("No puedes procesar un pago con el carrito vacío.", "warning");
                 return;
             }
 
-            // Cambiar visualmente el botón "PAGAR AHORA" para denotar carga
+            // Cambiar visualmente el botón de pago para denotar procesamiento seguro
             const botonEnvio = checkoutForm.querySelector('button[type="submit"]');
             if (botonEnvio) {
                 botonEnvio.disabled = true;
                 botonEnvio.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> PROCESANDO PAGO...';
             }
 
-            // Simulación de pasarela segura (2.5 segundos)
+            // Simulación de Pasarela de Pago Exitosa (2.5 Segundos)
             setTimeout(() => {
-                // 1. Limpiar el carrito de la persistencia local
+                // Vaciar persistencia del carrito tras la compra exitosa
                 localStorage.removeItem("kinetix_cart");
-                miCarrito = [];
-                renderResumenCompra(); // Actualiza la UI a ceros atrás del modal
+                carrito = [];
+                renderResumenCompra(); // Actualiza la vista detrás a $0.00 de manera limpia
 
-                // 2. Levantar el modal de éxito de Bootstrap de forma nativa
+                // Desplegar de forma nativa el Modal de confirmación de Bootstrap
                 const modalElement = document.getElementById('modalExitoPago');
                 if (modalElement) {
                     const modalExito = bootstrap.Modal.getOrCreateInstance(modalElement);
                     modalExito.show();
                 }
 
-                // 3. Capturar el botón de cierre del modal para forzar la redirección a index.html
+                // Evento al dar clic al botón naranja "VOLVER AL INICIO" dentro del modal
                 const btnCerrarExito = document.getElementById('btn-cerrar-exito');
                 if (btnCerrarExito) {
                     btnCerrarExito.addEventListener('click', () => {
@@ -111,12 +118,12 @@ document.addEventListener("DOMContentLoaded", () => {
                     });
                 }
 
-                // Respaldo de seguridad: si cierran el modal de otra forma alternativa, redirigir
+                // Respaldo secundario: si se cierra el modal por cualquier otro medio alterno
                 modalElement.addEventListener('hidden.bs.modal', () => {
                     window.location.href = "index.html";
                 });
 
-                // Limpieza estética del formulario base
+                // Limpieza del formulario base
                 checkoutForm.reset();
                 checkoutForm.classList.remove("was-validated");
 
@@ -124,6 +131,16 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Ejecución inicial al montar el componente
+    function mostrarAlerta(mensaje, tipo) {
+        if (!alertContainer) return;
+        alertContainer.innerHTML = `
+            <div class="alert alert-${tipo} alert-dismissible fade show" role="alert">
+                ${mensaje}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        `;
+    }
+
+    // Ejecutar al cargar la página
     renderResumenCompra();
 });
