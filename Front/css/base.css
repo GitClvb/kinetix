@@ -1,6 +1,8 @@
+/* BASE.CSS - KinetixFit - Estilos compartidos entre todas las páginas */
+
 /* VARIABLES GLOBALES */
 :root {
-    --naranja: #EA9230; /* Ajustado al tono naranja exacto de tu marca */
+    --naranja: #FF6B35;
     --verde: #A3FF00;
     --negro-profundo: #1C1C1C;
     --gris-carbono: #2E2E2E;
@@ -41,12 +43,40 @@ body {
     font-size: 1.2rem;
 }
 
-/* HEADER / NAVBAR GLOBAL */
+/* HEADER / NAVBAR */
 .logo {
     height: 40px;
 }
 
-.btn-registro-trigger {
+/* ==========================================================================
+   INDICADOR DE PÁGINA ACTIVA (Alta Especificidad para anular Bootstrap)
+   ========================================================================== */
+.navbar-nav .nav-link.nav-active,
+.navbar .nav-link.nav-active,
+.nav-item .nav-link.nav-active {
+    color: var(--naranja) !important;
+    font-weight: 700 !important;
+    position: relative;
+    background-color: transparent !important;
+    transition: color 0.3s ease;
+}
+
+/* Línea inferior brillante con sombreado decorativo */
+.navbar-nav .nav-link.nav-active::after,
+.navbar .nav-link.nav-active::after {
+    content: "";
+    position: absolute;
+    bottom: -2px; 
+    left: 10%;
+    width: 80%;
+    height: 3px;
+    background-color: var(--naranja);
+    border-radius: 2px;
+    box-shadow: 0 2px 8px rgba(255, 107, 53, 0.6);
+    display: block !important;
+}
+
+.btn-registro-trigger, .btn-enviar {
     background-color: var(--naranja);
     color: var(--blanco);
     border-radius: 6px;
@@ -56,8 +86,8 @@ body {
     white-space: nowrap;
 }
 
-.btn-registro-trigger:hover {
-    background-color: #d67f22;
+.btn-registro-trigger:hover, .btn-enviar:hover {
+    background-color: #e05a28;
     color: var(--blanco);
 }
 
@@ -99,32 +129,6 @@ body {
     margin: 0px 15px 0px 15px;
 }
 
-/* ==========================================================================
-   INDICADOR DE PÁGINA ACTIVA (Funciona de forma global en Desktop y Mobile)
-   ========================================================================== */
-
-/* 1. Cambiar el color del texto a naranja y hacerlo notar más */
-.nav-link.nav-active {
-    color: var(--naranja) !important;
-    position: relative;
-    transition: color 0.3s ease;
-}
-
-/* 2. Añadir una sutil línea inferior brillante (efecto sombreado/indicador) */
-.nav-link.nav-active::after {
-    content: "";
-    position: absolute;
-    bottom: -4px;
-    left: 10%;
-    width: 80%;
-    height: 3px;
-    background-color: var(--naranja);
-    border-radius: 2px;
-    /* Sombrear la línea indicadora para darle profundidad */
-    box-shadow: 0 2px 8px rgba(234, 146, 48, 0.6);
-}
-
-
 /* BOTÓN CTA GLOBAL */
 .btn-cta {
     background-color: var(--naranja);
@@ -139,7 +143,7 @@ body {
 }
 
 .btn-cta:hover {
-    background-color: #d67f22;
+    background-color: #e05a28;
     color: var(--blanco);
 }
 
@@ -182,41 +186,46 @@ body {
 }
 
 /* ==========================================================================
-   RESPONSIVE / MEDIA QUERIES
+   MEDIA QUERIES (RESPONSIVE)
    ========================================================================== */
 
-/* Navbar en Tablets y pantallas medianas */
+/* Navbar móvil (Pantallas medianas) */
 @media (max-width: 991px) {
-    #navbarNav {
-        border-top: 1px solid var(--gris-nube);
-        padding-top: 0.5rem;
+    .navbar-toggler {
+        border: none;
+        box-shadow: none;
     }
 
-    .btn-registro-trigger {
+    #navbarNav {
         width: 100%;
-        text-align: center;
-        margin-top: 0.5rem;
+        margin-top: 10px;
+        border-top: 1px solid var(--gris-nube);
+        padding-top: 10px;
+    }
+
+    .mobile-controls {
+        padding-right: 10px;
+    }
+
+    .mobile-controls #auth-buttons-mobile {
+        margin-right: 6px;
     }
 }
 
-/* Navbar y Footer en Dispositivos Móviles */
+/* Navbar, Hero y Footer (Celulares) */
 @media (max-width: 768px) {
-
     .logo {
-        height: 30px;
-        margin-left: 4px;
+        height: 25px;
     }
 
     .btn-registro-trigger {
         padding: 6px 12px;
         font-size: 0.8rem;
         line-height: 1.2;
-        margin: 0;
-        white-space: nowrap;
     }
 
     .cart-icon {
-        padding: 4px 6px;
+        padding: 6px 8px;
     }
 
     #auth-buttons-mobile .avatar-circle {
@@ -230,8 +239,48 @@ body {
     }
 
     .navbar-toggler {
-        margin-right: 5px;
+        margin-left: 5px;
+        border-color: var(--blanco);
     }
 
     #navbarNav {
-        border-top: 1px solid
+        border-top: 1px solid var(--gris-nube);
+        margin-top: 0.5rem;
+        padding-top: 0.8rem;
+    }
+
+    /* Hero section */
+    .hero-section {
+        min-height: 40vh;
+        background-size: cover;
+        background-position: 60% center;
+        padding: 40px 0;
+    }
+
+    .hero-section h1 {
+        font-size: 1.8rem;
+    }
+
+    .footer-custom {
+        text-align: left;
+    }
+
+    .social-container {
+        margin-top: 1rem;
+        align-items: flex-start;
+    }
+
+    .footer-link,
+    .social-link {
+        justify-content: left;
+        width: 100%;
+        font-size: .8rem;
+    }
+    
+    /* Adaptación de la línea activa en pantallas colapsadas */
+    .navbar-nav .nav-link.nav-active::after {
+        bottom: 2px;
+        left: 0;
+        width: 40px;
+    }
+} /* <--- ¡AQUÍ ESTABA EL ERROR! Esta llave de cierre final hacía falta */
