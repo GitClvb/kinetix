@@ -15,7 +15,7 @@
 <body>
 
     <div id="header-container"></div>
-    
+
     <div id="cart-container"></div>
 
     <section class="hero-home">
@@ -31,70 +31,78 @@
 
         <div class="row">
 
+            <div class="d-lg-none mb-3">
+
+                <button class="btn btn-filtros-mobile w-100" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#panelFiltros">
+                    <i class="bi bi-sliders"></i>
+                    Filtros
+                </button>
+
+            </div>
+
             <aside class="col-lg-3 mb-4">
+                <div class="collapse" id="panelFiltros">
+                    <div class="filter-sidebar p-4">
+                        <div class="mb-4">
 
-                <div class="filter-sidebar p-4">
+                            <h6 class="fw-bold text-dark">
+                                Género
+                            </h6>
 
-                    <h4 class="fw-bold text-dark">
-                        Filtros
-                    </h4>
+                            <div class="d-flex gap-2">
 
-                    <div class="mb-4">
+                                <button class="btn categoria-btn active-genero" data-genero="hombre">
+                                    Hombre
+                                </button>
 
-                        <h6 class="fw-bold text-dark">
-                            Género
-                        </h6>
+                                <button class="btn categoria-btn" data-genero="mujer">
+                                    Mujer
+                                </button>
 
-                        <div class="d-grid gap-2">
+                            </div>
 
-                            <button class="btn categoria-btn active-genero" data-genero="hombre">
+                        </div>
 
-                                Hombre
+                        <div class="mb-4">
 
-                            </button>
+                            <h6 class="fw-bold text-dark">
+                                Tallas
+                            </h6>
 
-                            <button class="btn categoria-btn" data-genero="mujer">
+                            <div class="sizes-filter">
 
-                                Mujer
+                                <input id="talla-ch" class="filtro-talla" value="CH" type="checkbox">
+                                <label for="talla-ch">
+                                    CH
+                                </label>
 
-                            </button>
+                                <input id="talla-m" class="filtro-talla" value="M" type="checkbox">
+                                <label for="talla-m">
+                                    M
+                                </label>
+
+                                <input id="talla-g" class="filtro-talla" value="G" type="checkbox">
+                                <label for="talla-g">
+                                    G
+                                </label>
+
+                            </div>
 
                         </div>
 
                     </div>
-
-                    <div class="mb-4">
-
-                        <h6 class="fw-bold text-dark">
-                            Tallas
-                        </h6>
-
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox">
-                            <label class="fw-bold text-dark">XS</label>
-                        </div>
-
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox">
-                            <label class="fw-bold text-dark">S</label>
-                        </div>
-
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox">
-                            <label class="fw-bold text-dark">M</label>
-                        </div>
-
-                    </div>
-
                 </div>
 
             </aside>
 
             <section class="col-lg-9">
 
-                <div class="d-flex gap-3 flex-wrap mb-4" id="contenedor-categorias">
+                <div class="categorias-wrapper">
+                    <div class="d-flex gap-3 mb-4" id="contenedor-categorias">
+                    </div>
                 </div>
-                
+
                 <div class="catalogo-wrapper">
 
                     <div id="loader-catalogo" class="loader-catalogo d-none">
