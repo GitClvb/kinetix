@@ -4,16 +4,16 @@ PRODUCTOS
 
 const productos = {
     hombre: [
-        { nombre: "Playera Oversize Black", categoria: "Playera", precio: "$599", imagen: "./img/hombre1.jpg" },
-        { nombre: "Short Performance", categoria: "Short", precio: "$499", imagen: "./img/hombre2.jpg" },
-        { nombre: "Sudadera Urban Fit", categoria: "Sudadera", precio: "$899", imagen: "./img/hombre3.jpg" },
-        { nombre: "Tank Essential", categoria: "Tank", precio: "$450", imagen: "./img/hombre4.jpg" },
-        { nombre: "Jogger Elite", categoria: "Jogger", precio: "$799", imagen: "./img/hombre5.jpg" },
-        { nombre: "Hoodie Motion", categoria: "Sudadera", precio: "$999", imagen: "./img/hombre6.jpg" },
-        { nombre: "Compression Tee", categoria: "Playera", precio: "$650", imagen: "./img/hombre7.jpg" },
-        { nombre: "Short Alpha", categoria: "Short", precio: "$520", imagen: "./img/hombre8.jpg" },
-        { nombre: "Playera Kinetix Core", categoria: "Playera", precio: "$580", imagen: "./img/hombre9.jpg" },
-        { nombre: "Pants Active", categoria: "Pants", precio: "$850", imagen: "./img/hombre10.jpg" }
+        { nombre: "Playera Oversize Black", categoria: "Playera", precio: "$599", imagen: "./img/hombre1.jpg", talla: ["CH", "M", "G"], color: ["#FFFFFF", "#000000"]},
+        { nombre: "Short Performance", categoria: "Short", precio: "$499", imagen: "./img/hombre2.jpg", talla: ["CH", "M"], color: ["#FFFFFF", "#000000"] },
+        { nombre: "Sudadera Urban Fit", categoria: "Sudadera", precio: "$899", imagen: "./img/hombre3.jpg" , talla: ["CH"], color: ["#FFFFFF", "#ff0000"]},
+        { nombre: "Tank Essential", categoria: "Tank", precio: "$450", imagen: "./img/hombre4.jpg", talla: ["M"], color: ["#FFFFFF"] },
+        { nombre: "Jogger Elite", categoria: "Jogger", precio: "$799", imagen: "./img/hombre5.jpg" , talla: ["G"], color: ["#000000"]},
+        { nombre: "Hoodie Motion", categoria: "Sudadera", precio: "$999", imagen: "./img/hombre6.jpg" , talla: ["CH", "M"], color: ["#FFFFFF", "#000000"]},
+        { nombre: "Compression Tee", categoria: "Playera", precio: "$650", imagen: "./img/hombre7.jpg" , talla: ["CH", "M"], color: ["#00ff44", "#5f1a1a"]},
+        { nombre: "Short Alpha", categoria: "Short", precio: "$520", imagen: "./img/hombre8.jpg" , talla: ["CH"], color: ["#FFFFFF", "#000000"]},
+        { nombre: "Playera Kinetix Core", categoria: "Playera", precio: "$580", imagen: "./img/hombre9.jpg" , talla: ["G"], color: ["#FFFFFF", "#000000"]},
+        { nombre: "Pants Active", categoria: "Pants", precio: "$850", imagen: "./img/hombre10.jpg" , talla: ["G"], color: ["#FFFFFF", "#000000"]}
     ],
     mujer: [
         { nombre: "Top Energy", categoria: "Top", precio: "$549", imagen: "./img/mujer1.jpg" },
@@ -40,8 +40,15 @@ let generoActual = "hombre";
 let categoriaActual = "Todas";
 
 /* =========================
-OBTENER CATEGORIAS
+OBTENER CATEGORIAS Y TALLAS
 ========================= */
+
+function obtenerTallasSeleccionadas(){
+
+    return [...document.querySelectorAll(".filtro-talla:checked")]
+        .map(checkbox => checkbox.value);
+
+}
 
 function obtenerCategorias(genero) {
     const categorias = productos[genero].map(producto => producto.categoria);
@@ -79,11 +86,138 @@ function renderCategorias(genero) {
             mostrarProductos(generoActual, categoriaActual);
         });
     });
+
+    const checkboxesTalla = document.querySelectorAll(".filtro-talla");
+
+    checkboxesTalla.forEach(checkbox => {
+
+        checkbox.addEventListener("change", () => {
+
+            mostrarProductos(
+                generoActual,
+                categoriaActual
+            );
+
+        });
+
+    }); 
 }
 
 /* =========================
 MOSTRAR PRODUCTOS
 ========================= */
+
+function crearCardProducto(producto){
+
+    return `
+
+        <div class="col-6 col-lg-6 col-xl-4">
+
+            <div class="product-card">
+
+                <img
+                    src="${producto.imagen}"
+                    alt="${producto.nombre}"
+                    loading="lazy">
+
+                <div class="product-info">
+
+                    <span class="product-category">
+                        ${producto.categoria}
+                    </span>
+
+                    <h5 class="product-title">
+                        ${producto.nombre}
+                    </h5>
+
+                    <p class="product-price">
+                        ${producto.precio}
+                    </p>
+
+                    <div class="product-sizes">
+
+                        <span class="product-label">
+                            Tallas
+                        </span>
+
+                        <div class="sizes-container">
+
+                            ${(producto.talla || []).map(talla => `
+                                <span class="size-chip">
+                                    ${talla}
+                                </span>
+                            `).join("")}
+
+                        </div>
+
+                    </div>
+
+                    <div class="product-colors">
+
+                        <span class="product-label">
+                            Colores
+                        </span>
+
+                        <div class="colors-container">
+
+                            ${(producto.color || []).map(color => `
+                                <span
+                                    class="color-dot"
+                                    style="background:${color}">
+                                </span>
+                            `).join("")}
+
+                        </div>
+
+                    </div>
+
+                    <button
+                        class="product-btn btn-agregar-carrito"
+                        data-nombre="${producto.nombre}"
+                        data-precio="${producto.precio.replace("$", "")}"
+                        data-imagen="${producto.imagen}">
+
+                        <i class="bi bi-bag-plus"></i>
+
+                        Agregar al carrito
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+function crearEstadoVacio(){
+
+    return `
+
+        <div class="col-12">
+
+            <div class="empty-state">
+
+                <i class="bi bi-search"></i>
+
+                <h4>
+                    No encontramos productos
+                </h4>
+
+                <p>
+                    Intenta cambiar los filtros seleccionados.
+                </p>
+
+            </div>
+
+        </div>
+
+    `;
+
+}
 
 function mostrarProductos(genero, categoria = "Todas") {
     const loader = document.getElementById("loader-catalogo");
@@ -100,36 +234,33 @@ function mostrarProductos(genero, categoria = "Todas") {
             });
         }
 
+        const tallasSeleccionadas = obtenerTallasSeleccionadas();
+
+        if(tallasSeleccionadas.length > 0){
+
+            productosFiltrados = productosFiltrados.filter(producto =>
+
+                producto.talla.some(talla =>
+                    tallasSeleccionadas.includes(talla)
+                )
+
+            );
+
+        }
+
         let html = "";
 
-        productosFiltrados.forEach(producto => {
-            html += `
-            <div class="col-md-6 col-xl-4">
-                <div class="product-card">
-                    <img src="${producto.imagen}" alt="${producto.nombre}">
-                    <div class="product-info">
-                        <span class="product-category">
-                            ${producto.categoria}
-                        </span>
-                        <h5 class="product-title">
-                            ${producto.nombre}
-                        </h5>
-                        <p class="product-price">
-                            ${producto.precio}
-                        </p>
-                        
-                        <button class="product-btn btn-agregar-carrito" 
-                                data-nombre="${producto.nombre}" 
-                                data-precio="${producto.precio.replace('$', '')}" 
-                                data-imagen="${producto.imagen}">
-                            <i class="bi bi-bag-plus"></i>
-                            Agregar al carrito
-                        </button>
-                    </div>
-                </div>
-            </div>
-            `;
-        });
+        if(productosFiltrados.length === 0){
+
+            html = crearEstadoVacio();
+
+        }else{
+
+            html = productosFiltrados
+                .map(crearCardProducto)
+                .join("");
+
+        }
 
         grid.innerHTML = html;
 
