@@ -5,7 +5,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     // Filtro pára saber si un user esta loggeado
     const isLogged = localStorage.getItem('kinetix_user_logged');
-    
+
     if (!isLogged) {
         // Redirección inmediata al login si un invitado intenta entrar directo por URL
         window.location.href = "login.html";
@@ -88,57 +88,101 @@ document.addEventListener("DOMContentLoaded", () => {
     // ==========================================================================
     function renderResumenCompra() {
         if (!itemsContainer || !cartCountBadge) return;
+
         itemsContainer.innerHTML = "";
-        
-        if (carrito.length === 0) {
-            itemsContainer.innerHTML = `<li class="list-group-item text-center text-muted py-3">Tu carrito está vacío</li>`;
+
+        if (miCarrito.length === 0) {
+            itemsContainer.innerHTML = `
+            <li class="list-group-item text-center text-muted py-3">
+                Tu carrito está vacío
+            </li>
+        `;
             cartCountBadge.textContent = "0";
             return;
         }
 
-        // Agrupación dinámica en caliente para corregir cantidades "undefined" y errores NaN
-        const productosAgrupados = {};
         let totalGeneral = 0;
+        let totalArticulos = 0;
 
-        carrito.forEach(producto => {
-            totalGeneral += producto.precio;
-            
-            if (productosAgrupados[producto.nombre]) {
-                productosAgrupados[producto.nombre].cantidad += 1;
-                productosAgrupados[producto.nombre].subtotal += producto.precio;
-            } else {
-                productosAgrupados[producto.nombre] = {
-                    precio: producto.precio,
-                    cantidad: 1,
-                    subtotal: producto.precio
-                };
-            }
-        });
+        miCarrito.forEach(producto => {
 
-        // Renderizado estético de productos agrupados
-        Object.keys(productosAgrupados).forEach(nombre => {
-            const item = productosAgrupados[nombre];
+            const cantidad = producto.cantidad || 1;
+            const subtotal = producto.precio * cantidad;
+
+            totalGeneral += subtotal;
+            totalArticulos += cantidad;
+
             itemsContainer.innerHTML += `
-                <li class="list-group-item d-flex justify-content-between lh-sm py-3">
-                    <div>
-                        <h6 class="my-0 fw-bold text-dark">${nombre}</h6>
-                        <small class="text-muted">Cantidad: ${item.cantidad}</small>
-                    </div>
-                    <span class="text-muted fw-semibold">$${item.subtotal.toFixed(2)} MXN</span>
-                </li>
-            `;
-        });
+            <li class="list-group-item checkout-item">
 
-        // Fila del Total General de la Orden
-        itemsContainer.innerHTML += `
-            <li class="list-group-item d-flex justify-content-between bg-light py-3 border-top">
-                <span class="fw-bold text-dark">Total (MXN)</span>
-                <strong style="color: #EA9230; font-size: 1.2rem;">$${totalGeneral.toFixed(2)} MXN</strong>
+                <img
+                    src="${producto.imagen || 'img/default-product.png'}"
+                    alt="${producto.nombre}"
+                    class="checkout-product-image">
+
+                <div class="checkout-product-info">
+
+                    <h6 class="fw-bold mb-1">
+                        ${producto.nombre}
+                    </h6>
+
+                    <small class="text-muted d-block">
+                        Cantidad: ${cantidad}
+                    </small>
+
+                    ${producto.talla
+                    ? `
+                            <small class="text-muted d-block">
+                                Talla: ${producto.talla}
+                            </small>
+                        `
+                    : ""
+                }
+
+                    ${producto.color
+                    ? `
+                            <small class="text-muted d-flex align-items-center gap-2">
+                                Color:
+                                <span
+                                    class="checkout-color-dot"
+                                    style="background:${producto.color}">
+                                </span>
+                            </small>
+                        `
+                    : ""
+                }
+
+                </div>
+
+                <div class="checkout-subtotal">
+                    $${subtotal.toFixed(2)}
+                </div>
+
             </li>
         `;
+        });
 
-        // Setea el total de artículos en el badge contador
-        cartCountBadge.textContent = carrito.length;
+        itemsContainer.innerHTML += `
+        <li
+            class="list-group-item
+                   d-flex
+                   justify-content-between
+                   align-items-center
+                   bg-light
+                   py-3">
+
+            <span class="fw-bold">
+                Total
+            </span>
+
+            <strong class="total-pagar">
+                $${totalGeneral.toFixed(2)} MXN
+            </strong>
+
+        </li>
+    `;
+
+        cartCountBadge.textContent = totalArticulos;
     }
 
     // Función auxiliar para mostrar las alertas estilizadas de Bootstrap
@@ -167,7 +211,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // Limpiar estados de error o validación previos
             checkoutForm.classList.remove("was-validated");
-            Object.values({...camposTexto, ...camposNumeros}).forEach(campo => {
+            Object.values({ ...camposTexto, ...camposNumeros }).forEach(campo => {
                 if (campo) campo.classList.remove("is-invalid");
             });
 
@@ -184,7 +228,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // --- VALIDACIÓN DE NÚMERO DE TARJETA (16 DÍGITOS) ---
             if (camposNumeros.tarjetaNumero) {
-                const numero = camposNumeros.tarjetaNumero.value.replace(/\s/g, ""); 
+                const numero = camposNumeros.tarjetaNumero.value.replace(/\s/g, "");
                 if (!regexTarjeta.test(numero)) {
                     camposNumeros.tarjetaNumero.classList.add("is-invalid");
                     formularioValido = false;
@@ -214,11 +258,11 @@ document.addEventListener("DOMContentLoaded", () => {
             if (!checkoutForm.checkValidity() || !formularioValido) {
                 e.stopPropagation();
                 checkoutForm.classList.add("was-validated");
-                
-                const errorTexto = mensajeError !== "" ? 
-                    `Por favor, corrige las credenciales de pago:<br>${mensajeError}` : 
+
+                const errorTexto = mensajeError !== "" ?
+                    `Por favor, corrige las credenciales de pago:<br>${mensajeError}` :
                     "Por favor, rellena todos los campos requeridos correctamente.";
-                
+
                 mostrarAlerta(errorTexto, "danger");
                 return;
             }

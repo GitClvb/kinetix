@@ -24,13 +24,13 @@
                     <span class="badge bg-dark rounded-pill" id="checkout-cart-count">0</span>
                 </h4>
                 <ul class="list-group mb-3 shadow-sm" id="checkout-cart-items">
-                    </ul>
+                </ul>
             </div>
 
             <div class="col-md-7 col-lg-8">
                 <div class="card border-0 shadow-lg p-4">
                     <h2 class="mb-4 fw-bold text-orange text-center text-md-start">DETALLES DE PAGO</h2>
-                    
+
                     <form id="checkoutForm" novalidate>
                         <h5 class="mb-3 fw-bold text-dark border-bottom pb-2">1. Dirección de Envío</h5>
                         <div class="row g-3 mb-4">
@@ -44,7 +44,8 @@
                             </div>
                             <div class="col-12">
                                 <label for="address" class="form-label fw-semibold">Dirección</label>
-                                <input type="text" class="form-control" id="address" placeholder="Calle, Número, Colonia" required>
+                                <input type="text" class="form-control" id="address"
+                                    placeholder="Calle, Número, Colonia" required>
                             </div>
                             <div class="col-md-5">
                                 <label for="city" class="form-label fw-semibold">Ciudad / Municipio</label>
@@ -69,15 +70,18 @@
                             </div>
                             <div class="col-md-6">
                                 <label for="cc-number" class="form-label fw-semibold">Número de tarjeta</label>
-                                <input type="text" class="form-control" id="cc-number" placeholder="ffff ffff ffff ffff" maxlength="16" required>
+                                <input type="text" class="form-control" id="cc-number" placeholder="ffff ffff ffff ffff"
+                                    maxlength="16" required>
                             </div>
                             <div class="col-md-3">
                                 <label for="cc-expiration" class="form-label fw-semibold">Expiración</label>
-                                <input type="text" class="form-control" id="cc-expiration" placeholder="MM/AA" maxlength="5" required>
+                                <input type="text" class="form-control" id="cc-expiration" placeholder="MM/AA"
+                                    maxlength="5" required>
                             </div>
                             <div class="col-md-3">
                                 <label for="cc-cvv" class="form-label fw-semibold">CVV</label>
-                                <input type="text" class="form-control" id="cc-cvv" placeholder="000" maxlength="4" required>
+                                <input type="text" class="form-control" id="cc-cvv" placeholder="000" maxlength="4"
+                                    required>
                             </div>
                         </div>
 
@@ -94,26 +98,31 @@
 
     <div id="footer-container"></div>
 
-    <div class="modal fade" id="modalExitoPago" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalExitoPagoLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0 shadow-lg">
-            <div class="modal-header bg-dark text-white text-center d-block py-3">
-                <h5 class="modal-title fw-bold" id="modalExitoPagoLabel">¡OPERACIÓN EXITOSA!</h5>
+    <div class="modal fade" id="modalExitoPago" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="modalExitoPagoLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header modal-header-exito text-white text-center d-block py-3">
+                    <h5 class="modal-title fw-bold" id="modalExitoPagoLabel">¡OPERACIÓN EXITOSA!</h5>
+                </div>
+                <div class="modal-content-body text-center p-4">
+                    <i class="bi bi-check-circle-fill display-1 d-block mb-3 text-orange"></i>
+                    <h4 class="fw-bold mb-2 text-dark">¡Gracias por tu compra!</h4>
+                    <p class="text-muted">Tu pago ha sido procesado con éxito. Oficialmente ya eres parte del
+                        <strong>Team KinetixFit</strong>.
+                    </p>
+                    <p class="small text-secondary">Tu comprobante y detalles de envío han sido enviados a tu correo
+                        electrónico.</p>
+                </div>
+                <div class="modal-footer justify-content-center border-0 pb-4">
+                    <button type="button" id="btn-cerrar-exito"
+                        class="btn btn-exito px-5 py-2 fw-bold rounded-pill shadow-sm">
+                        VOLVER AL INICIO
+                    </button>
+                </div>
             </div>
-            <div class="modal-content-body text-center p-4">
-                <i class="bi bi-check-circle-fill display-1 d-block mb-3" style="color: #EA9230;"></i>
-                <h4 class="fw-bold mb-2 text-dark">¡Gracias por tu compra!</h4>
-                <p class="text-muted">Tu pago ha sido procesado con éxito. Oficialmente ya eres parte del <strong>Team KinetixFit</strong>.</p>
-                <p class="small text-secondary">Tu comprobante y detalles de envío han sido enviados a tu correo electrónico.</p>
-            </div>
-            <div class="modal-footer justify-content-center border-0 pb-4">
-                <button type="button" id="btn-cerrar-exito" class="btn text-white px-5 py-2 fw-bold rounded-pill shadow-sm" style="background-color: #EA9230;">
-                    VOLVER AL INICIO
-                </button>
-            </div>
-          </div>
-       </div>
-   </div>
+        </div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="./js/layout.js"></script>

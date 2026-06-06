@@ -1,0 +1,277 @@
+.producto-categoria {
+    color: var(--naranja);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.producto-titulo {
+    font-weight: 800;
+    margin: .5rem 0 1rem;
+    color: var(--naranja);
+}
+
+.producto-precio {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--negro-profundo);
+}
+
+.breadcrumb-custom {
+    color: var(--naranja);
+    font-size: .95rem;
+}
+
+.producto-galeria {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.imagen-principal {
+    width: 100%;
+    height: 500px;
+    object-fit: contain;
+    display: block;
+}
+
+.galeria-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 48px;
+    height: 48px;
+    border: none;
+    border-radius: 50%;
+    background: white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, .15);
+}
+
+.galeria-arrow.left {
+    left: 15px;
+}
+
+.galeria-arrow.right {
+    right: 15px;
+}
+
+.miniaturas {
+    display: flex;
+    gap: 12px;
+}
+
+.thumb {
+    width: 90px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 12px;
+    cursor: pointer;
+    border: 2px solid transparent;
+}
+
+.active-thumb {
+    border-color: var(--naranja);
+}
+
+.section-title {
+    font-size: .85rem;
+    font-weight: 800;
+    color: black;
+}
+
+.sizes-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.size-btn {
+    min-width: 50px;
+    border: 1px solid #ddd;
+    background: white;
+    padding: 10px 14px;
+    font-weight: 700;
+}
+
+.active-size {
+    background: #111;
+    color: white;
+}
+
+.colors-container {
+    display: flex;
+    gap: 12px;
+}
+
+.color-dot {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+
+    border: 2px solid rgba(0, 0, 0, .15);
+
+    transition: all .25s ease;
+}
+
+.color-dot:hover {
+    transform: scale(1.08);
+}
+
+.color-dot.active-color {
+    transform: scale(1.12);
+
+    border: 3px solid var(--negro-profundo);
+
+    box-shadow:
+        0 0 0 4px rgba(0, 0, 0, 0.25);
+}
+
+.btn-add-cart {
+    width: 100%;
+    border: none;
+    background: var(--negro-profundo);
+    color: white;
+    padding: 14px;
+    font-weight: 700;
+    border-radius: 12px;
+    transition: .3s;
+}
+
+.btn-add-cart:hover {
+    background: var(--naranja);
+}
+
+.descripcion-producto {
+    width: 100%;
+    color: black;
+    margin-top: 3rem;
+    padding: 2rem;
+    background: var(--blanco);
+    border-radius: 20px;
+    border: 1px solid #ececec;
+    box-shadow: 0 5px 20px rgba(0,0,0,.06);
+}
+
+.descripcion-producto h4 {
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: black;
+}
+
+
+.descripcion-producto p {
+    margin: 0;
+    line-height: 1.8;
+    text-align: justify;
+    color: black;
+}
+
+.btn-regresar{
+    display:inline-flex;
+    align-items:center;
+    gap:.5rem;
+
+    color:var(--naranja);
+    text-decoration:none;
+    font-weight:700;
+
+    transition:.25s ease;
+}
+
+.btn-regresar:hover{
+    color:var(--negro-profundo);
+}
+
+.btn-regresar i{
+    font-size:1rem;
+}
+
+.active-color{
+    border:3px solid var(--negro-profundo);
+    transform:scale(1.15);
+}
+
+.toast-kinetix {
+    background-color: var(--negro-profundo);
+    color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0,0,0,.15);
+}
+
+.toast-kinetix .btn-close {
+    filter: invert(1);
+}
+
+.cantidad-container{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.cantidad-btn {
+    width: 40px;
+    height: 40px;
+    border: 2px solid var(--negro-profundo);
+    background: white;
+    color: var(--negro-profundo);
+    font-weight: 700;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all .2s ease;
+}
+
+.cantidad-btn:hover {
+    background: var(--negro-profundo);
+    color: white;
+}
+
+#cantidad-producto{
+    width:70px;
+    text-align:center;
+    border:1px solid #ddd;
+    border-radius:8px;
+}
+
+/* Chrome, Edge, Safari */
+#cantidad-producto::-webkit-outer-spin-button,
+#cantidad-producto::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+#cantidad-producto {
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+@media (max-width: 768px) {
+
+    .imagen-principal {
+        height: 300px;
+    }
+
+    .producto-titulo {
+        font-size: 1.7rem;
+    }
+
+    .producto-precio {
+        font-size: 1.5rem;
+    }
+
+    .thumb {
+        width: 70px;
+        height: 70px;
+    }
+
+    .galeria-arrow {
+        width: 40px;
+        height: 40px;
+    }
+
+}
