@@ -88,52 +88,59 @@ document.addEventListener("DOMContentLoaded", () => {
     // ==========================================================================
     function renderResumenCompra() {
         if (!itemsContainer || !cartCountBadge) return;
+
         itemsContainer.innerHTML = "";
 
-        if (carrito.length === 0) {
-            itemsContainer.innerHTML = `<li class="list-group-item text-center text-muted py-3">Tu carrito está vacío</li>`;
+        if (miCarrito.length === 0) {
+            itemsContainer.innerHTML = `
+            <li class="list-group-item text-center text-muted py-3">
+                Tu carrito está vacío
+            </li>
+        `;
             cartCountBadge.textContent = "0";
             return;
         }
 
-        // Agrupación dinámica en caliente para corregir cantidades "undefined" y errores NaN
-        // Renderizado estético de productos agrupados
         let totalGeneral = 0;
         let totalArticulos = 0;
 
-        carrito.forEach(producto => {
+        miCarrito.forEach(producto => {
 
-            const subtotal =
-                producto.precio * producto.cantidad;
+            const cantidad = producto.cantidad || 1;
+            const subtotal = producto.precio * cantidad;
 
             totalGeneral += subtotal;
-            totalArticulos += producto.cantidad;
+            totalArticulos += cantidad;
 
             itemsContainer.innerHTML += `
-                <li class="list-group-item checkout-item">
+            <li class="list-group-item checkout-item">
 
-                    <img
-                        src="${producto.imagen}"
-                        alt="${producto.nombre}"
-                        class="checkout-product-image">
+                <img
+                    src="${producto.imagen || 'img/default-product.png'}"
+                    alt="${producto.nombre}"
+                    class="checkout-product-image">
 
-                    <div class="checkout-product-info">
+                <div class="checkout-product-info">
 
-                        <h6 class="fw-bold mb-1">
-                            ${producto.nombre}
-                        </h6>
+                    <h6 class="fw-bold mb-1">
+                        ${producto.nombre}
+                    </h6>
 
-                        <small class="text-muted d-block">
-                            Cantidad: ${producto.cantidad}
-                        </small>
+                    <small class="text-muted d-block">
+                        Cantidad: ${cantidad}
+                    </small>
 
-                        ${producto.talla ? `
+                    ${producto.talla
+                    ? `
                             <small class="text-muted d-block">
                                 Talla: ${producto.talla}
                             </small>
-                        ` : ""}
+                        `
+                    : ""
+                }
 
-                        ${producto.color ? `
+                    ${producto.color
+                    ? `
                             <small class="text-muted d-flex align-items-center gap-2">
                                 Color:
                                 <span
@@ -141,40 +148,40 @@ document.addEventListener("DOMContentLoaded", () => {
                                     style="background:${producto.color}">
                                 </span>
                             </small>
-                        ` : ""}
+                        `
+                    : ""
+                }
 
-                    </div>
+                </div>
 
-                    <div class="checkout-subtotal">
-                        $${subtotal.toFixed(2)}
-                    </div>
-
-                </li>
-            `;
-        });
-
-        // Fila del Total General de la Orden
-        itemsContainer.innerHTML += `
-            <li
-                class="list-group-item
-                    d-flex
-                    justify-content-between
-                    align-items-center
-                    bg-light
-                    py-3">
-
-                <span class="fw-bold">
-                    Total
-                </span>
-
-                <strong class="total-pagar">
-                    $${totalGeneral.toFixed(2)} MXN
-                </strong>
+                <div class="checkout-subtotal">
+                    $${subtotal.toFixed(2)}
+                </div>
 
             </li>
-            `;
+        `;
+        });
 
-        // Setea el total de artículos en el badge contador
+        itemsContainer.innerHTML += `
+        <li
+            class="list-group-item
+                   d-flex
+                   justify-content-between
+                   align-items-center
+                   bg-light
+                   py-3">
+
+            <span class="fw-bold">
+                Total
+            </span>
+
+            <strong class="total-pagar">
+                $${totalGeneral.toFixed(2)} MXN
+            </strong>
+
+        </li>
+    `;
+
         cartCountBadge.textContent = totalArticulos;
     }
 
@@ -204,7 +211,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // Limpiar estados de error o validación previos
             checkoutForm.classList.remove("was-validated");
-            Object.values({...camposTexto, ...camposNumeros}).forEach(campo => {
+            Object.values({ ...camposTexto, ...camposNumeros }).forEach(campo => {
                 if (campo) campo.classList.remove("is-invalid");
             });
 
@@ -221,7 +228,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // --- VALIDACIÓN DE NÚMERO DE TARJETA (16 DÍGITOS) ---
             if (camposNumeros.tarjetaNumero) {
-                const numero = camposNumeros.tarjetaNumero.value.replace(/\s/g, ""); 
+                const numero = camposNumeros.tarjetaNumero.value.replace(/\s/g, "");
                 if (!regexTarjeta.test(numero)) {
                     camposNumeros.tarjetaNumero.classList.add("is-invalid");
                     formularioValido = false;
@@ -251,11 +258,11 @@ document.addEventListener("DOMContentLoaded", () => {
             if (!checkoutForm.checkValidity() || !formularioValido) {
                 e.stopPropagation();
                 checkoutForm.classList.add("was-validated");
-                
-                const errorTexto = mensajeError !== "" ? 
-                    `Por favor, corrige las credenciales de pago:<br>${mensajeError}` : 
+
+                const errorTexto = mensajeError !== "" ?
+                    `Por favor, corrige las credenciales de pago:<br>${mensajeError}` :
                     "Por favor, rellena todos los campos requeridos correctamente.";
-                
+
                 mostrarAlerta(errorTexto, "danger");
                 return;
             }
