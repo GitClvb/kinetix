@@ -2,7 +2,7 @@
 <div class="modal fade" id="registroModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
     <div class="modal-content custom-modal-bg border-0 shadow-lg">
-      
+
       <div class="modal-header border-bottom border-secondary px-4">
         <h5 class="modal-title fw-bold text-uppercase" style="letter-spacing:1px;">
           <span class="text-orange">Únete</span> al Team
@@ -12,7 +12,7 @@
 
       <div class="modal-body p-4">
         <div id="alertContainer"></div>
-        
+
         <form id="registerForm" autocomplete="off">
           <div class="mb-3">
             <input type="text" id="nombre" class="form-control input-kinetix" placeholder="Nombre">
@@ -27,10 +27,12 @@
             <input type="email" id="correo" class="form-control input-kinetix" placeholder="Correo electrónico">
           </div>
           <div class="mb-3">
-            <input type="password" id="password" class="form-control input-kinetix" placeholder="Contraseña" autocomplete="new-password">
+            <input type="password" id="password" class="form-control input-kinetix" placeholder="Contraseña"
+              autocomplete="new-password">
           </div>
           <div class="mb-4">
-            <input type="password" id="confirmPassword" class="form-control input-kinetix" placeholder="Confirmar contraseña" autocomplete="new-password">
+            <input type="password" id="confirmPassword" class="form-control input-kinetix"
+              placeholder="Confirmar contraseña" autocomplete="new-password">
           </div>
 
           <button type="button" id="btnCrearCuenta" class="btn-registro-modal w-100 py-2 fw-bold text-uppercase">
@@ -39,8 +41,9 @@
 
           <div class="text-center mt-3">
             <p class="text-white mb-0" style="font-size: 0.9rem;">
-                ¿Ya tienes una cuenta? 
-              <a href="login.html" id="linkIrALogin" class="text-orange text-decoration-none fw-bold" style="cursor: pointer;">
+              ¿Ya tienes una cuenta?
+              <a href="login.html" id="linkIrALogin" class="text-orange text-decoration-none fw-bold"
+                style="cursor: pointer;">
                 Inicia sesión aquí
               </a>
             </p>
@@ -60,9 +63,7 @@
         <h5 class="modal-title fw-bold text-uppercase">
           Guía de Tallas
         </h5>
-        <button type="button"
-          class="btn-close btn-close-white"
-          data-bs-dismiss="modal">
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal">
         </button>
       </div>
 
@@ -126,9 +127,7 @@
         <h5 class="modal-title fw-bold text-uppercase">
           Envíos y Entregas
         </h5>
-        <button type="button"
-          class="btn-close btn-close-white"
-          data-bs-dismiss="modal">
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal">
         </button>
       </div>
 
@@ -181,9 +180,7 @@
         <h5 class="modal-title fw-bold text-uppercase">
           Devoluciones
         </h5>
-        <button type="button"
-          class="btn-close btn-close-white"
-          data-bs-dismiss="modal">
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal">
         </button>
       </div>
       <div class="modal-body p-4 text-white">
@@ -230,9 +227,7 @@
         <h5 class="modal-title fw-bold text-uppercase">
           Políticas y Condiciones
         </h5>
-        <button type="button"
-          class="btn-close btn-close-white"
-          data-bs-dismiss="modal">
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal">
         </button>
       </div>
 
@@ -290,4 +285,84 @@
 
   </div>
 
+</div>
+
+<!-- MODAL NUEVA CATEGORÍA -->
+<div class="modal fade" id="modalCategoria" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="background: var(--gris-carbono); color: white;">
+      <div class="modal-header border-0">
+        <h5 class="modal-title" style="color: var(--naranja);">
+          <i class="bi bi-tag"></i> Nueva Categoría
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <label class="form-label">Nombre de la categoría</label>
+        <input type="text" class="form-control" id="nombreCategoria" placeholder="Ej. Accesorios, Chalecos...">
+      </div>
+      <div class="modal-footer border-0">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" id="guardarCategoriaBtn"
+          style="background: var(--naranja); border: none;">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL NUEVO COLOR -->
+<div class="modal fade" id="modalColor" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="background: var(--gris-carbono); color: white;">
+      <div class="modal-header border-0">
+        <h5 class="modal-title" style="color: var(--naranja);">
+          <i class="bi bi-palette"></i> Nuevo Color
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label class="form-label">Nombre del color</label>
+          <input type="text" class="form-control" id="nombreColor" placeholder="Ej. Coral, Turquesa...">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Código hexadecimal</label>
+          <div class="d-flex gap-2 align-items-center">
+            <input type="color" class="form-control" id="codigoColor" style="width: 60px; height: 45px; padding: 5px;">
+            <input type="text" class="form-control" id="codigoColorText" placeholder="#FFFFFF">
+          </div>
+        </div>
+        <div class="preview-color" style="padding: 10px; border-radius: 8px; background: #f0f0f0; text-align: center;">
+          <span style="color: #333;">Vista previa:</span>
+          <div id="previewColor"
+            style="width: 50px; height: 50px; border-radius: 8px; margin: 10px auto; border: 1px solid #ddd;"></div>
+        </div>
+      </div>
+      <div class="modal-footer border-0">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" id="guardarColorBtn"
+          style="background: var(--naranja); border: none;">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL VER STOCK -->
+<div class="modal fade" id="modalStock" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="background: var(--gris-carbono); color: white;">
+      <div class="modal-header border-0">
+        <h5 class="modal-title" style="color: var(--naranja);">
+          <i class="bi bi-boxes"></i> Stock del Producto
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="stockModalBody">
+        <!-- Aquí se inyectará dinámicamente el contenido del stock -->
+      </div>
+      <div class="modal-footer border-0">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
 </div>

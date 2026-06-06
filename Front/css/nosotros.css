@@ -47,16 +47,7 @@
     height: 100%;
     object-fit: cover;
     object-position: center;
-    transition: transform 0.5s ease;
     padding: 10px;
-}
-
-.tarjeta-producto:hover img {
-    transform: scale(1);
-}
-
-.tarjeta-producto:hover {
-    transform: scale(1.05);
 }
 
 /* SECCIÓN HISTORIA */

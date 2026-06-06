@@ -1,0 +1,269 @@
+body {
+    background-color: var(--gris-nube) !important;
+    font-family: var(--font-main);
+    color: var(--negro-profundo);
+}
+
+main.container {
+    max-width: 1300px !important;
+}
+
+.barra {
+    background-color: var(--negro-profundo);
+    height: 50px;
+}
+
+/* HEADER DASHBOARD */
+
+.admin-dashboard-header {
+    background: var(--blanco);
+}
+
+.admin-dashboard-navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    min-height: 80px;
+}
+
+.page-header {
+    margin-bottom: 30px;
+}
+
+.page-title {
+    font-family: var(--font-heading);
+    font-size: 42px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--negro-profundo);
+    margin-bottom: 5px;
+}
+
+.page-title span {
+    color: var(--naranja);
+}
+
+.page-subtitle {
+    color: var(--texto-muted);
+    font-size: 15px;
+    margin: 0;
+}
+
+/* KPI CARDS */
+
+.dashboard-card {
+    background: var(--blanco);
+    border: 1px solid var(--borde-suave);
+    border-radius: 14px;
+    padding: 22px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    height: 100%;
+}
+
+.card-icon {
+    width: 65px;
+    height: 65px;
+    border-radius: 12px;
+    background: var(--naranja-soft);
+    color: var(--naranja);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+}
+
+.dashboard-card h3 {
+    margin: 0;
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--negro-profundo);
+}
+
+.dashboard-card span {
+    color: var(--texto-muted);
+    font-size: 14px;
+}
+
+/* CARDS GENERALES */
+
+.card-dashboard {
+    background: var(--blanco);
+    border: 1px solid var(--borde-suave);
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+.card-dashboard .card-header {
+    background: transparent;
+    border-bottom: 1px solid var(--borde-suave);
+    color: var(--naranja);
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 18px 22px;
+}
+
+.card-dashboard .card-body {
+    padding: 22px;
+}
+
+/* ACCIONES RÁPIDAS */
+
+.quick-action {
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    background: var(--blanco);
+    border: 1px solid var(--borde-suave);
+    border-radius: 12px;
+    min-height: 140px;
+    color: var(--gris-carbono);
+    transition: all .2s ease;
+}
+
+.quick-action:hover {
+    border-color: var(--naranja);
+    background: var(--naranja-soft);
+    color: var(--naranja);
+    transform: translateY(-2px);
+}
+
+.quick-action i {
+    font-size: 32px;
+}
+
+.quick-action span {
+    font-size: 14px;
+    font-weight: 700;
+}
+
+/* TABLA */
+
+.table-responsive {
+    padding: 0;
+}
+
+.table {
+    margin-bottom: 0;
+}
+
+.table th {
+    font-size: 12px;
+    text-transform: uppercase;
+    color: var(--texto-muted);
+    padding: 14px 18px !important;
+    border-bottom: 2px solid var(--borde-suave);
+}
+
+.table td {
+    padding: 16px 18px !important;
+    font-size: 14px;
+    border-bottom: 1px solid var(--gris-nube);
+}
+
+.estado-pedido {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 768px) {
+
+    main.container {
+        padding-left: 12px !important;
+        padding-right: 12px !important;
+    }
+
+    .page-title {
+        font-size: 28px;
+        text-align: center;
+    }
+
+    .page-subtitle {
+        text-align: center;
+    }
+
+    .quick-action {
+        min-height: 100px;
+        gap: 4px;
+
+    }
+
+    .card-dashboard .card-body {
+        padding: 16px;
+    }
+
+    .admin-dashboard-navbar {
+        min-height: 70px;
+        gap: 10px;
+    }
+
+    .btn-registro-trigger {
+        padding: 6px 10px;
+        font-size: .8rem;
+    }
+
+    .logo {
+        height: 28px;
+    }
+
+    .barra {
+        height: 20px;
+    }
+
+    .dashboard-card h3 {
+        font-size: 18px;
+        font-weight: 800;
+    }
+
+}
+
+@media (max-width: 576px) {
+
+    .card-icon {
+        width: 45px;
+        height: 50px;
+        font-size: 15px;
+    }
+
+    .quick-action {
+        min-height: 85px;
+        gap: 6px;
+    }
+
+    .quick-action i {
+        font-size: 20px;
+    }
+
+    .quick-action span {
+        font-size: 10px;
+    }
+
+    .quick-action {
+        padding: 0.5rem;
+    }
+
+    .dashboard-card h3 {
+        font-size: 15px;
+        font-weight: 800;
+    }
+
+    .dashboard-card span {
+        font-size: 0.6rem;
+    }
+
+}

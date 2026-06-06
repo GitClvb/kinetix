@@ -1,337 +1,370 @@
-const inputURL = document.getElementById('urlImagen');
-const inputArchivoGlobal = document.getElementById('imagenArchivo');
-const previewImagen = document.getElementById('previewImagen');
-const btnEliminarImagen = document.getElementById('btnEliminarImagen');
-const precioInput = document.getElementById('precioProducto');
+// ============================================================
+// admin-producto.js  (refactorizado)
+// Responsabilidad: coordinar UI, eventos y servicios.
+// NO contiene lógica de persistencia ni construcción de datos.
+// ============================================================
 
-let imagenBase64 = "";
+import {
+    getCategorias, agregarCategoria,
+    getColores,    agregarColor,
+    getColorById
+} from "./catalogoService.js";
 
-// Si escribe URL → bloquear archivo
-inputURL.addEventListener('input', function () {
+import {
+    getProductos,
+    getProductoById,
+    crearProducto,
+    actualizarProducto,
+    cambiarEstado
+} from "./productoService.js";
 
-    const url = this.value.trim();
+import {
+    crearBloqueColor,
+    leerDatosBloque,
+    refrescarSelectoresColor
+} from "./colorBloque.js";
 
-    const alertContainer = document.getElementById('alert-container');
+// ── Estado de edición ────────────────────────────────────────
+// Guardamos el id del producto en edición para hacer PATCH, no DELETE+POST
+let _idEditando = null;
 
-    // Limpiar alertas anteriores
-    alertContainer.innerHTML = "";
+// ── Toast ────────────────────────────────────────────────────
+function mostrarToast(mensaje, tipo = "success") {
+    const toast = document.getElementById("toastNotificacion");
+    const body  = document.getElementById("toastMensaje");
+    if (!toast || !body) return;
 
-    // Si está vacío
-    if (url === "") {
+    toast.classList.remove("bg-success", "bg-danger");
+    toast.classList.add(tipo === "success" ? "bg-success" : "bg-danger");
+    body.innerHTML = mensaje;
+    bootstrap.Toast.getOrCreateInstance(toast).show();
+}
 
-        inputArchivoGlobal.disabled = false;
+// ── Cargar catálogos en el formulario ────────────────────────
+function cargarCategorias() {
+    const cmb = document.getElementById("cmbCategoria");
+    if (!cmb) return;
+    cmb.innerHTML = `<option value="" disabled selected>Selecciona una categoría</option>` +
+        getCategorias().map(c => `<option value="${c.id}">${c.nombre}</option>`).join("");
+}
 
-        previewImagen.src = "";
+// ── Contenedor de bloques color ──────────────────────────────
+function getContenedor() {
+    return document.getElementById("contenedorColores");
+}
 
-        previewImagen.classList.add('d-none');
-        btnEliminarImagen.classList.add('d-none');
+function agregarBloqueColorUI(colorData = null) {
+    const bloque = crearBloqueColor(colorData, abrirModalColor);
+    getContenedor().appendChild(bloque);
+}
 
+// ── Eliminar bloque (delegado) ───────────────────────────────
+document.addEventListener("click", (e) => {
+    const btn = e.target.closest(".btnEliminarColor");
+    if (!btn) return;
+
+    const bloques = document.querySelectorAll(".bloque-color");
+    if (bloques.length === 1) {
+        mostrarToast("Debe existir al menos un color.", "danger");
         return;
     }
-
-    // Bloquear archivo
-    inputArchivoGlobal.disabled = true;
-
-    // Validar formato URL
-    try {
-
-        new URL(url);
-
-    } catch {
-
-        previewImagen.classList.add('d-none');
-        btnEliminarImagen.classList.add('d-none');
-
-        alertContainer.innerHTML = `
-            <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                La URL ingresada no es válida.
-
-                <button 
-                    type="button" 
-                    class="btn-close" 
-                    data-bs-dismiss="alert"
-                    aria-label="Close">
-                </button>
-            </div>
-        `;
-
-        return;
-    }
-
-    // Verificar si carga imagen
-    const imgTest = new Image();
-
-    imgTest.onload = function () {
-
-        previewImagen.src = url;
-
-        previewImagen.classList.remove('d-none');
-        btnEliminarImagen.classList.remove('d-none');
-    };
-
-    imgTest.onerror = function () {
-
-        previewImagen.src = "";
-
-        previewImagen.classList.add('d-none');
-        btnEliminarImagen.classList.add('d-none');
-
-        alertContainer.innerHTML = `
-            <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                No se pudo cargar la imagen desde la URL proporcionada.
-
-                <button 
-                    type="button" 
-                    class="btn-close" 
-                    data-bs-dismiss="alert"
-                    aria-label="Close">
-                </button>
-            </div>
-        `;
-    };
-
-    imgTest.src = url;
+    btn.closest(".bloque-color").remove();
 });
 
-// Si selecciona archivo → bloquear URL
-inputArchivoGlobal.addEventListener('change', function () {
+// ── Modales ──────────────────────────────────────────────────
+function abrirModalCategoria() {
+    const el = document.getElementById("modalCategoria");
+    if (!el || !window.bootstrap) return;
+    document.getElementById("nombreCategoria").value = "";
+    new bootstrap.Modal(el).show();
+}
 
-    const archivo = this.files[0];
+function abrirModalColor(callback) {
+    window._nuevoColorCallback = callback;
+    const el = document.getElementById("modalColor");
+    if (!el || !window.bootstrap) return;
 
-    if (!archivo) {
+    ["nombreColor", "codigoColorText"].forEach(id => {
+        const inp = document.getElementById(id);
+        if (inp) inp.value = "";
+    });
+    const picker  = document.getElementById("codigoColor");
+    const preview = document.getElementById("previewColor");
+    if (picker)  picker.value = "#000000";
+    if (preview) preview.style.backgroundColor = "#000000";
 
-        inputURL.disabled = false;
+    new bootstrap.Modal(el).show();
+}
 
-        previewImagen.classList.add('d-none');
-        btnEliminarImagen.classList.add('d-none');
+// ── Inicializar modales (se llama UNA VEZ tras inyección) ────
+function inicializarModales() {
+    // --- Modal Categoría ---
+    const btnGuardarCategoria = document.getElementById("guardarCategoriaBtn");
+    if (btnGuardarCategoria) {
+        btnGuardarCategoria.addEventListener("click", () => {
+            const input  = document.getElementById("nombreCategoria");
+            const nombre = input?.value.trim();
+            if (!nombre) return mostrarToast("Ingresa un nombre válido.", "danger");
 
-        imagenBase64 = "";
-
-        return;
+            const nueva = agregarCategoria(nombre);   // ← catalogoService
+            cargarCategorias();
+            document.getElementById("cmbCategoria").value = nueva.id;
+            mostrarToast(`Categoría "${nueva.nombre}" agregada.`);
+            bootstrap.Modal.getInstance(document.getElementById("modalCategoria"))?.hide();
+            input.value = "";
+        });
     }
 
-    // Bloquear URL
-    inputURL.disabled = true;
+    // --- Modal Color ---
+    const picker  = document.getElementById("codigoColor");
+    const colorTx = document.getElementById("codigoColorText");
+    const preview = document.getElementById("previewColor");
 
-    const reader = new FileReader();
+    if (picker && colorTx && preview) {
+        picker.addEventListener("input",  () => { colorTx.value = picker.value; preview.style.backgroundColor = picker.value; });
+        colorTx.addEventListener("input", () => {
+            if (/^#[0-9A-Fa-f]{6}$/.test(colorTx.value)) {
+                picker.value = colorTx.value;
+                preview.style.backgroundColor = colorTx.value;
+            }
+        });
+    }
 
-    reader.onload = function (event) {
+    const btnGuardarColor = document.getElementById("guardarColorBtn");
+    if (btnGuardarColor) {
+        btnGuardarColor.addEventListener("click", () => {
+            const nombre = document.getElementById("nombreColor")?.value.trim();
+            const codigo = document.getElementById("codigoColorText")?.value.trim();
 
-        imagenBase64 = event.target.result;
+            if (!nombre) return mostrarToast("Ingresa un nombre válido.", "danger");
+            if (!codigo || !/^#[0-9A-Fa-f]{6}$/.test(codigo))
+                return mostrarToast("Código hexadecimal inválido (ej: #FF0000).", "danger");
 
-        // Mostrar preview
-        previewImagen.src = imagenBase64;
+            const nuevo = agregarColor(nombre, codigo);   // ← catalogoService
+            refrescarSelectoresColor();
+            mostrarToast(`Color "${nuevo.nombre}" agregado.`);
+            bootstrap.Modal.getInstance(document.getElementById("modalColor"))?.hide();
 
-        previewImagen.classList.remove('d-none');
-        btnEliminarImagen.classList.remove('d-none');
-    };
+            // Invocar callback del bloque que abrió el modal
+            window._nuevoColorCallback?.(nuevo);
+            window._nuevoColorCallback = null;
+        });
+    }
+}
 
-    reader.readAsDataURL(archivo);
-});
-
-document.getElementById('productForm').addEventListener('submit', function (e) {
+// ── Guardar / Actualizar producto ────────────────────────────
+function onSubmitProducto(e) {
     e.preventDefault();
 
-    // 1. Obtener referencias a los campos
-    const nombre = document.getElementById('nombreProducto').value.trim();
-    const categoria = document.getElementById('categoriaProducto').value;
-    const precio = document.getElementById('precioProducto').value;
-    const descripcion = document.getElementById('descripcionProducto').value.trim();
-    const url = document.getElementById('urlImagen').value.trim();
-    const inputArchivo = document.getElementById('imagenArchivo');
-    const alertContainer = document.getElementById('alert-container');
-    const genero = document.querySelector('input[name="generoProducto"]:checked')?.value;
+    const nombre      = document.getElementById("txtNombreProducto")?.value.trim();
+    const precio      = parseFloat(document.getElementById("txtPrecioProducto")?.value);
+    const categoriaId = document.getElementById("cmbCategoria")?.value;
+    const genero      = document.getElementById("cmbGenero")?.value;
+    const descripcion = document.getElementById("txtDescripcion")?.value.trim();
 
-    // Limpiar alertas previas
-    alertContainer.innerHTML = '';
+    // Validaciones
+    if (!nombre)                        return mostrarToast("Completa el nombre.", "danger");
+    if (!precio || precio <= 0)         return mostrarToast("Ingresa un precio válido.", "danger");
+    if (!categoriaId)                   return mostrarToast("Selecciona una categoría.", "danger");
+    if (!genero)                        return mostrarToast("Selecciona el género.", "danger");
+    if (!descripcion || descripcion.length < 20)
+        return mostrarToast("La descripción debe tener al menos 20 caracteres.", "danger");
 
-    // 2. Validación (CA3)
-    let errores = [];
-    if (!genero) errores.push("Debes seleccionar un género.");
-    if (nombre.length < 3) errores.push("El nombre debe tener al menos 3 caracteres.");
-    if (categoria === "") errores.push("Debes seleccionar una categoría.");
-    if (precio <= 0) errores.push("El precio debe ser mayor a 0.");
-    if (descripcion.length < 10) errores.push("La descripción es muy corta.");
-    const tieneURL = url !== "";
-    const tieneArchivo = inputArchivo.files.length > 0;
+    const bloques = document.querySelectorAll(".bloque-color");
+    if (!bloques.length) return mostrarToast("Agrega al menos un color.", "danger");
 
-    // Debe existir una opción
-    if (!tieneURL && !tieneArchivo) {
-        errores.push("Debes agregar una imagen por URL o archivo.");
+    const coloresProducto = [];
+    for (const bloque of bloques) {
+        const { colorId, imagenes, tallas } = leerDatosBloque(bloque);
+        if (!colorId)         return mostrarToast("Selecciona un color para todas las variantes.", "danger");
+        if (!imagenes.length) return mostrarToast("Cada color debe tener al menos una imagen.", "danger");
+        coloresProducto.push({ id_color: Number(colorId), imagenes, tallas });
     }
 
-    // Validar URL solo si existe
-    if (tieneURL && !url.startsWith('http')) {
-        errores.push("La URL de la imagen no es válida.");
-    }
+    const datos = {
+        nombre, descripcion, precio,
+        id_categoria: Number(categoriaId),
+        genero,
+        colores: coloresProducto
+    };
 
-    if (errores.length > 0) {
-        // Mostrar Alertas de Bootstrap
-        errores.forEach(msg => {
-            const alert = `
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <i class="bi bi-exclamation-triangle-fill"></i> ${msg}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>`;
-            alertContainer.innerHTML += alert;
-        });
+    if (_idEditando) {
+        // ── ACTUALIZACIÓN: PATCH, no DELETE+POST ─────────────
+        actualizarProducto(_idEditando, datos);   // ← productoService
+        mostrarToast("Producto actualizado correctamente.");
+        _idEditando = null;
+        document.getElementById("btnGuardarProducto").innerHTML =
+            '<i class="bi bi-check2-circle"></i> Crear Producto';
     } else {
-        // 3. Crear Objeto JSON (CA5)
-        const nuevoProducto = {
-            id: Date.now(), // Genera un ID único basado en tiempo
-            nombre: nombre,
-            categoria: categoria,
-            genero: genero,
-            precio: parseFloat(precio).toFixed(2),
-            descripcion: descripcion,
-            imagen: tieneArchivo ? imagenBase64 : url,
-            tipoImagen: tieneArchivo ? "archivo" : "url",
-            fechaCreacion: new Date().toISOString()
-        };
-
-        console.log("Producto Creado Exitosamente:", JSON.stringify(nuevoProducto, null, 2));
-
-        // Alerta de éxito
-        alertContainer.innerHTML = `
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <strong>¡Producto creado exitosamente!</strong><br>
-                    Los campos se limpiarán automáticamente en 3 segundos...
-                </div>`;
-
-
-        // Esperar 3 segundos antes de limpiar
-        setTimeout(() => {
-
-            // Limpiar formulario
-            document.getElementById('productForm').reset();
-
-            // Limpiar preview
-            previewImagen.src = "";
-            previewImagen.classList.add('d-none');
-            btnEliminarImagen.classList.add('d-none');
-
-            // Reactivar inputs
-            inputURL.disabled = false;
-            inputArchivoGlobal.disabled = false;
-
-            // Reiniciar Base64
-            imagenBase64 = "";
-
-            // Limpiar radio buttons
-            document.querySelectorAll('input[name="generoProducto"]').forEach(radio => {
-                radio.checked = false;
-            });
-
-            // Limpiar alertas
-            alertContainer.innerHTML = `
-                    <div class="alert alert-info alert-dismissible fade show" role="alert">
-                        El formulario ha sido limpiado correctamente.
-                        
-                        <button 
-                            type="button" 
-                            class="btn-close" 
-                            data-bs-dismiss="alert" 
-                            aria-label="Close">
-                        </button>
-                    </div>
-                    `;
-
-        }, 3000);
-
-        // Opcional: Limpiar formulario
-        // document.getElementById('productForm').reset();
+        // ── CREACIÓN ─────────────────────────────────────────
+        crearProducto(datos);   // ← productoService
+        mostrarToast("Producto registrado correctamente.");
     }
-});
 
-btnEliminarImagen.addEventListener('click', function () {
+    resetFormulario();
+    cargarProductos();
+    mostrarTab("tabListado");
+}
 
-    // Limpiar URL
-    inputURL.value = "";
+function resetFormulario() {
+    document.getElementById("frmProducto")?.reset();
+    getContenedor().innerHTML = "";
+    agregarBloqueColorUI();
+    _idEditando = null;
+}
 
-    // Limpiar archivo
-    inputArchivoGlobal.value = "";
+// ── Tabla de productos ───────────────────────────────────────
+function cargarProductos() {
+    const productos = getProductos();   // ← productoService
+    const tbody     = document.getElementById("tbodyProductos");
+    if (!tbody) return;
 
-    // Limpiar preview
-    previewImagen.src = "";
+    tbody.innerHTML = "";
 
-    previewImagen.classList.add('d-none');
-
-    // Ocultar botón
-    btnEliminarImagen.classList.add('d-none');
-
-    // Reactivar inputs
-    inputURL.disabled = false;
-
-    inputArchivoGlobal.disabled = false;
-
-    // Reiniciar Base64
-    imagenBase64 = "";
-
-    // Limpiar alertas
-    document.getElementById('alert-container').innerHTML = "";
-});
-
-precioInput.addEventListener('input', function () {
-
-    // Reemplazar comas por punto
-    let valor = this.value.replace(/,/g, '.');
-
-    // Eliminar caracteres inválidos
-    valor = valor.replace(/[^0-9.]/g, '');
-
-    // Permitir solo un punto decimal
-    valor = valor.replace(/(\..*?)\..*/g, '$1');
-
-    // Permitir máximo 2 decimales
-    valor = valor.replace(/^(\d+)(\.\d{0,2})?.*$/, '$1$2');
-
-    this.value = valor;
-});
-
-// Detectar recarga o salida
-window.addEventListener('beforeunload', function (e) {
-
-    const generoSeleccionado =
-        document.querySelector('input[name="generoProducto"]:checked');
-
-    // Verificar si hay información escrita
-    const formularioTieneDatos =
-        document.getElementById('nombreProducto').value.trim() !== "" ||
-        document.getElementById('categoriaProducto').value !== "" ||
-        generoSeleccionado ||
-        document.getElementById('precioProducto').value.trim() !== "" ||
-        document.getElementById('descripcionProducto').value.trim() !== "" ||
-        document.getElementById('urlImagen').value.trim() !== "" ||
-        document.getElementById('imagenArchivo').files.length > 0;
-
-    if (formularioTieneDatos) {
-
-        // Mensaje estándar del navegador
-        e.preventDefault();
-
-        e.returnValue = '';
+    if (!productos.length) {
+        tbody.innerHTML = '<tr><td colspan="7" class="text-center">No hay productos registrados</td></tr>';
+        return;
     }
-});
 
-// Limpiar formulario al recargar
-window.addEventListener('load', function () {
+    const categorias = getCategorias();
 
-    document.getElementById('productForm').reset();
+    productos.forEach(p => {
+        const cat       = categorias.find(c => c.id === p.id_categoria);
+        const inactivo  = p.estado === "inactivo";
+        const estadoBadge = inactivo
+            ? `<span class="badge bg-secondary">Inactivo</span>`
+            : `<span class="badge bg-success">Activo</span>`;
 
-    previewImagen.src = "";
+        const tr = document.createElement("tr");
+        if (inactivo) tr.classList.add("producto-inactivo");
 
-    // Limpiar radio buttons
-    document.querySelectorAll('input[name="generoProducto"]').forEach(radio => {
-        radio.checked = false;
+        tr.innerHTML = `
+            <td>${p.id_producto}</td>
+            <td>
+                <strong>${p.nombre}</strong><br>
+                <small class="text-muted">${p.colores.length} color(es)</small>
+            </td>
+            <td>${cat?.nombre || "-"}</td>
+            <td>${p.genero}</td>
+            <td>$${p.precio.toFixed(2)}</td>
+            <td>${estadoBadge}</td>
+            <td class="text-end">
+                <div class="btn-group">
+                    <button class="btn btn-info btn-sm"
+                            onclick="verStock(${p.id_producto})"
+                            title="Ver stock"
+                            ${inactivo ? "disabled" : ""}>
+                        <i class="bi bi-boxes"></i>
+                    </button>
+                    <button class="btn btn-warning btn-sm"
+                            onclick="editarProducto(${p.id_producto})"
+                            title="Editar"
+                            ${inactivo ? "disabled" : ""}>
+                        <i class="bi bi-pencil"></i>
+                    </button>
+                    <button class="btn btn-${inactivo ? "success" : "secondary"} btn-sm"
+                            onclick="cambiarEstadoProducto(${p.id_producto})"
+                            title="${inactivo ? "Activar" : "Dar de baja"}">
+                        <i class="bi bi-${inactivo ? "arrow-repeat" : "archive"}"></i>
+                    </button>
+                </div>
+            </td>`;
+        tbody.appendChild(tr);
     });
+}
 
-    previewImagen.classList.add('d-none');
+// ── Ver stock ────────────────────────────────────────────────
+function verStock(id) {
+    const producto = getProductoById(id);
+    if (!producto || producto.estado === "inactivo") return;
 
-    btnEliminarImagen.classList.add('d-none');
+    const html = producto.colores.map(c => {
+        const info  = getColorById(c.id_color);
+        const stock = c.tallas.map(t => `${t.talla}: ${t.stock}`).join(", ");
+        return `
+            <div class="stock-item mb-3 p-2"
+                 style="border-left:4px solid ${info?.codigo || "#ccc"};
+                        background:rgba(255,255,255,0.05);border-radius:8px;">
+                <strong style="color:${info?.codigo || "#fff"}">${info?.nombre || "Color"}</strong><br>
+                <small>${stock}</small>
+            </div>`;
+    }).join("") || '<p class="text-muted">Sin información de stock</p>';
 
-    imagenBase64 = "";
+    const modalBody = document.getElementById("stockModalBody");
+    if (modalBody) {
+        modalBody.innerHTML = html;
+        new bootstrap.Modal(document.getElementById("modalStock")).show();
+    }
+}
 
-    inputURL.disabled = false;
+// ── Editar producto ──────────────────────────────────────────
+function editarProducto(id) {
+    const producto = getProductoById(id);
+    if (!producto || producto.estado === "inactivo") return;
 
-    inputArchivoGlobal.disabled = false;
-});
+    // Guardamos el id en memoria — NO eliminamos el producto
+    _idEditando = producto.id_producto;
+
+    mostrarTab("tabAgregar");
+
+    document.getElementById("txtNombreProducto").value = producto.nombre;
+    document.getElementById("txtPrecioProducto").value = producto.precio;
+    document.getElementById("cmbCategoria").value      = producto.id_categoria;
+    document.getElementById("cmbGenero").value         = producto.genero;
+    document.getElementById("txtDescripcion").value    = producto.descripcion;
+
+    getContenedor().innerHTML = "";
+    producto.colores.forEach(c => agregarBloqueColorUI(c));
+
+    document.getElementById("btnGuardarProducto").innerHTML =
+        '<i class="bi bi-pencil-square"></i> Actualizar Producto';
+
+    mostrarToast("Editando producto — guarda los cambios cuando termines.");
+}
+
+// ── Cambiar estado ───────────────────────────────────────────
+function cambiarEstadoProducto(id) {
+    const actualizado = cambiarEstado(id);   // ← productoService
+    cargarProductos();
+    mostrarToast(`Producto ${actualizado.estado === "activo" ? "activado" : "desactivado"} correctamente.`);
+}
+
+// ── Helpers de navegación ────────────────────────────────────
+function mostrarTab(tabId) {
+    const el = document.getElementById(tabId);
+    if (el && window.bootstrap) new bootstrap.Tab(el).show();
+}
+
+// ── Bootstrap: inicialización principal ─────────────────────
+function inicializarTodo() {
+    cargarCategorias();
+    agregarBloqueColorUI();
+    cargarProductos();
+
+    document.getElementById("btnAgregarColor")
+        ?.addEventListener("click", () => agregarBloqueColorUI());
+
+    document.getElementById("frmProducto")
+        ?.addEventListener("submit", onSubmitProducto);
+
+    document.getElementById("btnNuevaCategoria")
+        ?.addEventListener("click", abrirModalCategoria);
+}
+
+// Espera a que modal-fix.js inyecte los modales y dispare el evento
+// { once: true } garantiza que el listener se ejecute exactamente una vez
+document.addEventListener("modalesListos", () => {
+    inicializarModales();
+}, { once: true });
+
+// Inicializa la UI cuando el DOM esté listo
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", inicializarTodo);
+} else {
+    inicializarTodo();
+}
+
+// ── Exponer funciones llamadas desde HTML (onclick="...") ────
+window.editarProducto       = editarProducto;
+window.cambiarEstadoProducto = cambiarEstadoProducto;
+window.verStock             = verStock;

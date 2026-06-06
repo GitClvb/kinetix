@@ -8,6 +8,9 @@
     --gris-carbono: #2E2E2E;
     --gris-nube: #F2F2F2;
     --blanco: #FFFFFF;
+    --naranja-soft: #FFF0EB;
+    --borde-suave: #E0E0E0;
+    --texto-muted: #666666;
     --font-main: "Work Sans", sans-serif;
     --font-heading: 'Post No Bills Colombo', sans-serif;
 }
@@ -66,7 +69,7 @@ body {
 .navbar .nav-link.nav-active::after {
     content: "";
     position: absolute;
-    bottom: -2px; 
+    bottom: -2px;
     left: 10%;
     width: 80%;
     height: 3px;
@@ -76,7 +79,8 @@ body {
     display: block !important;
 }
 
-.btn-registro-trigger, .btn-enviar {
+.btn-registro-trigger,
+.btn-enviar {
     background-color: var(--naranja);
     color: var(--blanco);
     border-radius: 6px;
@@ -86,7 +90,8 @@ body {
     white-space: nowrap;
 }
 
-.btn-registro-trigger:hover, .btn-enviar:hover {
+.btn-registro-trigger:hover,
+.btn-enviar:hover {
     background-color: #e05a28;
     color: var(--blanco);
 }
@@ -140,6 +145,7 @@ body {
     letter-spacing: 1px;
     transition: background 0.3s ease;
     text-decoration: none;
+    border-color: var(--naranja);
 }
 
 .btn-cta:hover {
@@ -218,6 +224,10 @@ body {
         height: 25px;
     }
 
+    .apertura {
+        font-size: 0.8rem;
+    }
+
     .btn-registro-trigger {
         padding: 6px 12px;
         font-size: 0.8rem;
@@ -276,11 +286,13 @@ body {
         width: 100%;
         font-size: .8rem;
     }
-    
+
     /* Adaptación de la línea activa en pantallas colapsadas */
     .navbar-nav .nav-link.nav-active::after {
         bottom: 2px;
         left: 0;
         width: 40px;
     }
-} /* <--- ¡AQUÍ ESTABA EL ERROR! Esta llave de cierre final hacía falta */
+}
+
+/* <--- ¡AQUÍ ESTABA EL ERROR! Esta llave de cierre final hacía falta */
