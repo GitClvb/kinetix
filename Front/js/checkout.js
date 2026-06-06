@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     // Filtro pára saber si un user esta loggeado
     const isLogged = localStorage.getItem('kinetix_user_logged');
-    
+
     if (!isLogged) {
         // Redirección inmediata al login si un invitado intenta entrar directo por URL
         window.location.href = "login.html";
@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function renderResumenCompra() {
         if (!itemsContainer || !cartCountBadge) return;
         itemsContainer.innerHTML = "";
-        
+
         if (carrito.length === 0) {
             itemsContainer.innerHTML = `<li class="list-group-item text-center text-muted py-3">Tu carrito está vacío</li>`;
             cartCountBadge.textContent = "0";
@@ -27,48 +27,85 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         // Agrupación dinámica en caliente para corregir cantidades "undefined" y errores NaN
-        const productosAgrupados = {};
+        // Renderizado estético de productos agrupados
         let totalGeneral = 0;
+        let totalArticulos = 0;
 
         carrito.forEach(producto => {
-            totalGeneral += producto.precio;
-            
-            if (productosAgrupados[producto.nombre]) {
-                productosAgrupados[producto.nombre].cantidad += 1;
-                productosAgrupados[producto.nombre].subtotal += producto.precio;
-            } else {
-                productosAgrupados[producto.nombre] = {
-                    precio: producto.precio,
-                    cantidad: 1,
-                    subtotal: producto.precio
-                };
-            }
-        });
 
-        // Renderizado estético de productos agrupados
-        Object.keys(productosAgrupados).forEach(nombre => {
-            const item = productosAgrupados[nombre];
+            const subtotal =
+                producto.precio * producto.cantidad;
+
+            totalGeneral += subtotal;
+            totalArticulos += producto.cantidad;
+
             itemsContainer.innerHTML += `
-                <li class="list-group-item d-flex justify-content-between lh-sm py-3">
-                    <div>
-                        <h6 class="my-0 fw-bold text-dark">${nombre}</h6>
-                        <small class="text-muted">Cantidad: ${item.cantidad}</small>
+                <li class="list-group-item checkout-item">
+
+                    <img
+                        src="${producto.imagen}"
+                        alt="${producto.nombre}"
+                        class="checkout-product-image">
+
+                    <div class="checkout-product-info">
+
+                        <h6 class="fw-bold mb-1">
+                            ${producto.nombre}
+                        </h6>
+
+                        <small class="text-muted d-block">
+                            Cantidad: ${producto.cantidad}
+                        </small>
+
+                        ${producto.talla ? `
+                            <small class="text-muted d-block">
+                                Talla: ${producto.talla}
+                            </small>
+                        ` : ""}
+
+                        ${producto.color ? `
+                            <small class="text-muted d-flex align-items-center gap-2">
+                                Color:
+                                <span
+                                    class="checkout-color-dot"
+                                    style="background:${producto.color}">
+                                </span>
+                            </small>
+                        ` : ""}
+
                     </div>
-                    <span class="text-muted fw-semibold">$${item.subtotal.toFixed(2)} MXN</span>
+
+                    <div class="checkout-subtotal">
+                        $${subtotal.toFixed(2)}
+                    </div>
+
                 </li>
             `;
         });
 
         // Fila del Total General de la Orden
         itemsContainer.innerHTML += `
-            <li class="list-group-item d-flex justify-content-between bg-light py-3 border-top">
-                <span class="fw-bold text-dark">Total (MXN)</span>
-                <strong style="color: #EA9230; font-size: 1.2rem;">$${totalGeneral.toFixed(2)} MXN</strong>
+            <li
+                class="list-group-item
+                    d-flex
+                    justify-content-between
+                    align-items-center
+                    bg-light
+                    py-3">
+
+                <span class="fw-bold">
+                    Total
+                </span>
+
+                <strong class="total-pagar">
+                    $${totalGeneral.toFixed(2)} MXN
+                </strong>
+
             </li>
-        `;
+            `;
 
         // Setea el total de artículos en el badge contador
-        cartCountBadge.textContent = carrito.length;
+        cartCountBadge.textContent = totalArticulos;
     }
 
     // 2. Validación y envío del formulario

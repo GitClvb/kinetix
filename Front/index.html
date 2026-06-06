@@ -48,7 +48,7 @@
             <div class="row g-4 categorias-grid">
                 <div class="col-md-4">
                     <div class="tarjeta-categoria shadow-sm">
-                        <a href="catalogo.html">
+                        <a href="catalogo.html" onclick="localStorage.setItem('generoSeleccionado', 'mujer')">
                             <img src="./img/mujer.webp" alt="Mujeres">
                             <div class="overlay-texto">MUJERES</div>
                         </a>
@@ -56,9 +56,9 @@
                 </div>
                 <div class="col-md-4">
                     <div class="tarjeta-categoria shadow-sm">
-                        <a href="catalogo.html">
+                        <a href="catalogo.html" onclick="localStorage.setItem('generoSeleccionado', 'hombre')">
                             <img src="./img/hombre.webp" alt="Hombres">
-                        <div class="overlay-texto">HOMBRES</div>
+                            <div class="overlay-texto">HOMBRES</div>
                         </a>
                     </div>
                 </div>
@@ -80,8 +80,8 @@
                 <div class="row align-items-center">
                     <div class="col-md-4 text-center text-md-start">
                         <h2 class="titulo-heavy display-5"><span class="text-orange">Prueba</span><br>
-                             <h2 class="titulo-heavy display-5"><span class="text-black">los más vendidos</span><br>
-                        </h2>
+                            <h2 class="titulo-heavy display-5"><span class="text-black">los más vendidos</span><br>
+                            </h2>
                     </div>
                     <div class="col-md-8">
                         <div class="row g-4">
@@ -119,7 +119,7 @@
         </section>
     </main>
 
-<!-- FOOTER -->
+    <!-- FOOTER -->
     <div id="footer-container"></div>
 
     <!-- JS (ESTE ORDEN ES OBLIGATORIO) -->
@@ -129,4 +129,5 @@
     <script src="./js/cart.js"></script>
     <script src="./js/modal-fix.js"></script>
 </body>
+
 </html>
