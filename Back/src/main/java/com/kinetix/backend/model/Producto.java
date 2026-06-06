@@ -1,4 +1,5 @@
 package com.kinetix.backend.model;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -9,22 +10,29 @@ public class Producto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String nombre;
 
+    @Column(nullable = false, length = 500)
+    private String descripcion;
+
+    @Column(nullable = false)
     private Double precio;
 
-    // constructor vacío
+    @Column(nullable = false)
+    private Integer stock;
+
     public Producto() {
     }
 
-    // constructor
-    public Producto(Long id, String nombre, Double precio) {
+    public Producto(Long id, String nombre, String descripcion, Double precio, Integer stock) {
         this.id = id;
         this.nombre = nombre;
+        this.descripcion = descripcion;
         this.precio = precio;
+        this.stock = stock;
     }
 
-    // getters y setters
     public Long getId() {
         return id;
     }
@@ -41,11 +49,27 @@ public class Producto {
         this.nombre = nombre;
     }
 
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
     public Double getPrecio() {
         return precio;
     }
 
     public void setPrecio(Double precio) {
         this.precio = precio;
+    }
+
+    public Integer getStock() {
+        return stock;
+    }
+
+    public void setStock(Integer stock) {
+        this.stock = stock;
     }
 }

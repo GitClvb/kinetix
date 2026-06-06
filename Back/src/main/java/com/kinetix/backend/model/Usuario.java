@@ -10,25 +10,29 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String nombre;
 
+    @Column(nullable = false, unique = true)
     private String correo;
 
+    @Column(nullable = false)
     private String password;
 
-    // constructor vacío
+    @Column(nullable = false)
+    private String telefono;
+
     public Usuario() {
     }
 
-    // constructor
-    public Usuario(Long id, String nombre, String correo, String password) {
+    public Usuario(Long id, String nombre, String correo, String password, String telefono) {
         this.id = id;
         this.nombre = nombre;
         this.correo = correo;
         this.password = password;
+        this.telefono = telefono;
     }
 
-    // getters y setters
     public Long getId() {
         return id;
     }
@@ -59,5 +63,13 @@ public class Usuario {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
     }
 }
