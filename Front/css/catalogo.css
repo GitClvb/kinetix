@@ -144,6 +144,69 @@ PRODUCT CARD
     background: var(--naranja);
 }
 
+.categorias-wrapper {
+    position: relative;
+    padding: 0 50px;
+}
+
+.categoria-arrow {
+    position: absolute;
+    top: 45%;
+    transform: translateY(-50%);
+
+    width: 40px;
+    height: 40px;
+
+    border: none;
+    border-radius: 50%;
+
+    background: white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, .12);
+
+    z-index: 10;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+
+    transition: .25s ease;
+}
+
+.categoria-arrow:hover {
+    transform: translateY(-50%) scale(1.08);
+}
+
+.categoria-arrow-left {
+    left: 0px;
+}
+
+.categoria-arrow-right {
+    right: 0px;
+}
+
+#contenedor-categorias {
+    display: flex;
+    flex-wrap: nowrap !important;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+
+    scroll-snap-type: x proximity;
+    position: relative;
+
+    padding-bottom: .75rem;
+    margin-bottom: 1.25rem !important;
+
+    flex-wrap: nowrap;
+    scroll-behavior: smooth;
+}
+
+
 /* =========================
 RESPONSIVE
 ========================= */
@@ -161,50 +224,32 @@ RESPONSIVE
         height: 180px;
     }
 
-    .product-info{
+    .product-info {
         padding: 14px;
     }
 
-    .product-title{
+    .product-title {
         font-size: .95rem;
         margin: 6px 0;
     }
 
-    .product-price{
+    .product-price {
         font-size: 1rem;
         margin-bottom: .75rem;
     }
 
-    .product-label{
-        display:none !important;
+    .product-label {
+        display: none !important;
     }
 
-    .product-btn{
+    .product-btn {
         padding: 10px;
         font-size: .85rem;
     }
 
-    #catalogo-grid{
+    #catalogo-grid {
         --bs-gutter-x: .75rem;
         --bs-gutter-y: .75rem;
-    }
-
-    #contenedor-categorias {
-        display: flex;
-        flex-wrap: nowrap !important;
-        overflow-x: auto;
-        overflow-y: hidden;
-        padding-bottom: .5rem;
-        scrollbar-width: none;
-
-        -webkit-overflow-scrolling: touch;
-        width: 100%;
-
-        scroll-snap-type: x proximity;
-        position: relative;
-
-        padding-bottom: .75rem;
-        margin-bottom: 1.25rem !important;
     }
 
     #contenedor-categorias::-webkit-scrollbar {
@@ -229,6 +274,11 @@ RESPONSIVE
 
     .categorias-wrapper {
         position: relative;
+        padding: 0;
+    }
+
+    .categoria-arrow {
+        display: none;
     }
 
     .categorias-wrapper::after {
@@ -246,8 +296,8 @@ RESPONSIVE
                 rgba(255, 255, 255, 1));
     }
 
-    .filter-sidebar{
-        padding:1rem !important;
+    .filter-sidebar {
+        padding: 1rem !important;
     }
 
 }
@@ -441,10 +491,6 @@ ATRIBUTOS PRODUCTO
     transition: .25s ease;
 }
 
-.color-dot:hover {
-    transform: scale(1.15);
-}
-
 /*Categorias seleccionadas que no arrojan nada*/
 .empty-state {
     padding: 80px 20px;
@@ -471,36 +517,36 @@ ATRIBUTOS PRODUCTO
     color: var(--gris-carbono);
 }
 
-.sizes-filter{
-    display:flex;
-    gap:.5rem;
-    flex-wrap:wrap;
+.sizes-filter {
+    display: flex;
+    gap: .5rem;
+    flex-wrap: wrap;
 }
 
-.sizes-filter input{
-    display:none;
+.sizes-filter input {
+    display: none;
 }
 
-.sizes-filter label{
-    padding:8px 14px;
-    border:1px solid #ddd;
-    border-radius:999px;
-    cursor:pointer;
-    font-weight:600;
-    transition:.3s ease;
-    background:var(--blanco);
-    color:var(--negro-profundo);
-    display:flex;
-    align-items:center;
-    justify-content:center;
+.sizes-filter label {
+    padding: 8px 14px;
+    border: 1px solid #ddd;
+    border-radius: 999px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: .3s ease;
+    background: var(--blanco);
+    color: var(--negro-profundo);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.sizes-filter label:hover{
-    border-color:var(--naranja);
+.sizes-filter label:hover {
+    border-color: var(--naranja);
 }
 
-.sizes-filter input:checked + label{
-    background:var(--naranja);
-    border-color:var(--naranja);
-    color:var(--blanco);
+.sizes-filter input:checked+label {
+    background: var(--naranja);
+    border-color: var(--naranja);
+    color: var(--blanco);
 }
