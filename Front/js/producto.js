@@ -48,7 +48,7 @@ precioProducto.textContent =
     producto.precio;
 
 imagenPrincipal.src =
-    producto.imagen;
+    producto.colores[0].imagen;
 
 imagenPrincipal.alt =
     producto.nombre;
@@ -64,16 +64,18 @@ botonCarrito.dataset.precio =
     producto.precio.replace("$", "");
 
 botonCarrito.dataset.imagen =
-    producto.imagen;
+    producto.colores[0].imagen;
 
 /* =========================
 RENDER TALLAS
 ========================= */
 
-if (producto.talla?.length) {
+function renderTallas(color) {
+
+    tallaSeleccionada = null;
 
     contenedorTallas.innerHTML =
-        producto.talla
+        color.talla
             .map(talla => `
                 <button
                     class="size-btn"
@@ -84,7 +86,48 @@ if (producto.talla?.length) {
             .join("");
 
     const botonesTalla =
-        document.querySelectorAll(".size-btn");
+        contenedorTallas.querySelectorAll(".size-btn");
+
+    botonesTalla.forEach(btn => {
+
+        btn.addEventListener("click", () => {
+
+            botonesTalla.forEach(b =>
+                b.classList.remove("active-size")
+            );
+
+            btn.classList.add("active-size");
+
+            tallaSeleccionada =
+                btn.dataset.talla;
+
+            botonCarrito.dataset.talla =
+                tallaSeleccionada;
+
+        });
+
+    });
+
+}
+
+
+function renderTallas(color) {
+
+    tallaSeleccionada = null;
+
+    contenedorTallas.innerHTML =
+        color.talla
+            .map(talla => `
+                <button
+                    class="size-btn"
+                    data-talla="${talla}">
+                    ${talla}
+                </button>
+            `)
+            .join("");
+
+    const botonesTalla =
+        contenedorTallas.querySelectorAll(".size-btn");
 
     botonesTalla.forEach(btn => {
 
@@ -139,17 +182,24 @@ if (producto.colores?.length) {
 
             color.classList.add("active-color");
 
+            const colorActual =
+                producto.colores.find(
+                    c => c.codigo === color.dataset.color
+                );
+
             colorSeleccionado =
-                color.dataset.color;
+                colorActual.codigo;
 
             botonCarrito.dataset.color =
                 colorSeleccionado;
 
             imagenPrincipal.src =
-                color.dataset.imagen;
+                colorActual.imagen;
 
             botonCarrito.dataset.imagen =
-                color.dataset.imagen;
+                colorActual.imagen;
+
+            renderTallas(colorActual);
 
         });
 
