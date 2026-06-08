@@ -9,15 +9,17 @@ PRODUCTOS
 const productos = {
     hombre: [
         {
-            nombre: "Playera Oversize Black", categoria: "Playera", precio: "$599", talla: ["CH", "M", "G"],
+            nombre: "Playera Oversize Black", categoria: "Playera", precio: "$599",
             colores: [
                 {
                     codigo: "#000000",
-                    imagen: "./img/hombre1-negro.jpg"
+                    imagen: "./img/hombre1-negro.jpg",
+                    talla: ["CH", "M"]
                 },
                 {
                     codigo: "#FFFFFF",
-                    imagen: "./img/hombre1-blanco.webp"
+                    imagen: "./img/hombre1-blanco.webp",
+                    talla: ["G"]
                 }
             ],
             descripcion: "Descripcion del articulo numero 1. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Assumenda consequuntur voluptatibus eos non quis, quasi reprehenderit modi error quae quas voluptates ex, eveniet, a placeat optio asperiores atque temporibus quaerat!"
@@ -132,10 +134,17 @@ MOSTRAR PRODUCTOS
 ========================= */
 
 function crearCardProducto(producto) {
-    const imagenPrincipal =
-    producto.colores?.[0]?.imagen || "";
-    return `
 
+    const imagenPrincipal =
+        producto.colores?.[0]?.imagen || producto.imagen || "";
+
+    const tallas = producto.colores
+        ? [...new Set(
+            producto.colores.flatMap(color => color.talla || [])
+        )]
+        : (producto.talla || []);
+
+    return `
         <div class="col-6 col-lg-6 col-xl-4">
 
             <div class="product-card">
@@ -167,7 +176,7 @@ function crearCardProducto(producto) {
 
                         <div class="sizes-container">
 
-                            ${(producto.talla || []).map(talla => `
+                            ${tallas.map(talla => `
                                 <span class="size-chip">
                                     ${talla}
                                 </span>
@@ -190,7 +199,7 @@ function crearCardProducto(producto) {
                                     class="color-dot"
                                     style="background:${color.codigo}">
                                 </span>
-                            `)}
+                            `).join("")}
 
                         </div>
 
@@ -210,9 +219,7 @@ function crearCardProducto(producto) {
             </div>
 
         </div>
-
     `;
-
 }
 
 function crearEstadoVacio() {
@@ -260,13 +267,17 @@ function mostrarProductos(genero, categoria = "Todas") {
 
         if (tallasSeleccionadas.length > 0) {
 
-            productosFiltrados = productosFiltrados.filter(producto =>
+            productosFiltrados = productosFiltrados.filter(producto => {
 
-                producto.talla.some(talla =>
+                const tallasProducto = producto.colores
+                    ? producto.colores.flatMap(color => color.talla || [])
+                    : (producto.talla || []);
+
+                return tallasProducto.some(talla =>
                     tallasSeleccionadas.includes(talla)
-                )
+                );
 
-            );
+            });
 
         }
 
