@@ -1,0 +1,162 @@
+/* NOSOTROS.CSS - KinetixFit - Estilos exclusivos de la página "Nosotros"*/
+
+/* HERO NOSOTROS */
+.hero-section {
+    min-height: 70vh;
+    background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('../img/banner-nosotros.webp');
+    background-size: cover;
+    background-position: center;
+    color: var(--blanco);
+    display: flex;
+    align-items: center;
+    border-bottom: 5px solid var(--naranja);
+}
+
+.italic {
+    font-style: italic;
+}
+
+.lead {
+    color: var(--negro-profundo);
+    font-family: var(--font-main);
+}
+
+/* TEXTO ESPECÍFICO DE NOSOTROS */
+.text-orange-heading {
+    color: var(--naranja);
+    font-family: var(--font-main);
+}
+
+/* TARJETAS DE IMÁGENES */
+.tarjeta-producto {
+    background-color: var(--blanco);
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    border: 1px solid #ddd;
+    transition: all 0.4s ease;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /*margin: 10px;
+    padding: 10px;*/
+}
+
+.tarjeta-producto img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.5s ease;
+    padding: 10px;
+}
+
+.tarjeta-producto:hover img {
+    transform: scale(1);
+}
+
+.tarjeta-producto:hover {
+    transform: scale(1.05);
+}
+
+/* SECCIÓN HISTORIA */
+.historia-section {
+    background-color: var(--negro-profundo);
+    color: var(--blanco);
+}
+
+/* SECCIÓN INVITACIÓN */
+.section-invitacion {
+    background-color: var(--naranja);
+}
+
+.invitacion-titulo {
+    font-family: 'Post No Bills Colombo ExtraBold', sans-serif;
+    font-size: 3.5rem;
+    color: var(--negro-profundo);
+    letter-spacing: 1px;
+    line-height: 1.1;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.btn-invitacion {
+    background-color: var(--gris-nube);
+    color: var(--negro-profundo);
+    border-radius: 0;
+    padding: 15px 40px;
+    font-weight: 900;
+    text-transform: uppercase;
+    font-size: 1.2rem;
+    border: none;
+    transition: background 0.3s ease;
+}
+
+.btn-invitacion:hover {
+    background-color: var(--blanco);
+    color: var(--naranja);
+}
+
+/* Responsive */
+
+/* TABLET */
+@media (max-width: 992px) {
+    .tarjeta-producto {
+        aspect-ratio: 3 / 4;
+    }
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+
+    /* Hero section */
+    .hero-section {
+        min-height: 40vh;
+        background-size: cover;
+        background-position: 60% center;
+        padding: 40px 0;
+    }
+
+    .hero-section h1 {
+        font-size: 1.8rem;
+    }
+
+    /*parrafos*/
+    .lead {
+        font-size: 1.1rem;
+    }
+    .text-orange-heading {
+        margin-top: 25px;
+    }
+
+    /* CTA */
+    .invitacion-titulo {
+        font-size: 2.5rem;
+    }
+
+    .btn-invitacion {
+        font-size: .7rem;
+    }
+
+    /* carousel */
+
+      #carouselNosotros {
+        padding-inline: 12px;
+    }
+
+    #carouselNosotros .tarjeta-producto {
+        width: 100%;
+        height: 250px;
+        aspect-ratio: 16 / 9;
+        overflow: hidden;
+    }
+
+    #carouselNosotros .tarjeta-producto img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: left center;
+        padding: 0;
+    }
+
+}

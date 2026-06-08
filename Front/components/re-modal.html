@@ -1,0 +1,293 @@
+<!-- MODAL REGISTRO -->
+<div class="modal fade" id="registroModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content custom-modal-bg border-0 shadow-lg">
+      
+      <div class="modal-header border-bottom border-secondary px-4">
+        <h5 class="modal-title fw-bold text-uppercase" style="letter-spacing:1px;">
+          <span class="text-orange">Únete</span> al Team
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body p-4">
+        <div id="alertContainer"></div>
+        
+        <form id="registerForm" autocomplete="off">
+          <div class="mb-3">
+            <input type="text" id="nombre" class="form-control input-kinetix" placeholder="Nombre">
+          </div>
+          <div class="mb-3">
+            <input type="text" id="apellido" class="form-control input-kinetix" placeholder="Apellido">
+          </div>
+          <div class="mb-3">
+            <input type="tel" id="telefono" class="form-control input-kinetix" placeholder="Teléfono">
+          </div>
+          <div class="mb-3">
+            <input type="email" id="correo" class="form-control input-kinetix" placeholder="Correo electrónico">
+          </div>
+          <div class="mb-3">
+            <input type="password" id="password" class="form-control input-kinetix" placeholder="Contraseña" autocomplete="new-password">
+          </div>
+          <div class="mb-4">
+            <input type="password" id="confirmPassword" class="form-control input-kinetix" placeholder="Confirmar contraseña" autocomplete="new-password">
+          </div>
+
+          <button type="button" id="btnCrearCuenta" class="btn-registro-modal w-100 py-2 fw-bold text-uppercase">
+            Crear cuenta
+          </button>
+
+          <div class="text-center mt-3">
+            <p class="text-white mb-0" style="font-size: 0.9rem;">
+                ¿Ya tienes una cuenta? 
+              <a href="login.html" id="linkIrALogin" class="text-orange text-decoration-none fw-bold" style="cursor: pointer;">
+                Inicia sesión aquí
+              </a>
+            </p>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL GUÍA DE TALLAS -->
+<div class="modal fade" id="tallasModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content custom-modal-bg border-0 shadow-lg">
+      <div class="modal-header border-bottom border-secondary px-4">
+        <h5 class="modal-title fw-bold text-uppercase">
+          Guía de Tallas
+        </h5>
+        <button type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="modal">
+        </button>
+      </div>
+
+      <div class="modal-body p-4 text-white">
+
+        <p>
+          Encuentra tu talla ideal comparando tus medidas.
+        </p>
+
+        <div class="table-responsive">
+
+          <table class="table table-dark table-bordered text-center align-middle">
+
+            <thead>
+              <tr>
+                <th>Talla</th>
+                <th>Pecho</th>
+                <th>Cintura</th>
+              </tr>
+            </thead>
+
+            <tbody>
+
+              <tr>
+                <td>S</td>
+                <td>88 - 94 cm</td>
+                <td>72 - 78 cm</td>
+              </tr>
+
+              <tr>
+                <td>M</td>
+                <td>95 - 102 cm</td>
+                <td>79 - 86 cm</td>
+              </tr>
+
+              <tr>
+                <td>L</td>
+                <td>103 - 110 cm</td>
+                <td>87 - 94 cm</td>
+              </tr>
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- MODAL ENVÍOS -->
+<div class="modal fade" id="enviosModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content custom-modal-bg border-0 shadow-lg">
+      <div class="modal-header border-bottom border-secondary px-4">
+        <h5 class="modal-title fw-bold text-uppercase">
+          Envíos y Entregas
+        </h5>
+        <button type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="modal">
+        </button>
+      </div>
+
+      <div class="modal-body p-4 text-white">
+        <div class="mb-3">
+          <h6 class="text-orange fw-bold">
+            Tiempo estimado
+          </h6>
+          <p>
+            Los pedidos llegan de 3 a 7 días hábiles.
+          </p>
+        </div>
+
+        <div class="mb-3">
+          <h6 class="text-orange fw-bold">
+            Envío gratis
+          </h6>
+
+          <p>
+            Compras mayores a $999 MXN obtienen envío gratuito.
+          </p>
+
+        </div>
+
+        <div>
+
+          <h6 class="text-orange fw-bold">
+            Seguimiento
+          </h6>
+
+          <p>
+            Recibirás una guía de rastreo por correo electrónico.
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- MODAL DEVOLUCIONES -->
+<div class="modal fade" id="devolucionesModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content custom-modal-bg border-0 shadow-lg">
+      <div class="modal-header border-bottom border-secondary px-4">
+        <h5 class="modal-title fw-bold text-uppercase">
+          Devoluciones
+        </h5>
+        <button type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="modal">
+        </button>
+      </div>
+      <div class="modal-body p-4 text-white">
+
+        <p>
+          Puedes solicitar una devolución dentro de los primeros 15 días posteriores a tu compra.
+        </p>
+
+        <ul>
+
+          <li>El producto debe estar sin uso.</li>
+
+          <li>Debe conservar etiquetas originales.</li>
+
+          <li>Se requiere comprobante de compra.</li>
+
+        </ul>
+
+        <div class="mt-4">
+
+          <h6 class="text-orange fw-bold">
+            Contacto de soporte
+          </h6>
+
+          <p class="mb-0">
+            soporte@kinetixfit.com
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- MODAL POLÍTICAS -->
+<div class="modal fade" id="politicasModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content custom-modal-bg border-0 shadow-lg">
+      <div class="modal-header border-bottom border-secondary px-4">
+        <h5 class="modal-title fw-bold text-uppercase">
+          Políticas y Condiciones
+        </h5>
+        <button type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="modal">
+        </button>
+      </div>
+
+      <div class="modal-body p-4 text-white">
+        <div class="mb-4">
+          <h6 class="text-orange fw-bold">
+            Compras
+          </h6>
+
+          <p>
+            Todas las compras están sujetas a disponibilidad de inventario.
+          </p>
+
+        </div>
+
+        <div class="mb-4">
+
+          <h6 class="text-orange fw-bold">
+            Pagos
+          </h6>
+
+          <p>
+            Aceptamos tarjetas de crédito, débito y pagos digitales autorizados.
+          </p>
+
+        </div>
+
+        <div class="mb-4">
+
+          <h6 class="text-orange fw-bold">
+            Privacidad
+          </h6>
+
+          <p>
+            Tu información personal será protegida y utilizada únicamente para fines relacionados con tu compra.
+          </p>
+
+        </div>
+
+        <div>
+
+          <h6 class="text-orange fw-bold">
+            Restricciones
+          </h6>
+
+          <p class="mb-0">
+            KinetixFit se reserva el derecho de cancelar pedidos por actividad sospechosa o errores de sistema.
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

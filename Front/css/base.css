@@ -1,0 +1,286 @@
+/* BASE.CSS - KinetixFit - Estilos compartidos entre todas las páginas */
+
+/* VARIABLES GLOBALES */
+:root {
+    --naranja: #FF6B35;
+    --verde: #A3FF00;
+    --negro-profundo: #1C1C1C;
+    --gris-carbono: #2E2E2E;
+    --gris-nube: #F2F2F2;
+    --blanco: #FFFFFF;
+    --font-main: "Work Sans", sans-serif;
+    --font-heading: 'Post No Bills Colombo', sans-serif;
+}
+
+/* ESTILOS GENERALES */
+body {
+    font-family: var(--font-main);
+    color: var(--blanco);
+}
+
+/* CLASES UTILITARIAS GLOBALES */
+.text-orange {
+    color: var(--naranja);
+}
+
+.highlight {
+    color: var(--naranja);
+    font-weight: bold;
+}
+
+.bg-gris-nube {
+    background-color: var(--gris-nube);
+}
+
+/* BARRA DE ANUNCIO */
+.announcement-bar {
+    background-color: var(--negro-profundo);
+}
+
+.apertura {
+    color: var(--naranja);
+    letter-spacing: 15px;
+    font-size: 1.2rem;
+}
+
+/* HEADER / NAVBAR */
+.logo {
+    height: 40px;
+}
+
+/* ==========================================================================
+   INDICADOR DE PÁGINA ACTIVA (Alta Especificidad para anular Bootstrap)
+   ========================================================================== */
+.navbar-nav .nav-link.nav-active,
+.navbar .nav-link.nav-active,
+.nav-item .nav-link.nav-active {
+    color: var(--naranja) !important;
+    font-weight: 700 !important;
+    position: relative;
+    background-color: transparent !important;
+    transition: color 0.3s ease;
+}
+
+/* Línea inferior brillante con sombreado decorativo */
+.navbar-nav .nav-link.nav-active::after,
+.navbar .nav-link.nav-active::after {
+    content: "";
+    position: absolute;
+    bottom: -2px; 
+    left: 10%;
+    width: 80%;
+    height: 3px;
+    background-color: var(--naranja);
+    border-radius: 2px;
+    box-shadow: 0 2px 8px rgba(255, 107, 53, 0.6);
+    display: block !important;
+}
+
+.btn-registro-trigger, .btn-enviar {
+    background-color: var(--naranja);
+    color: var(--blanco);
+    border-radius: 6px;
+    padding: 8px 20px;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.btn-registro-trigger:hover, .btn-enviar:hover {
+    background-color: #e05a28;
+    color: var(--blanco);
+}
+
+.cart-icon {
+    color: var(--negro-profundo);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cart-icon:hover {
+    color: var(--naranja);
+}
+
+.avatar-circle {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background-color: var(--naranja);
+    color: var(--blanco);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+
+.btn-profile {
+    background: transparent;
+    border: none;
+    padding: 0;
+}
+
+.btn-profile:focus {
+    box-shadow: none;
+}
+
+.dropdown {
+    margin: 0px 15px 0px 15px;
+}
+
+/* BOTÓN CTA GLOBAL */
+.btn-cta {
+    background-color: var(--naranja);
+    color: var(--blanco);
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 12px 32px;
+    border-radius: 6px;
+    letter-spacing: 1px;
+    transition: background 0.3s ease;
+    text-decoration: none;
+}
+
+.btn-cta:hover {
+    background-color: #e05a28;
+    color: var(--blanco);
+}
+
+/* FOOTER */
+.footer-custom {
+    background-color: var(--negro-profundo);
+}
+
+.footer-custom h6 {
+    font-weight: 700;
+    letter-spacing: 5px;
+    margin-bottom: 1.5rem;
+}
+
+.footer-custom li {
+    list-style: none;
+}
+
+.footer-link,
+.social-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    width: fit-content;
+    padding: 2px 10px;
+    color: var(--blanco);
+    text-decoration: none;
+}
+
+.footer-link:hover,
+.social-link:hover {
+    color: var(--naranja);
+}
+
+.social-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-end;
+}
+
+/* ==========================================================================
+   MEDIA QUERIES (RESPONSIVE)
+   ========================================================================== */
+
+/* Navbar móvil (Pantallas medianas) */
+@media (max-width: 991px) {
+    .navbar-toggler {
+        border: none;
+        box-shadow: none;
+    }
+
+    #navbarNav {
+        width: 100%;
+        margin-top: 10px;
+        border-top: 1px solid var(--gris-nube);
+        padding-top: 10px;
+    }
+
+    .mobile-controls {
+        padding-right: 10px;
+    }
+
+    .mobile-controls #auth-buttons-mobile {
+        margin-right: 6px;
+    }
+}
+
+/* Navbar, Hero y Footer (Celulares) */
+@media (max-width: 768px) {
+    .logo {
+        height: 25px;
+    }
+
+    .btn-registro-trigger {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+        line-height: 1.2;
+    }
+
+    .cart-icon {
+        padding: 6px 8px;
+    }
+
+    #auth-buttons-mobile .avatar-circle {
+        width: 32px;
+        height: 32px;
+        font-size: 0.8rem;
+    }
+
+    .dropdown {
+        margin: 15px 15px 0px 15px;
+    }
+
+    .navbar-toggler {
+        margin-left: 5px;
+        border-color: var(--blanco);
+    }
+
+    #navbarNav {
+        border-top: 1px solid var(--gris-nube);
+        margin-top: 0.5rem;
+        padding-top: 0.8rem;
+    }
+
+    /* Hero section */
+    .hero-section {
+        min-height: 40vh;
+        background-size: cover;
+        background-position: 60% center;
+        padding: 40px 0;
+    }
+
+    .hero-section h1 {
+        font-size: 1.8rem;
+    }
+
+    .footer-custom {
+        text-align: left;
+    }
+
+    .social-container {
+        margin-top: 1rem;
+        align-items: flex-start;
+    }
+
+    .footer-link,
+    .social-link {
+        justify-content: left;
+        width: 100%;
+        font-size: .8rem;
+    }
+    
+    /* Adaptación de la línea activa en pantallas colapsadas */
+    .navbar-nav .nav-link.nav-active::after {
+        bottom: 2px;
+        left: 0;
+        width: 40px;
+    }
+} /* <--- ¡AQUÍ ESTABA EL ERROR! Esta llave de cierre final hacía falta */
