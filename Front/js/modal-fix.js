@@ -114,54 +114,59 @@
 
     // 4. PROCESO DE REGISTRO
     // Función principal que procesa el registro de un nuevo usuario
-    function registrarUsuario() {
-      // Lista de campos que se tienen que validar
-      const campos = ["nombre", "apellido", "telefono", "correo", "password", "confirmPassword"];
-      const val = id => (document.getElementById(id)?.value || "").trim();
-      // Array para almacenar los mensajes de error
-      let errores = [];
-      // VALIDACIÓN SOLO LETRAS
-      if (!/^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ\s]+$/.test(val("nombre"))) {
-        errores.push("El nombre solo debe contener letras");
-      }
+  // 4. PROCESO DE REGISTRO
+async function registrarUsuario() {
+  const campos = ["nombre", "apellido", "telefono", "correo", "password", "confirmPassword"];
+  const val = id => (document.getElementById(id)?.value || "").trim();
+  let errores = [];
 
-      if (!/^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ\s]+$/.test(val("apellido"))) {
-        errores.push("El apellido solo debe contener letras");
-      }
+  if (!/^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ\s]+$/.test(val("nombre"))) errores.push("El nombre solo debe contener letras");
+  if (!/^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ\s]+$/.test(val("apellido"))) errores.push("El apellido solo debe contener letras");
+  if (!/^\d{10}$/.test(val("telefono"))) errores.push("El teléfono debe contener exactamente 10 números");
 
-      // TELEFONO 10 DIGITOS
-      if (!/^\d{10}$/.test(val("telefono"))) {
-        errores.push("El teléfono debe contener exactamente 10 números");
-      }
-      // Validar para que los primeros 4 campos no estén vacíos
-      campos.slice(0, 4).forEach(c => { if (!val(c)) errores.push(`Ingresa tu ${c === 'password' ? 'contraseña' : c}`); });
-      if (val("password") && val("password") !== val("confirmPassword")) errores.push("Las contraseñas no coinciden");
+  campos.slice(0, 4).forEach(c => { if (!val(c)) errores.push(`Ingresa tu ${c}`); });
 
-      if (val("password")) {
-        const pwErrors = REGLAS.filter(r => !r.test(val("password"))).map(r => r.texto);
-        errores = [...errores, ...pwErrors];
-      }
+  if (val("password") && val("password") !== val("confirmPassword")) errores.push("Las contraseñas no coinciden");
 
-      if (errores.length > 0) return mostrarAlerta(errores, "danger");
-      // Obtenemos la lista de usuarios existentes del localStorage
-      const users = JSON.parse(localStorage.getItem("users")) || [];
-      // Verifica si el correo ya está registrado
-      if (users.some(u => u.correo === val("correo"))) return mostrarAlerta(["Este correo ya está registrado"], "danger");
+  if (val("password")) {
+    const pwErrors = REGLAS.filter(r => !r.test(val("password"))).map(r => r.texto);
+    errores = [...errores, ...pwErrors];
+  }
 
-      // Agregamos al usuario y guarda en localStorage
-      users.push({ nombre: val("nombre"), apellido: val("apellido"), telefono: val("telefono"), correo: val("correo"), password: val("password"), role: "cliente" });
-      localStorage.setItem("users", JSON.stringify(users));
+  if (errores.length > 0) return mostrarAlerta(errores, "danger");
 
-      mostrarAlerta([`¡Cuenta creada exitosamente! Bienvenido, ${val("nombre")}.`], "success");
-      document.getElementById("kf-password-indicator")?.remove();
-      document.getElementById("btnCrearCuenta").style.display = "none";
+  // ✅ LLAMADA AL BACKEND en lugar de localStorage
+  try {
+    const response = await fetch("http://localhost:8080/api/usuarios", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        nombre: val("nombre"),
+        apellido: val("apellido"),
+        telefono: val("telefono"),
+        correo: val("correo"),
+        contrasena: val("password"),   // ojo: el backend espera "contrasena"
+        rol: "cliente",
+        estado: "activo"
+      })
+    });
 
-      // Espera 1.5 segundos y redirijo al login
-      setTimeout(() => {
-        gestionarModal("hide");
-        window.location.href = "./login.html";
-      }, 1500);
-    }
+    if (response.status === 409) return mostrarAlerta(["Este correo ya está registrado"], "danger");
+    if (!response.ok) return mostrarAlerta(["Error al crear la cuenta. Intenta de nuevo."], "danger");
+
+    mostrarAlerta([`¡Cuenta creada exitosamente! Bienvenido, ${val("nombre")}.`], "success");
+    document.getElementById("kf-password-indicator")?.remove();
+    document.getElementById("btnCrearCuenta").style.display = "none";
+
+    setTimeout(() => {
+      gestionarModal("hide");
+      window.location.href = "./login.html";
+    }, 1500);
+
+  } catch (err) {
+    mostrarAlerta(["Error de conexión con el servidor."], "danger");
+  }
+}
 
     // 5. INICIALIZADOR GLOBAL Y ESCUCHADORES DE EVENTOS UNIFICADOS
     async function init() {

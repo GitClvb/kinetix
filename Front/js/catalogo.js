@@ -1,420 +1,465 @@
-// Obtención de filtro genero si es que se dirige desde el index
-const generoSeleccionado =
-    localStorage.getItem("generoSeleccionado");
+// ============================================
+// CATÁLOGO DE PRODUCTOS - VERSIÓN MEJORADA
+// ============================================
 
-/* =========================
-PRODUCTOS
-========================= */
-
-const productos = {
-    hombre: [
-        {
-            nombre: "Playera Oversize Black", categoria: "Playera", precio: "$599",
-            colores: [
-                {
-                    codigo: "#000000",
-                    imagen: "./img/hombre1-negro.jpg",
-                    talla: ["CH", "M"]
-                },
-                {
-                    codigo: "#FFFFFF",
-                    imagen: "./img/hombre1-blanco.webp",
-                    talla: ["G"]
-                }
-            ],
-            descripcion: "Descripcion del articulo numero 1. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Assumenda consequuntur voluptatibus eos non quis, quasi reprehenderit modi error quae quas voluptates ex, eveniet, a placeat optio asperiores atque temporibus quaerat!"
-        },
-        { nombre: "Short Performance", categoria: "Short", precio: "$499", imagen: "./img/hombre2.webp", talla: ["CH", "M"], color: ["#FFFFFF", "#000000"] },
-        { nombre: "Sudadera Urban Fit", categoria: "Sudadera", precio: "$899", imagen: "./img/hombre3.webp", talla: ["CH"], color: ["#FFFFFF", "#ff0000"] },
-        { nombre: "Tank Essential", categoria: "Tank", precio: "$450", imagen: "./img/hombre4.jpg", talla: ["M"], color: ["#FFFFFF"] },
-        { nombre: "Jogger Elite", categoria: "Jogger", precio: "$799", imagen: "./img/hombre5.jpg", talla: ["G"], color: ["#000000"] },
-        { nombre: "Hoodie Motion", categoria: "Sudadera", precio: "$999", imagen: "./img/hombre6.jpg", talla: ["CH", "M"], color: ["#FFFFFF", "#000000"] },
-        { nombre: "Compression Tee", categoria: "Playera", precio: "$650", imagen: "./img/hombre7.jpg", talla: ["CH", "M"], color: ["#00ff44", "#5f1a1a"] },
-        { nombre: "Short Alpha", categoria: "Short", precio: "$520", imagen: "./img/hombre8.jpg", talla: ["CH"], color: ["#FFFFFF", "#000000"] },
-        { nombre: "Playera Kinetix Core", categoria: "Playera", precio: "$580", imagen: "./img/hombre9.jpg", talla: ["G"], color: ["#FFFFFF", "#000000"] },
-        { nombre: "Pants Active", categoria: "Pants", precio: "$850", imagen: "./img/hombre10.jpg", talla: ["G"], color: ["#FFFFFF", "#000000"] }
-    ],
-    mujer: [
-        { nombre: "Top Energy", categoria: "Top", precio: "$549", imagen: "./img/mujer1.jpg" },
-        { nombre: "Leggings Sculpt", categoria: "Leggings", precio: "$799", imagen: "./img/mujer2.jpg" },
-        { nombre: "Playera Fit Motion", categoria: "Playera", precio: "$599", imagen: "./img/mujer3.jpg" },
-        { nombre: "Short Flex", categoria: "Short", precio: "$499", imagen: "./img/mujer4.jpg" },
-        { nombre: "Sudadera Active", categoria: "Sudadera", precio: "$950", imagen: "./img/mujer5.jpg" },
-        { nombre: "Top Seamless", categoria: "Top", precio: "$620", imagen: "./img/mujer6.jpg" },
-        { nombre: "Leggings Motion", categoria: "Leggings", precio: "$850", imagen: "./img/mujer7.jpg" },
-        { nombre: "Jogger Balance", categoria: "Jogger", precio: "$770", imagen: "./img/mujer8.jpg" },
-        { nombre: "Playera Energy", categoria: "Playera", precio: "$560", imagen: "./img/mujer9.jpg" },
-        { nombre: "Hoodie Premium", categoria: "Sudadera", precio: "$1050", imagen: "./img/mujer10.jpg" }
-    ]
+// ---------------------------
+// 1. ESTADO Y VARIABLES GLOBALES
+// ---------------------------
+let productos = {
+    hombre: [],
+    mujer: []
 };
 
-/* =========================
-VARIABLES
-========================= */
+let todosLosProductos = []; // Para la vista inicial (hasta 10 productos)
 
 const grid = document.getElementById("catalogo-grid");
 const contenedorCategorias = document.getElementById("contenedor-categorias");
+const loader = document.getElementById("loader-catalogo");
 
-let generoActual =
-    generoSeleccionado || "hombre";
-
-localStorage.removeItem(
-    "generoSeleccionado"
-);
-
+let generoActual = "todos"; // Cambiado: "todos" como valor inicial
 let categoriaActual = "Todas";
+let isLoading = false;
 
-/* =========================
-OBTENER CATEGORIAS Y TALLAS
-========================= */
+// Obtener género desde localStorage (si viene del index)
+const generoSeleccionado = localStorage.getItem("generoSeleccionado");
+if (generoSeleccionado && (generoSeleccionado === "hombre" || generoSeleccionado === "mujer")) {
+    generoActual = generoSeleccionado;
+}
+localStorage.removeItem("generoSeleccionado");
 
-function obtenerTallasSeleccionadas() {
+// ---------------------------
+// 2. FUNCIONES DE UTILERÍA
+// ---------------------------
 
-    return [...document.querySelectorAll(".filtro-talla:checked")]
-        .map(checkbox => checkbox.value);
-
+/**
+ * Muestra u oculta el loader
+ */
+function toggleLoader(show) {
+    if (show) {
+        loader?.classList.remove("d-none");
+        grid?.classList.add("grid-loading");
+    } else {
+        loader?.classList.add("d-none");
+        grid?.classList.remove("grid-loading");
+    }
 }
 
+/**
+ * Obtiene las tallas seleccionadas en los filtros
+ */
+function obtenerTallasSeleccionadas() {
+    return [...document.querySelectorAll(".filtro-talla:checked")]
+        .map(checkbox => checkbox.value);
+}
+
+/**
+ * Obtiene las categorías únicas para un género específico
+ */
 function obtenerCategorias(genero) {
-    const categorias = productos[genero].map(producto => producto.categoria);
+    if (genero === "todos") {
+        const todasLasCategorias = [...productos.hombre, ...productos.mujer];
+        const categorias = todasLasCategorias.map(p => p.categoria);
+        return ["Todas", ...new Set(categorias)];
+    }
+    
+    const categorias = productos[genero]?.map(p => p.categoria) || [];
     return ["Todas", ...new Set(categorias)];
 }
 
-/* =========================
-RENDER CATEGORIAS
-========================= */
+/**
+ * Obtiene todos los productos según el género seleccionado
+ */
+function obtenerProductosPorGenero(genero) {
+    if (genero === "todos") {
+        return [...productos.hombre, ...productos.mujer];
+    }
+    return productos[genero] || [];
+}
 
+// ---------------------------
+// 3. RENDERIZADO DE FILTROS
+// ---------------------------
+
+/**
+ * Renderiza los botones de categorías
+ */
 function renderCategorias(genero) {
+    if (!contenedorCategorias) return;
+    
     const categorias = obtenerCategorias(genero);
     contenedorCategorias.innerHTML = "";
-
+    
     categorias.forEach((categoria, index) => {
-        contenedorCategorias.innerHTML += `
-            <button
-                class="categoria-producto ${index === 0 ? "active-btn" : ""}"
-                data-categoria="${categoria}">
-                ${categoria}
-            </button>
-        `;
-    });
-
-    const botonesCategoria = document.querySelectorAll(".categoria-producto");
-
-    botonesCategoria.forEach(btn => {
-        btn.addEventListener("click", () => {
-            botonesCategoria.forEach(b => {
-                b.classList.remove("active-btn");
+        const button = document.createElement("button");
+        button.className = `categoria-producto ${index === 0 && categoria === "Todas" ? "active-btn" : ""}`;
+        button.textContent = categoria;
+        button.dataset.categoria = categoria;
+        
+        button.addEventListener("click", () => {
+            // Actualizar UI de botones
+            document.querySelectorAll(".categoria-producto").forEach(btn => {
+                btn.classList.remove("active-btn");
             });
-
-            btn.classList.add("active-btn");
-            categoriaActual = btn.dataset.categoria;
+            button.classList.add("active-btn");
+            
+            // Actualizar filtro y mostrar productos
+            categoriaActual = categoria;
             mostrarProductos(generoActual, categoriaActual);
         });
+        
+        contenedorCategorias.appendChild(button);
     });
-
-    const checkboxesTalla = document.querySelectorAll(".filtro-talla");
-
-    checkboxesTalla.forEach(checkbox => {
-
-        checkbox.addEventListener("change", () => {
-
-            mostrarProductos(
-                generoActual,
-                categoriaActual
-            );
-
-        });
-
-    });
+    
     setTimeout(actualizarFlechas, 50);
 }
 
-/* =========================
-MOSTRAR PRODUCTOS
-========================= */
+/**
+ * Renderiza los checkboxes de tallas
+ */
+function renderTallas(genero) {
+    const contenedor = document.getElementById("contenedor-tallas");
+    if (!contenedor) return;
+    
+    // Obtener productos según género
+    const productosGenero = genero === "todos" 
+        ? [...productos.hombre, ...productos.mujer]
+        : productos[genero];
+    
+    // Extraer tallas únicas
+    const tallasSet = new Set();
+    productosGenero.forEach(producto => {
+        producto.colores?.forEach(color => {
+            color.talla?.forEach(talla => tallasSet.add(talla));
+        });
+    });
+    
+    const tallas = [...tallasSet];
+    const ordenTallas = ["XS", "S", "M", "L", "XL", "XXL"];
+    tallas.sort((a, b) => ordenTallas.indexOf(a) - ordenTallas.indexOf(b));
+    
+    // Renderizar checkboxes
+    contenedor.innerHTML = tallas.map(talla => `
+        <input type="checkbox" id="talla-${talla}" class="filtro-talla" value="${talla}">
+        <label for="talla-${talla}">${talla}</label>
+    `).join("");
+    
+    // Agregar event listeners
+    document.querySelectorAll(".filtro-talla").forEach(checkbox => {
+        checkbox.addEventListener("change", () => {
+            mostrarProductos(generoActual, categoriaActual);
+        });
+    });
+}
 
+// ---------------------------
+// 4. RENDERIZADO DE PRODUCTOS
+// ---------------------------
+
+/**
+ * Crea el HTML de una tarjeta de producto
+ */
 function crearCardProducto(producto) {
-
-    const imagenPrincipal =
-        producto.colores?.[0]?.imagen || producto.imagen || "";
-
+    const imagenPrincipal = producto.colores?.[0]?.imagen || producto.imagen || "";
+    
+    // Obtener tallas únicas
     const tallas = producto.colores
-        ? [...new Set(
-            producto.colores.flatMap(color => color.talla || [])
-        )]
+        ? [...new Set(producto.colores.flatMap(color => color.talla || []))]
         : (producto.talla || []);
-
+    
     return `
         <div class="col-6 col-lg-6 col-xl-4">
-
             <div class="product-card">
-
-                <img
-                    src="${imagenPrincipal}"
-                    alt="${producto.nombre}"
-                    loading="lazy">
-
+                <img src="${imagenPrincipal}" alt="${producto.nombre}" loading="lazy">
                 <div class="product-info">
-
-                    <span class="product-category">
-                        ${producto.categoria}
-                    </span>
-
-                    <h5 class="product-title">
-                        ${producto.nombre}
-                    </h5>
-
-                    <p class="product-price">
-                        ${producto.precio}
-                    </p>
-
+                    <span class="product-category">${producto.categoria}</span>
+                    <h5 class="product-title">${producto.nombre}</h5>
+                    <p class="product-price">${producto.precio}</p>
+                    
                     <div class="product-sizes">
-
-                        <span class="product-label">
-                            Tallas
-                        </span>
-
+                        <span class="product-label">Tallas</span>
                         <div class="sizes-container">
-
-                            ${tallas.map(talla => `
-                                <span class="size-chip">
-                                    ${talla}
-                                </span>
-                            `).join("")}
-
+                            ${tallas.map(talla => `<span class="size-chip">${talla}</span>`).join("")}
                         </div>
-
                     </div>
-
+                    
                     <div class="product-colors">
-
-                        <span class="product-label">
-                            Colores
-                        </span>
-
+                        <span class="product-label">Colores</span>
                         <div class="colors-container">
-
                             ${(producto.colores || []).map(color => `
-                                <span
-                                    class="color-dot"
-                                    style="background:${color.codigo}">
-                                </span>
+                                <span class="color-dot" style="background:${color.codigo}" title="Color"></span>
                             `).join("")}
-
                         </div>
-
                     </div>
-
-                    <button
-                        class="product-btn btn-ver-producto"
-                        data-producto='${JSON.stringify(producto)}'>
-
-                        <i class="bi bi-eye"></i>
-                        Ver producto
-
+                    
+                    <button class="product-btn btn-ver-producto" data-producto='${JSON.stringify(producto)}'>
+                        <i class="bi bi-eye"></i> Ver producto
                     </button>
-
                 </div>
-
             </div>
-
         </div>
     `;
 }
 
-function crearEstadoVacio() {
-
+/**
+ * Muestra mensaje cuando no hay productos
+ */
+function mostrarEstadoVacio() {
     return `
-
         <div class="col-12">
-
             <div class="empty-state">
-
                 <i class="bi bi-search"></i>
-
-                <h4>
-                    No encontramos productos
-                </h4>
-
-                <p>
-                    Intenta cambiar los filtros seleccionados.
-                </p>
-
+                <h4>No encontramos productos</h4>
+                <p>Intenta cambiar los filtros seleccionados.</p>
             </div>
-
         </div>
-
     `;
-
 }
 
+/**
+ * Filtra y muestra productos según género, categoría y tallas
+ */
 function mostrarProductos(genero, categoria = "Todas") {
-    const loader = document.getElementById("loader-catalogo");
-
-    loader.classList.remove("d-none");
-    grid.classList.add("grid-loading");
-
+    if (isLoading) return;
+    isLoading = true;
+    toggleLoader(true);
+    
+    // Pequeño retraso para mostrar el loader
     setTimeout(() => {
-        let productosFiltrados = productos[genero];
-
+        let productosFiltrados = obtenerProductosPorGenero(genero);
+        
+        // Filtrar por categoría
         if (categoria !== "Todas") {
-            productosFiltrados = productosFiltrados.filter(producto => {
-                return producto.categoria === categoria;
-            });
+            productosFiltrados = productosFiltrados.filter(p => p.categoria === categoria);
         }
-
+        
+        // Filtrar por tallas seleccionadas
         const tallasSeleccionadas = obtenerTallasSeleccionadas();
-
         if (tallasSeleccionadas.length > 0) {
-
             productosFiltrados = productosFiltrados.filter(producto => {
-
                 const tallasProducto = producto.colores
                     ? producto.colores.flatMap(color => color.talla || [])
                     : (producto.talla || []);
-
-                return tallasProducto.some(talla =>
-                    tallasSeleccionadas.includes(talla)
-                );
-
+                return tallasProducto.some(talla => tallasSeleccionadas.includes(talla));
             });
-
         }
+        
+        // Renderizar productos
+        const html = productosFiltrados.length === 0 
+            ? mostrarEstadoVacio()
+            : productosFiltrados.map(crearCardProducto).join("");
+        
+        if (grid) grid.innerHTML = html;
+        
+        // Agregar event listeners a los botones "Ver producto"
+        document.querySelectorAll(".btn-ver-producto").forEach(btn => {
+            btn.addEventListener("click", () => {
+                const producto = JSON.parse(btn.dataset.producto);
+                window.location.href = `producto.html?id=${producto.idProducto}`;
+            });
+        });
+        
+        toggleLoader(false);
+        isLoading = false;
+    }, 200); // Reducido de 350ms a 200ms para mejor UX
+}
 
-        let html = "";
+/**
+ * Muestra los primeros 10 productos (vista inicial)
+ */
+function mostrarPrimeros10Productos() {
+    if (isLoading) return;
+    isLoading = true;
+    toggleLoader(true);
+    
+    setTimeout(() => {
+        // Mezclar productos de hombre y mujer y tomar primeros 10
+        const todos = [...productos.hombre, ...productos.mujer];
+        const primeros10 = todos.slice(0, 10);
+        
+        const html = primeros10.length === 0 
+            ? mostrarEstadoVacio()
+            : primeros10.map(crearCardProducto).join("");
+        
+        if (grid) grid.innerHTML = html;
+        
+        // Agregar event listeners
+        document.querySelectorAll(".btn-ver-producto").forEach(btn => {
+            btn.addEventListener("click", () => {
+                const producto = JSON.parse(btn.dataset.producto);
+                window.location.href = `producto.html?id=${producto.idProducto}`;
+            });
+        });
+        
+        toggleLoader(false);
+        isLoading = false;
+    }, 200);
+}
 
-        if (productosFiltrados.length === 0) {
+// ---------------------------
+// 5. CARGA DE DATOS Y FILTROS DE GÉNERO
+// ---------------------------
 
-            html = crearEstadoVacio();
+/**
+ * Actualiza la UI cuando se cambia el género
+ */
+function actualizarPorGenero(genero) {
+    categoriaActual = "Todas";
+    
+    // Actualizar botones de categorías
+    document.querySelectorAll(".categoria-producto").forEach(btn => {
+        btn.classList.remove("active-btn");
+        if (btn.dataset.categoria === "Todas") {
+            btn.classList.add("active-btn");
+        }
+    });
+    
+    renderTallas(genero);
+    renderCategorias(genero);
+    
+    if (genero === "todos") {
+        mostrarPrimeros10Productos();
+    } else {
+        mostrarProductos(genero);
+    }
+}
 
+/**
+ * Carga el catálogo desde el backend
+ */
+async function cargarCatalogo() {
+    try {
+        toggleLoader(true);
+        
+        const response = await fetch("http://localhost:8080/productos/catalogo");
+        
+        if (!response.ok) {
+            throw new Error(`Error HTTP: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        productos = {
+            hombre: data.hombre || [],
+            mujer: data.mujer || []
+        };
+        
+        console.log(`✅ Cargados: ${productos.hombre.length} productos hombre, ${productos.mujer.length} productos mujer`);
+        
+        // Configurar UI según género actual
+        if (generoActual === "todos") {
+            // Vista inicial: mostrar primeros 10 productos
+            actualizarPorGenero("todos");
         } else {
-
-            html = productosFiltrados
-                .map(crearCardProducto)
-                .join("");
-
+            renderTallas(generoActual);
+            renderCategorias(generoActual);
+            mostrarProductos(generoActual);
         }
-
-        grid.innerHTML = html;
-        document.querySelectorAll(".btn-ver-producto")
-            .forEach(btn => {
-
-                btn.addEventListener("click", () => {
-
-                    const producto =
-                        JSON.parse(btn.dataset.producto);
-
-                    localStorage.setItem(
-                        "productoSeleccionado",
-                        JSON.stringify(producto)
-                    );
-
-                    window.location.href =
-                        "producto.html";
-
-                });
-
+        
+        // Marcar botón de género activo
+        const botonActivo = document.querySelector(`.categoria-btn[data-genero="${generoActual}"]`);
+        if (botonActivo) {
+            document.querySelectorAll(".categoria-btn").forEach(btn => {
+                btn.classList.remove("active-genero");
             });
-
-        loader.classList.add("d-none");
-        grid.classList.remove("grid-loading");
-
-    }, 350);
+            botonActivo.classList.add("active-genero");
+        }
+        
+        setTimeout(actualizarFlechas, 50);
+        toggleLoader(false);
+        
+    } catch (error) {
+        console.error("Error cargando catálogo:", error);
+        toggleLoader(false);
+        
+        if (grid) {
+            grid.innerHTML = `
+                <div class="col-12">
+                    <div class="empty-state">
+                        <i class="bi bi-exclamation-triangle"></i>
+                        <h4>Error de conexión</h4>
+                        <p>No se pudo cargar el catálogo. Verifica que el servidor esté funcionando.</p>
+                        <button onclick="location.reload()" class="btn btn-primary mt-3">Reintentar</button>
+                    </div>
+                </div>
+            `;
+        }
+    }
 }
 
-/* =========================
-INICIALIZAR
-========================= */
-
-renderCategorias(generoActual);
-mostrarProductos(generoActual);
-const botonGeneroActivo =
-    document.querySelector(
-        `.categoria-btn[data-genero="${generoActual}"]`
-    );
-
-if (botonGeneroActivo) {
-    botonGeneroActivo.classList.add(
-        "active-genero"
-    );
-}
-setTimeout(actualizarFlechas, 50);
-
-/* =========================
-BOTONES GENERO
-========================= */
+// ---------------------------
+// 6. CONFIGURACIÓN DE BOTONES DE GÉNERO
+// ---------------------------
 
 const botonesGenero = document.querySelectorAll(".categoria-btn");
 
 botonesGenero.forEach(btn => {
     btn.addEventListener("click", () => {
-        botonesGenero.forEach(b => {
-            b.classList.remove("active-genero");
-        });
-
+        const genero = btn.dataset.genero;
+        if (genero === generoActual) return;
+        
+        // Actualizar UI de botones
+        botonesGenero.forEach(b => b.classList.remove("active-genero"));
         btn.classList.add("active-genero");
-
-        generoActual = btn.dataset.genero;
-        categoriaActual = "Todas";
-
-        renderCategorias(generoActual);
-        mostrarProductos(generoActual);
+        
+        // Actualizar género actual
+        generoActual = genero;
+        
+        // Actualizar productos mostrados
+        actualizarPorGenero(generoActual);
     });
 });
 
-const contenedor = document.getElementById("contenedor-categorias");
-
-document.getElementById("scroll-right")
-    ?.addEventListener("click", () => {
-
-        contenedor.scrollBy({
-            left: 250,
-            behavior: "smooth"
-        });
-
-    });
-
-document.getElementById("scroll-left")
-    ?.addEventListener("click", () => {
-
-        contenedor.scrollBy({
-            left: -250,
-            behavior: "smooth"
-        });
-
-    });
+// ---------------------------
+// 7. FUNCIONES DE SCROLL (CATEGORÍAS)
+// ---------------------------
 
 function actualizarFlechas() {
-
     const contenedor = document.getElementById("contenedor-categorias");
     const left = document.getElementById("scroll-left");
     const right = document.getElementById("scroll-right");
-
+    
     if (!contenedor || !left || !right) return;
-
-    // ocultar sólo en móvil real
+    
+    // Ocultar en móvil
     if (window.innerWidth <= 768) {
         left.style.display = "none";
         right.style.display = "none";
         return;
     }
-
-    const maxScroll =
-        contenedor.scrollWidth - contenedor.clientWidth;
-
-    // si no hay overflow
+    
+    const maxScroll = contenedor.scrollWidth - contenedor.clientWidth;
+    
     if (maxScroll <= 0) {
         left.style.display = "none";
         right.style.display = "none";
         return;
     }
-
-    left.style.display =
-        contenedor.scrollLeft > 5 ? "flex" : "none";
-
-    right.style.display =
-        contenedor.scrollLeft < maxScroll - 5 ? "flex" : "none";
+    
+    left.style.display = contenedor.scrollLeft > 5 ? "flex" : "none";
+    right.style.display = contenedor.scrollLeft < maxScroll - 5 ? "flex" : "none";
 }
 
+// Event listeners para botones de scroll
+document.getElementById("scroll-right")?.addEventListener("click", () => {
+    const contenedor = document.getElementById("contenedor-categorias");
+    if (contenedor) {
+        contenedor.scrollBy({ left: 250, behavior: "smooth" });
+    }
+});
+
+document.getElementById("scroll-left")?.addEventListener("click", () => {
+    const contenedor = document.getElementById("contenedor-categorias");
+    if (contenedor) {
+        contenedor.scrollBy({ left: -250, behavior: "smooth" });
+    }
+});
+
+// Event listeners para actualizar flechas
 window.addEventListener("resize", actualizarFlechas);
-contenedor.addEventListener("scroll", actualizarFlechas);
+if (contenedorCategorias) {
+    contenedorCategorias.addEventListener("scroll", actualizarFlechas);
+}
+
+// ---------------------------
+// 8. INICIALIZAR
+// ---------------------------
+cargarCatalogo();

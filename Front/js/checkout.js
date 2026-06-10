@@ -1,5 +1,5 @@
 /* ==========================================================================
-   LOGIC AND VALIDATIONS FOR KINETIXFIT CHECKOUT
+   chekout.js -  LOGIC AND VALIDATIONS FOR KINETIXFIT CHECKOUT
    ========================================================================== */
 
 document.addEventListener("DOMContentLoaded", () => {

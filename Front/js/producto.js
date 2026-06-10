@@ -2,14 +2,20 @@
 OBTENER PRODUCTO
 ========================= */
 
-const producto = JSON.parse(
-    localStorage.getItem("productoSeleccionado")
-);
+const params =
+    new URLSearchParams(window.location.search);
 
-if (!producto) {
-    window.location.href = "catalogo.html";
+const idProducto =
+    params.get("id");
+
+if (!idProducto) {
+
+    window.location.href =
+        "catalogo.html";
+
 }
 
+let producto = null;
 let tallaSeleccionada = null;
 let colorSeleccionado = null;
 
@@ -34,37 +40,75 @@ const descripcionProducto =
 const botonCarrito =
     document.querySelector(".btn-agregar-carrito");
 
-/* =========================
-RENDER DATOS
-========================= */
+async function cargarProducto() {
 
-nombreProducto.textContent =
-    producto.nombre;
+    try {
 
-categoriaProducto.textContent =
-    producto.categoria;
+        const response = await fetch(
+            `http://localhost:8080/productos/detalle/${idProducto}`
+        );
 
-precioProducto.textContent =
-    producto.precio;
+        if (!response.ok) {
 
-imagenPrincipal.src =
-    producto.colores[0].imagen;
+            throw new Error(
+                "Error al cargar producto"
+            );
 
-imagenPrincipal.alt =
-    producto.nombre;
+        }
 
-descripcionProducto.textContent =
-    producto.descripcion || "";
+        producto =
+            await response.json();
 
-//Boton
-botonCarrito.dataset.nombre =
-    producto.nombre;
+        inicializarProducto();
 
-botonCarrito.dataset.precio =
-    producto.precio.replace("$", "");
+    } catch (error) {
 
-botonCarrito.dataset.imagen =
-    producto.colores[0].imagen;
+        console.error(error);
+
+        window.location.href =
+            "catalogo.html";
+
+    }
+
+}
+
+function inicializarProducto() {
+
+
+    /* =========================
+    RENDER DATOS
+    ========================= */
+
+    nombreProducto.textContent =
+        producto.nombre;
+
+    categoriaProducto.textContent =
+        producto.categoria;
+
+    precioProducto.textContent =
+        producto.precio;
+
+    imagenPrincipal.src =
+        producto.colores[0].imagen;
+
+    imagenPrincipal.alt =
+        producto.nombre;
+
+    descripcionProducto.textContent =
+        producto.descripcion || "";
+
+    //Boton
+    botonCarrito.dataset.nombre =
+        producto.nombre;
+
+    botonCarrito.dataset.precio =
+        producto.precio.replace("$", "");
+
+    botonCarrito.dataset.imagen =
+        producto.colores[0].imagen;
+
+    renderColores();
+}
 
 /* =========================
 RENDER TALLAS
@@ -110,63 +154,24 @@ function renderTallas(color) {
 
 }
 
+// Render colores
 
-function renderTallas(color) {
+function renderColores() {
 
-    tallaSeleccionada = null;
-
-    contenedorTallas.innerHTML =
-        color.talla
-            .map(talla => `
-                <button
-                    class="size-btn"
-                    data-talla="${talla}">
-                    ${talla}
-                </button>
-            `)
-            .join("");
-
-    const botonesTalla =
-        contenedorTallas.querySelectorAll(".size-btn");
-
-    botonesTalla.forEach(btn => {
-
-        btn.addEventListener("click", () => {
-
-            botonesTalla.forEach(b =>
-                b.classList.remove("active-size")
-            );
-
-            btn.classList.add("active-size");
-
-            tallaSeleccionada =
-                btn.dataset.talla;
-
-            botonCarrito.dataset.talla =
-                tallaSeleccionada;
-
-        });
-
-    });
-
-}
-
-/* =========================
-RENDER COLORES
-========================= */
-
-if (producto.colores?.length) {
+    if (!producto.colores?.length) {
+        return;
+    }
 
     contenedorColores.innerHTML =
         producto.colores
             .map(color => `
-            <span
-                class="color-dot"
-                data-color="${color.codigo}"
-                data-imagen="${color.imagen}"
-                style="background:${color.codigo}">
-            </span>
-        `)
+                <span
+                    class="color-dot"
+                    data-color="${color.codigo}"
+                    data-imagen="${color.imagen}"
+                    style="background:${color.codigo}">
+                </span>
+            `)
             .join("");
 
     const colores =
@@ -205,13 +210,13 @@ if (producto.colores?.length) {
 
     });
 
-}
+    const primerColor =
+        document.querySelector(".color-dot");
 
-const primerColor =
-    document.querySelector(".color-dot");
+    if (primerColor) {
+        primerColor.click();
+    }
 
-if (primerColor) {
-    primerColor.click();
 }
 
 const inputCantidad =
@@ -238,3 +243,5 @@ document
         }
 
     });
+
+cargarProducto();

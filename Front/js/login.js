@@ -1,26 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    const demoUser = {
-        nombre: "admin",
-        password: "Admin123!",
-        correo: "admin@gmail.com",
-        role: "admin"
-    };
-
-    let users =
-        JSON.parse(localStorage.getItem("users")) || [];
-
-    const adminExists =
-        users.find(user => user.role === "admin");
-
-    if (!adminExists) {
-
-        users.push(demoUser);
-
-        localStorage.setItem("users", JSON.stringify(users)
-        );
-    }
-
     const loginForm =
         document.getElementById("loginForm");
 
@@ -46,8 +25,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (!loginForm) return;
-    loginForm.addEventListener("submit", (e) => {
+
+    loginForm.addEventListener("submit", async (e) => {
         e.preventDefault();
+
         const loginInput = usernameInput.value.trim();
         const password = passwordInput.value.trim();
 
@@ -56,48 +37,77 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        const users = JSON.parse(localStorage.getItem("users")) || [];
+        try {
 
-        const userFound = users.find(user =>
-            (
-                user.nombre === loginInput ||
-                user.correo === loginInput
-            ) &&
-            user.password === password
-        );
+            const response = await fetch(
+                "http://localhost:8080/api/auth/login",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        correo: loginInput,
+                        contrasena: password
+                    })
+                }
+            );
 
-        if (!userFound) {
-            showAlert("Usuario o contraseña inválidos.");
-            return;
+           /* if (!response.ok) {
+                showAlert("Usuario o contraseña inválidos.");
+                return;
+            }*/
+
+            if (!response.ok) {
+
+    const text = await response.text();
+
+    console.error("Backend error:", text);
+
+    showAlert("Error en login (ver consola)");
+    return;
+}
+
+            const userFound = await response.json();
+
+            localStorage.setItem(
+                "kinetix_user_logged",
+                "true"
+            );
+
+            localStorage.setItem(
+                "isAuthenticated",
+                "true"
+            );
+
+            localStorage.setItem(
+                "currentUser",
+                JSON.stringify(userFound)
+            );
+
+            showAlert(
+                "Inicio de sesión exitoso.",
+                "success"
+            );
+
+            setTimeout(() => {
+
+                // OJO: en backend es "rol", no "role"
+                if (userFound.rol === "admin") {
+                    window.location.href =
+                        "admin-dashboard.html";
+                } else {
+                    window.location.href =
+                        "index.html";
+                }
+
+            }, 900);
+
+        } catch (error) {
+
+            showAlert(
+                "Error de conexión con el servidor."
+            );
         }
-
-        localStorage.setItem(
-            "kinetix_user_logged",
-            "true"
-        );
-
-        localStorage.setItem(
-            "isAuthenticated",
-            "true"
-        );
-
-        localStorage.setItem(
-            "currentUser",
-            JSON.stringify(userFound)
-        );
-
-        showAlert(
-            "Inicio de sesión exitoso.",
-            "success"
-        );
-
-        setTimeout(() => {
-            if (userFound.role === "admin") {
-                window.location.href = "admin-dashboard.html";
-            } else {
-                window.location.href =
-                    "index.html";
-            }
-        }, 900);
     });
 });
