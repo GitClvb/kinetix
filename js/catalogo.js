@@ -17,7 +17,7 @@ const productos = {
             nombre: "Short Performance",
             categoria: "Short",
             precio: "$499",
-            imagen: "./img/hombre2.jpg"
+            imagen: "./img/Short-Negro-H.jpg"
         },
 
         {
@@ -38,7 +38,7 @@ const productos = {
             nombre: "Jogger Elite",
             categoria: "Jogger",
             precio: "$799",
-            imagen: "./img/hombre5.jpg"
+            imagen: "./img/PantsUrb-Negro-H.jpg"
         },
 
         {
@@ -52,28 +52,28 @@ const productos = {
             nombre: "Compression Tee",
             categoria: "Playera",
             precio: "$650",
-            imagen: "./img/hombre7.jpg"
+            imagen: "./img/Playera-Negra-H.jpg"
         },
 
         {
             nombre: "Short Alpha",
             categoria: "Short",
             precio: "$520",
-            imagen: "./img/hombre8.jpg"
+            imagen: "./img/Short-Blanco-H.jpg"
         },
 
         {
             nombre: "Playera Kinetix Core",
             categoria: "Playera",
             precio: "$580",
-            imagen: "./img/hombre9.jpg"
+            imagen: "./img/Playera-Blanca-H.jpg"
         },
 
         {
             nombre: "Pants Active",
             categoria: "Pants",
             precio: "$850",
-            imagen: "./img/hombre10.jpg"
+            imagen: "./img/Pants-Negro-H.jpg"
         }
 
     ],
@@ -84,49 +84,49 @@ const productos = {
             nombre: "Top Energy",
             categoria: "Top",
             precio: "$549",
-            imagen: "./img/mujer1.jpg"
+            imagen: "./img/Top-Negro-M"
         },
 
         {
             nombre: "Leggings Sculpt",
             categoria: "Leggings",
             precio: "$799",
-            imagen: "./img/mujer2.jpg"
+            imagen: "./img/Leggings-Morado-M.jpg"
         },
 
         {
             nombre: "Playera Fit Motion",
             categoria: "Playera",
             precio: "$599",
-            imagen: "./img/mujer3.jpg"
+            imagen: "./img/Playera-Negra-M.jpg"
         },
 
         {
             nombre: "Short Flex",
             categoria: "Short",
             precio: "$499",
-            imagen: "./img/mujer4.jpg"
+            imagen: "./img/Short-magenta-M.jpg"
         },
 
         {
             nombre: "Sudadera Active",
             categoria: "Sudadera",
             precio: "$950",
-            imagen: "./img/mujer5.jpg"
+            imagen: "./img/Sudadera-Azul-M.jpg"
         },
 
         {
             nombre: "Top Seamless",
             categoria: "Top",
             precio: "$620",
-            imagen: "./img/mujer6.jpg"
+            imagen: "./img/Top-verde-aqua-M.jpg"
         },
 
         {
             nombre: "Leggings Motion",
             categoria: "Leggings",
             precio: "$850",
-            imagen: "./img/mujer7.jpg"
+            imagen: "./img/Leggins-Negro-M.jpg"
         },
 
         {
@@ -140,14 +140,14 @@ const productos = {
             nombre: "Playera Energy",
             categoria: "Playera",
             precio: "$560",
-            imagen: "./img/mujer9.jpg"
+            imagen: "./img/Playera-Rosa-M.jpg"
         },
 
         {
             nombre: "Hoodie Premium",
             categoria: "Sudadera",
             precio: "$1050",
-            imagen: "./img/mujer10.jpg"
+            imagen: "./img/Sudadera-Rosa-M.jpg"
         }
 
     ]
