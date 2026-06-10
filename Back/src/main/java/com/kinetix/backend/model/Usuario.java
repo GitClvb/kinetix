@@ -1,6 +1,10 @@
 package com.kinetix.backend.model;
 
+import com.kinetix.backend.common.EstadoUsuario;
+import com.kinetix.backend.common.Rol;
 import jakarta.persistence.*;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "usuarios")
@@ -8,37 +12,48 @@ public class Usuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "id_usuario")
+    private Integer idUsuario;
 
-    @Column(nullable = false)
     private String nombre;
 
-    @Column(nullable = false, unique = true)
+    private String apellido;
+
     private String correo;
 
-    @Column(nullable = false)
-    private String password;
+    private String contrasena;
 
-    @Column(nullable = false)
     private String telefono;
 
-    public Usuario() {
-    }
+    @Enumerated(EnumType.STRING)
+    private Rol rol;
 
-    public Usuario(Long id, String nombre, String correo, String password, String telefono) {
-        this.id = id;
+    @Enumerated(EnumType.STRING)
+    private EstadoUsuario estado;
+
+    @Column(name = "fecha_registro")
+    private LocalDateTime fechaRegistro;
+
+    public Usuario(Integer idUsuario, String nombre, String apellido, String correo, String contrasena, String telefono, Rol rol, EstadoUsuario estado, LocalDateTime fechaRegistro) {
+        this.idUsuario = idUsuario;
         this.nombre = nombre;
+        this.apellido = apellido;
         this.correo = correo;
-        this.password = password;
+        this.contrasena = contrasena;
         this.telefono = telefono;
+        this.rol = rol;
+        this.estado = estado;
+        this.fechaRegistro = fechaRegistro;
     }
 
-    public Long getId() {
-        return id;
+    public Usuario(){ }
+
+    public Integer getIdUsuario() {
+        return idUsuario;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setIdUsuario(Integer idUsuario) {
+        this.idUsuario = idUsuario;
     }
 
     public String getNombre() {
@@ -49,6 +64,14 @@ public class Usuario {
         this.nombre = nombre;
     }
 
+    public String getApellido() {
+        return apellido;
+    }
+
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
+    }
+
     public String getCorreo() {
         return correo;
     }
@@ -57,12 +80,12 @@ public class Usuario {
         this.correo = correo;
     }
 
-    public String getPassword() {
-        return password;
+    public String getContrasena() {
+        return contrasena;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setContrasena(String contrasena) {
+        this.contrasena = contrasena;
     }
 
     public String getTelefono() {
@@ -71,5 +94,29 @@ public class Usuario {
 
     public void setTelefono(String telefono) {
         this.telefono = telefono;
+    }
+
+    public Rol getRol() {
+        return rol;
+    }
+
+    public void setRol(Rol rol) {
+        this.rol = rol;
+    }
+
+    public EstadoUsuario getEstado() {
+        return estado;
+    }
+
+    public void setEstado(EstadoUsuario estado) {
+        this.estado = estado;
+    }
+
+    public LocalDateTime getFechaRegistro() {
+        return fechaRegistro;
+    }
+
+    public void setFechaRegistro(LocalDateTime fechaRegistro) {
+        this.fechaRegistro = fechaRegistro;
     }
 }

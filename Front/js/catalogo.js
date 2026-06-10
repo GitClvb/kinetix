@@ -6,46 +6,9 @@ const generoSeleccionado =
 PRODUCTOS
 ========================= */
 
-const productos = {
-    hombre: [
-        {
-            nombre: "Playera Oversize Black", categoria: "Playera", precio: "$599",
-            colores: [
-                {
-                    codigo: "#000000",
-                    imagen: "./img/hombre1-negro.jpg",
-                    talla: ["CH", "M"]
-                },
-                {
-                    codigo: "#FFFFFF",
-                    imagen: "./img/hombre1-blanco.webp",
-                    talla: ["G"]
-                }
-            ],
-            descripcion: "Descripcion del articulo numero 1. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Assumenda consequuntur voluptatibus eos non quis, quasi reprehenderit modi error quae quas voluptates ex, eveniet, a placeat optio asperiores atque temporibus quaerat!"
-        },
-        { nombre: "Short Performance", categoria: "Short", precio: "$499", imagen: "./img/hombre2.webp", talla: ["CH", "M"], color: ["#FFFFFF", "#000000"] },
-        { nombre: "Sudadera Urban Fit", categoria: "Sudadera", precio: "$899", imagen: "./img/hombre3.webp", talla: ["CH"], color: ["#FFFFFF", "#ff0000"] },
-        { nombre: "Tank Essential", categoria: "Tank", precio: "$450", imagen: "./img/hombre4.jpg", talla: ["M"], color: ["#FFFFFF"] },
-        { nombre: "Jogger Elite", categoria: "Jogger", precio: "$799", imagen: "./img/hombre5.jpg", talla: ["G"], color: ["#000000"] },
-        { nombre: "Hoodie Motion", categoria: "Sudadera", precio: "$999", imagen: "./img/hombre6.jpg", talla: ["CH", "M"], color: ["#FFFFFF", "#000000"] },
-        { nombre: "Compression Tee", categoria: "Playera", precio: "$650", imagen: "./img/hombre7.jpg", talla: ["CH", "M"], color: ["#00ff44", "#5f1a1a"] },
-        { nombre: "Short Alpha", categoria: "Short", precio: "$520", imagen: "./img/hombre8.jpg", talla: ["CH"], color: ["#FFFFFF", "#000000"] },
-        { nombre: "Playera Kinetix Core", categoria: "Playera", precio: "$580", imagen: "./img/hombre9.jpg", talla: ["G"], color: ["#FFFFFF", "#000000"] },
-        { nombre: "Pants Active", categoria: "Pants", precio: "$850", imagen: "./img/hombre10.jpg", talla: ["G"], color: ["#FFFFFF", "#000000"] }
-    ],
-    mujer: [
-        { nombre: "Top Energy", categoria: "Top", precio: "$549", imagen: "./img/mujer1.jpg" },
-        { nombre: "Leggings Sculpt", categoria: "Leggings", precio: "$799", imagen: "./img/mujer2.jpg" },
-        { nombre: "Playera Fit Motion", categoria: "Playera", precio: "$599", imagen: "./img/mujer3.jpg" },
-        { nombre: "Short Flex", categoria: "Short", precio: "$499", imagen: "./img/mujer4.jpg" },
-        { nombre: "Sudadera Active", categoria: "Sudadera", precio: "$950", imagen: "./img/mujer5.jpg" },
-        { nombre: "Top Seamless", categoria: "Top", precio: "$620", imagen: "./img/mujer6.jpg" },
-        { nombre: "Leggings Motion", categoria: "Leggings", precio: "$850", imagen: "./img/mujer7.jpg" },
-        { nombre: "Jogger Balance", categoria: "Jogger", precio: "$770", imagen: "./img/mujer8.jpg" },
-        { nombre: "Playera Energy", categoria: "Playera", precio: "$560", imagen: "./img/mujer9.jpg" },
-        { nombre: "Hoodie Premium", categoria: "Sudadera", precio: "$1050", imagen: "./img/mujer10.jpg" }
-    ]
+let productos = {
+    hombre: [],
+    mujer: []
 };
 
 /* =========================
@@ -127,6 +90,75 @@ function renderCategorias(genero) {
 
     });
     setTimeout(actualizarFlechas, 50);
+}
+
+/* Tallas */
+
+function renderTallas(genero) {
+
+    const contenedor =
+        document.getElementById(
+            "contenedor-tallas"
+        );
+
+    const tallas = [
+        ...new Set(
+            productos[genero]
+                .flatMap(producto =>
+                    producto.colores.flatMap(
+                        color => color.talla
+                    )
+                )
+        )
+    ];
+
+    const orden = [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL",
+        "XXL"
+    ];
+
+    tallas.sort(
+        (a, b) =>
+            orden.indexOf(a) -
+            orden.indexOf(b)
+    );
+
+    contenedor.innerHTML = tallas.map(
+        talla => `
+            <input
+                id="talla-${talla}"
+                class="filtro-talla"
+                value="${talla}"
+                type="checkbox">
+
+            <label for="talla-${talla}">
+                ${talla}
+            </label>
+        `
+    ).join("");
+
+    document
+        .querySelectorAll(".filtro-talla")
+        .forEach(checkbox => {
+
+            checkbox.addEventListener(
+                "change",
+                () => {
+
+                    mostrarProductos(
+                        generoActual,
+                        categoriaActual
+                    );
+
+                }
+            );
+
+        });
+
 }
 
 /* =========================
@@ -304,13 +336,8 @@ function mostrarProductos(genero, categoria = "Todas") {
                     const producto =
                         JSON.parse(btn.dataset.producto);
 
-                    localStorage.setItem(
-                        "productoSeleccionado",
-                        JSON.stringify(producto)
-                    );
-
                     window.location.href =
-                        "producto.html";
+                        `producto.html?id=${producto.idProducto}`;
 
                 });
 
@@ -322,23 +349,53 @@ function mostrarProductos(genero, categoria = "Todas") {
     }, 350);
 }
 
+async function cargarCatalogo() {
+
+    try {
+
+        const response = await fetch(
+            "http://localhost:8080/productos/catalogo"
+        );
+
+        if (!response.ok) {
+            throw new Error("Error al cargar catálogo");
+        }
+
+        productos = await response.json();
+
+        renderCategorias(generoActual);
+        mostrarProductos(generoActual);
+        renderTallas(generoActual);
+
+        const botonGeneroActivo =
+            document.querySelector(
+                `.categoria-btn[data-genero="${generoActual}"]`
+            );
+
+        if (botonGeneroActivo) {
+            botonGeneroActivo.classList.add(
+                "active-genero"
+            );
+        }
+
+        setTimeout(actualizarFlechas, 50);
+
+    } catch (error) {
+
+        console.error(
+            "Error cargando catálogo:",
+            error
+        );
+
+    }
+
+}
+
 /* =========================
 INICIALIZAR
 ========================= */
 
-renderCategorias(generoActual);
-mostrarProductos(generoActual);
-const botonGeneroActivo =
-    document.querySelector(
-        `.categoria-btn[data-genero="${generoActual}"]`
-    );
-
-if (botonGeneroActivo) {
-    botonGeneroActivo.classList.add(
-        "active-genero"
-    );
-}
-setTimeout(actualizarFlechas, 50);
+cargarCatalogo();
 
 /* =========================
 BOTONES GENERO
@@ -356,7 +413,8 @@ botonesGenero.forEach(btn => {
 
         generoActual = btn.dataset.genero;
         categoriaActual = "Todas";
-
+        
+        renderTallas(generoActual);
         renderCategorias(generoActual);
         mostrarProductos(generoActual);
     });

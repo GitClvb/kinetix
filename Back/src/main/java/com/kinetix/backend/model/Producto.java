@@ -1,6 +1,12 @@
 package com.kinetix.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.kinetix.backend.common.EstadoProducto;
+import com.kinetix.backend.common.Genero;
 import jakarta.persistence.*;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "productos")
@@ -8,37 +14,61 @@ public class Producto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "id_producto")
+    private Integer idProducto;
 
-    @Column(nullable = false)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_categoria")
+    private Categoria categoria;
+
     private String nombre;
 
-    @Column(nullable = false, length = 500)
+    @Column(columnDefinition = "TEXT")
     private String descripcion;
 
-    @Column(nullable = false)
-    private Double precio;
+    private double precio;
 
-    @Column(nullable = false)
-    private Integer stock;
+    @Enumerated(EnumType.STRING)
+    private Genero genero;
 
-    public Producto() {
-    }
+    @Enumerated(EnumType.STRING)
+    @Column(name = "estado")
+    private EstadoProducto estado;
 
-    public Producto(Long id, String nombre, String descripcion, Double precio, Integer stock) {
-        this.id = id;
+    @Column(name = "fecha_creacion")
+    private LocalDateTime fechaCreacion;
+
+    @Column(name = "fecha_actualizacion")
+    private LocalDateTime fechaActualizacion;
+
+    public Producto(Integer idProducto, Categoria categoria, String nombre, String descripcion, double precio, Genero genero, EstadoProducto estado, LocalDateTime fechaCreacion, LocalDateTime fechaActualizacion) {
+        this.idProducto = idProducto;
+        this.categoria = categoria;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.precio = precio;
-        this.stock = stock;
+        this.genero = genero;
+        this.estado = estado;
+        this.fechaCreacion = fechaCreacion;
+        this.fechaActualizacion = fechaActualizacion;
     }
 
-    public Long getId() {
-        return id;
+    public Producto() {}
+
+    public Integer getIdProducto() {
+        return idProducto;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setIdProducto(Integer idProducto) {
+        this.idProducto = idProducto;
+    }
+
+    public Categoria getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
     }
 
     public String getNombre() {
@@ -57,19 +87,43 @@ public class Producto {
         this.descripcion = descripcion;
     }
 
-    public Double getPrecio() {
+    public double getPrecio() {
         return precio;
     }
 
-    public void setPrecio(Double precio) {
+    public void setPrecio(double precio) {
         this.precio = precio;
     }
 
-    public Integer getStock() {
-        return stock;
+    public Genero getGenero() {
+        return genero;
     }
 
-    public void setStock(Integer stock) {
-        this.stock = stock;
+    public void setGenero(Genero genero) {
+        this.genero = genero;
+    }
+
+    public EstadoProducto getEstado() {
+        return estado;
+    }
+
+    public void setEstado(EstadoProducto estado) {
+        this.estado = estado;
+    }
+
+    public LocalDateTime getFechaCreacion() {
+        return fechaCreacion;
+    }
+
+    public void setFechaCreacion(LocalDateTime fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
+    }
+
+    public LocalDateTime getFechaActualizacion() {
+        return fechaActualizacion;
+    }
+
+    public void setFechaActualizacion(LocalDateTime fechaActualizacion) {
+        this.fechaActualizacion = fechaActualizacion;
     }
 }

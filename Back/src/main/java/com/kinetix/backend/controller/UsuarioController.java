@@ -35,6 +35,7 @@ public class UsuarioController {
         return ResponseEntity.ok(nuevoUsuario);
     }
 
+    /*
     @PutMapping("/{id}")
     public ResponseEntity<Usuario> actualizarUsuario(@PathVariable Long id, @RequestBody Usuario datosUsuario) {
         return usuarioRepository.findById(id)
@@ -48,6 +49,8 @@ public class UsuarioController {
                 })
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
+
+     */
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminarUsuario(@PathVariable Long id) {
