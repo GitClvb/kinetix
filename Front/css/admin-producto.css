@@ -9,11 +9,12 @@ body {
     font-size: 3rem;
     color: var(--negro-profundo);
     text-transform: uppercase;
-
+    font-family: var(--font-heading);
 }
 
 .page-title span {
     color: var(--naranja);
+    font-family: var(--font-heading);
 }
 
 /* PESTAÑAS NAVEGACIÓN */
@@ -323,7 +324,6 @@ body {
 
     .nav-tabs .nav-item {
         flex: 0 0 auto;
-        /* Evita que las pestañas se aplasten */
     }
 
     .nav-tabs .nav-link {

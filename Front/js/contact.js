@@ -36,7 +36,6 @@ form.addEventListener("submit", function (event) {
         valido = false;
     }
 
-    // ❌ evita envío si falla
     if (!valido) {
         event.preventDefault();
     }

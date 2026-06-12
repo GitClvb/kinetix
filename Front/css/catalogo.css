@@ -1,7 +1,3 @@
-/* =========================
-HERO
-========================= */
-
 .hero-home {
     min-height: 40vh;
     background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.4)), url('../img/benner2.webp');
@@ -16,20 +12,12 @@ HERO
     font-size: 1.1rem;
 }
 
-/* =========================
-SIDEBAR
-========================= */
-
 .filter-sidebar {
     background: var(--blanco);
     border-radius: 20px;
     border: 1px solid #ececec;
     box-shadow: 0 5px 25px rgba(0, 0, 0, .08);
 }
-
-/* =========================
-BOTONES GENERO
-========================= */
 
 .categoria-btn {
     flex: 1;
@@ -55,10 +43,6 @@ BOTONES GENERO
     color: var(--blanco);
 }
 
-/* =========================
-CATEGORIAS
-========================= */
-
 .categoria-producto {
     background: var(--blanco);
     border: 1px solid #ddd;
@@ -66,6 +50,7 @@ CATEGORIAS
     border-radius: 50px;
     font-weight: 600;
     transition: .3s ease;
+    white-space: nowrap;
 }
 
 .categoria-producto:hover {
@@ -80,10 +65,6 @@ CATEGORIAS
     color: var(--blanco);
     box-shadow: 0 4px 12px rgba(255, 120, 0, .25);
 }
-
-/* =========================
-PRODUCT CARD
-========================= */
 
 .product-card {
     background: var(--blanco);
@@ -110,7 +91,7 @@ PRODUCT CARD
 }
 
 .product-category {
-    color: var(--naranja);
+    color: var(--negro-profundo);
     font-size: .8rem;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -118,6 +99,7 @@ PRODUCT CARD
 }
 
 .product-title {
+    color: var(--naranja);
     font-size: 1.1rem;
     font-weight: 700;
     margin: 10px 0;
@@ -205,11 +187,6 @@ PRODUCT CARD
     flex-wrap: nowrap;
     scroll-behavior: smooth;
 }
-
-
-/* =========================
-RESPONSIVE
-========================= */
 
 @media(max-width:768px) {
     .hero-home {
@@ -326,10 +303,6 @@ RESPONSIVE
     color: var(--blanco);
 }
 
-/* =========================
-LOADER CATALOGO
-========================= */
-
 .loader-catalogo {
     position: absolute;
     inset: 0;
@@ -368,10 +341,6 @@ LOADER CATALOGO
     animation: spin .8s linear infinite;
 }
 
-/* =========================
-ANIMACION PRODUCTOS
-========================= */
-
 .product-card {
     animation: productFade .45s ease;
 }
@@ -383,10 +352,6 @@ ANIMACION PRODUCTOS
 .product-card:hover img {
     transform: scale(1.04);
 }
-
-/* =========================
-KEYFRAMES
-========================= */
 
 @keyframes spin {
     to {
@@ -419,10 +384,6 @@ KEYFRAMES
     }
 }
 
-/* =========================
-TRANSICION GRID
-========================= */
-
 #catalogo-grid {
     transition: opacity .25s ease;
 }
@@ -432,17 +393,9 @@ TRANSICION GRID
     pointer-events: none;
 }
 
-/* =========================
-LOADER OVERLAY
-========================= */
-
 .catalogo-wrapper {
     position: relative;
 }
-
-/* =========================
-ATRIBUTOS PRODUCTO
-========================= */
 
 .product-label {
     display: block;

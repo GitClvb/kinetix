@@ -1,81 +1,132 @@
-// ============================================================
-// productoService.js
-// Responsabilidad: CRUD de productos.
-// HOY usa localStorage. MAÑANA solo cambia cada función marcada.
-// ============================================================
+const API_URL =
+    "http://localhost:8080/productos";
 
-const STORAGE_KEY = "kf_productos";
+export async function getProductos() {
 
-function leer() {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+    const response =
+        await fetch(API_URL);
+
+    if (!response.ok) {
+
+        throw new Error(
+            "Error al obtener productos"
+        );
+
+    }
+
+    return await response.json();
+
 }
 
-function guardar(lista) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(lista));
+export async function getProductoById(id) {
+
+    const response =
+        await fetch(
+            `${API_URL}/${id}/estado`
+        );
+
+    if (!response.ok) {
+
+        throw new Error(
+            "Producto no encontrado"
+        );
+
+    }
+
+    return await response.json();
+
 }
 
-// ── READ ─────────────────────────────────────────────────────
-export function getProductos() {
-    // TODO (backend): return fetch('/api/productos').then(r => r.json());
-    return leer();
+
+export async function crearProducto(producto) {
+
+    const response =
+        await fetch(API_URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(producto)
+        });
+
+    if (!response.ok) {
+
+        const error =
+            await response.text();
+
+        throw new Error(error);
+
+    }
+
+    return true;
+
 }
 
-export function getProductoById(id) {
-    // TODO (backend): return fetch(`/api/productos/${id}`).then(r => r.json());
-    return leer().find(p => p.id_producto === Number(id)) || null;
+// Actualiza un producto existente 
+
+export async function getProductosAdmin() {
+
+    const response =
+        await fetch(
+            `${API_URL}/admin`
+        );
+
+    if (!response.ok) {
+
+        throw new Error(
+            "Error al obtener productos"
+        );
+
+    }
+
+    return await response.json();
+
 }
 
-// ── CREATE ───────────────────────────────────────────────────
-export function crearProducto(datos) {
-    // TODO (backend):
-    // return fetch('/api/productos', {
-    //     method: 'POST',
-    //     headers: { 'Content-Type': 'application/json' },
-    //     body: JSON.stringify(datos)
-    // }).then(r => r.json());
+export async function actualizarProducto(id, producto) {
 
-    const lista = leer();
-    const nuevo = {
-        ...datos,
-        id_producto: Date.now(),   // El servidor generará el ID real
-        estado: "activo",
-        fecha_creacion: new Date().toISOString()
-    };
-    lista.push(nuevo);
-    guardar(lista);
-    return nuevo;
+    const response =
+        await fetch(`${API_URL}/${id}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(producto)
+        });
+
+    if (!response.ok) {
+
+        const error =
+            await response.text();
+
+        throw new Error(error);
+
+    }
+
+    return true;
+
 }
 
-// ── UPDATE ───────────────────────────────────────────────────
-/**
- * Actualiza un producto existente SIN eliminarlo primero.
- * Recibe el id y los campos a actualizar (parcial o total).
- */
-export function actualizarProducto(id, cambios) {
-    // TODO (backend):
-    // return fetch(`/api/productos/${id}`, {
-    //     method: 'PATCH',
-    //     headers: { 'Content-Type': 'application/json' },
-    //     body: JSON.stringify(cambios)
-    // }).then(r => r.json());
+// activar / dar de baja
+export async function cambiarEstado(id) {
 
-    const lista = leer();
-    const idx   = lista.findIndex(p => p.id_producto === Number(id));
-    if (idx === -1) throw new Error(`Producto ${id} no encontrado`);
+    const response =
+        await fetch(
+            `${API_URL}/${id}/estado`,
+            {
+                method: "PATCH"
+            }
+        );
 
-    lista[idx] = { ...lista[idx], ...cambios };
-    guardar(lista);
-    return lista[idx];
-}
+    if (!response.ok) {
 
-// ── ESTADO (activar / dar de baja) ──────────────────────────
-export function cambiarEstado(id) {
-    // TODO (backend):
-    // return fetch(`/api/productos/${id}/estado`, { method: 'PATCH' }).then(r => r.json());
+        const error =
+            await response.text();
 
-    const producto = getProductoById(id);
-    if (!producto) throw new Error(`Producto ${id} no encontrado`);
+        throw new Error(error);
 
-    const nuevoEstado = producto.estado === "activo" ? "inactivo" : "activo";
-    return actualizarProducto(id, { estado: nuevoEstado });
+    }
+
+    return true;
+
 }

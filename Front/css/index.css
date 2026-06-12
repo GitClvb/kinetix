@@ -79,6 +79,52 @@
     text-align: center;
 }
 
+.card-producto {
+    border: 0;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all .3s ease;
+    background: #fff;
+}
+
+.card-producto:hover {
+    transform: translateY(-5px);
+}
+
+/* Contenedor de imagen */
+.card-producto .img-wrapper {
+    height: 350px;
+    overflow: hidden;
+}
+
+/* Imagen */
+.card-producto .img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform .4s ease;
+}
+
+.card-producto:hover img {
+    transform: scale(1.05);
+}
+
+.card-producto h5 {
+    font-weight: 700;
+    margin-top: 15px;
+}
+
+.card-producto .precio {
+    color: var(--naranja);
+    font-weight: 800;
+    font-size: 1.4rem;
+}
+
+.card-producto .btn {
+    border-radius: 8px;
+}
+
 /* BANNER ÚNETE AL TEAM */
 .join-team {
     background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../img/unete.webp');
@@ -133,6 +179,51 @@
         font-size: 1.3rem;
         bottom: 10px;
         letter-spacing: 1px;
+    }
+
+    .titulo-heavy {
+        font-size: 2.3rem;
+        margin-bottom: 1rem;
+    }
+
+    .card-producto {
+        border-radius: 10px;
+    }
+
+    /* Imagen más pequeña */
+    .card-producto .img-wrapper {
+        height: 180px;
+    }
+
+    .card-producto .img-wrapper img {
+        object-fit: cover;
+        object-position: center;
+    }
+
+    /* Menos padding */
+    .card-producto .p-3 {
+        padding: .75rem !important;
+    }
+
+    .card-producto h5 {
+        font-size: 1rem;
+        margin-top: .5rem;
+        margin-bottom: .3rem;
+        line-height: 1.2;
+    }
+
+    .card-producto small {
+        font-size: .85rem;
+    }
+
+    .card-producto .precio {
+        font-size: 1.1rem;
+        margin: .5rem 0 !important;
+    }
+
+    .card-producto .btn {
+        font-size: .8rem;
+        padding: .4rem .8rem;
     }
 
 }

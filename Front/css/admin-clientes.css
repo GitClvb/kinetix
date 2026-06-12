@@ -1,0 +1,77 @@
+body {
+    background-color: var(--gris-nube);
+    color: var(--negro-profundo);
+    font-family: var(--font-main);
+    line-height: 1.6;
+}
+
+.page-header { margin-bottom: 2rem; }
+
+.page-title {
+    font-family: var(--font-heading);
+    font-size: 3rem;
+    font-weight: 800;
+    color: var(--negro-profundo);
+}
+
+.page-title span { color: var(--naranja); }
+
+.card-dashboard {
+    background: var(--blanco);
+    border: 1px solid var(--borde-suave);
+    border-radius: 20px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.card-dashboard:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+}
+
+.card-dashboard .icon { color: var(--naranja); margin-bottom: 0.5rem; }
+
+.card-dashboard .value {
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--negro-profundo);
+}
+
+.card-dashboard .label { color: var(--texto-muted); font-size: 0.9rem; }
+
+.table-container {
+    background: var(--blanco);
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.table { color: var(--negro-profundo); border-collapse: separate; border-spacing: 0 0.5rem; }
+
+.table thead th {
+    color: var(--naranja);
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    border-bottom: 2px solid var(--naranja-soft);
+}
+
+/* Badges con tus colores */
+.badge-activo { background: var(--verde); color: var(--negro-profundo); font-weight: 600; }
+.badge-inactivo { background: var(--gris-nube); color: var(--texto-muted); }
+
+/* Botones */
+.btn-action {
+    border: none;
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    font-weight: 500;
+    transition: opacity 0.2s;
+}
+
+.btn-action:hover { opacity: 0.9; }
+
+.btn-view { background: var(--gris-carbono); color: var(--blanco); }
+.btn-toggle { background: var(--naranja); color: var(--blanco); }

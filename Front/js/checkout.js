@@ -1,15 +1,8 @@
-/* ==========================================================================
-   chekout.js -  LOGIC AND VALIDATIONS FOR KINETIXFIT CHECKOUT
-   ========================================================================== */
+document.addEventListener("DOMContentLoaded", async () => {
 
-document.addEventListener("DOMContentLoaded", () => {
-    // Filtro pára saber si un user esta loggeado
-    const isLogged = localStorage.getItem('kinetix_user_logged');
-
-    if (!isLogged) {
-        // Redirección inmediata al login si un invitado intenta entrar directo por URL
+    if (!localStorage.getItem('kinetix_user_logged')) {
         window.location.href = "login.html";
-        return; // Frena por completo el resto del script
+        return;
     }
 
     const checkoutForm = document.getElementById("checkoutForm");
@@ -17,20 +10,28 @@ document.addEventListener("DOMContentLoaded", () => {
     const cartCountBadge = document.getElementById("checkout-cart-count");
     const alertContainer = document.getElementById("checkout-alert-container");
 
-    // 1. Cargar datos usando la clave exacta de tu proyecto
-    let miCarrito = JSON.parse(localStorage.getItem("kinetix_cart")) || [];
+    const estaLogueado = () => !!localStorage.getItem('currentUser');
 
-    // --- EXPRESIONES REGULARES PARA VALIDACIÓN AVANZADA ---
-    // Permite letras (con acentos, diéresis y ñ) y espacios. Bloquea números de forma estricta.
+    let itemsCarrito = [];
+    let modoDb = false;
+
+    if (estaLogueado() && typeof fetchCarritoDB === 'function') {
+        try {
+            itemsCarrito = await fetchCarritoDB();
+            modoDb = true;
+        } catch (err) {
+            console.error('Error cargando carrito desde BD:', err);
+        }
+    }
+    if (!modoDb) {
+        itemsCarrito = JSON.parse(localStorage.getItem('kinetix_cart') || '[]');
+    }
+
     const regexSoloLetras = /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+$/;
-    // Valida exactamente 16 dígitos numéricos
     const regexTarjeta = /^\d{16}$/;
-    // Valida formato MM/YY o MM/AA (2 dígitos, diagonal, 2 dígitos)
     const regexExpiracion = /^(0[1-9]|1[0-2])\/?([0-9]{2})$/;
-    // Valida exactamente 3 o 4 dígitos numéricos para el CVV
     const regexCVV = /^\d{3,4}$/;
 
-    // --- MAPEADO DE CAMPOS EXACTOS SEGÚN TU HTML ---
     const camposTexto = {
         nombre: document.getElementById("firstName"),
         apellidos: document.getElementById("lastName"),
@@ -38,276 +39,232 @@ document.addEventListener("DOMContentLoaded", () => {
         estado: document.getElementById("state"),
         tarjetaNombre: document.getElementById("cc-name")
     };
-
     const camposNumeros = {
         tarjetaNumero: document.getElementById("cc-number"),
         tarjetaExpiracion: document.getElementById("cc-expiration"),
         tarjetaCVV: document.getElementById("cc-cvv")
     };
 
-    // ==========================================================================
-    // FILTROS EN TIEMPO REAL (Evitan la escritura de caracteres no deseados)
-    // ==========================================================================
-
-    // Bloquear números y caracteres especiales en los campos de texto mientras se teclea
-    Object.values(camposTexto).forEach(campo => {
-        if (campo) {
-            campo.addEventListener("input", (e) => {
-                e.target.value = e.target.value.replace(/[0-9]/g, "");
-            });
-        }
+    Object.values(camposTexto).forEach(c => {
+        c?.addEventListener("input", e => {
+            e.target.value = e.target.value.replace(/[0-9]/g, "");
+        });
+    });
+    camposNumeros.tarjetaNumero?.addEventListener("input",
+        e => { e.target.value = e.target.value.replace(/\D/g, ""); });
+    camposNumeros.tarjetaCVV?.addEventListener("input",
+        e => { e.target.value = e.target.value.replace(/\D/g, ""); });
+    camposNumeros.tarjetaExpiracion?.addEventListener("input", e => {
+        let v = e.target.value.replace(/\D/g, "");
+        if (v.length > 2) v = v.substring(0, 2) + "/" + v.substring(2, 4);
+        e.target.value = v;
     });
 
-    // Bloquear letras en el número de tarjeta mientras se escribe
-    if (camposNumeros.tarjetaNumero) {
-        camposNumeros.tarjetaNumero.addEventListener("input", (e) => {
-            e.target.value = e.target.value.replace(/\D/g, ""); // Borra todo lo que NO sea número
-        });
-    }
-
-    // Bloquear letras en el código CVV mientras se escribe
-    if (camposNumeros.tarjetaCVV) {
-        camposNumeros.tarjetaCVV.addEventListener("input", (e) => {
-            e.target.value = e.target.value.replace(/\D/g, ""); // Borra todo lo que NO sea número
-        });
-    }
-
-    // Formatear automáticamente la expiración añadiendo la diagonal (MM/AA) y bloqueando letras
-    if (camposNumeros.tarjetaExpiracion) {
-        camposNumeros.tarjetaExpiracion.addEventListener("input", (e) => {
-            let valor = e.target.value.replace(/\D/g, ""); // Limpia letras
-            if (valor.length > 2) {
-                valor = valor.substring(0, 2) + "/" + valor.substring(2, 4);
-            }
-            e.target.value = valor;
-        });
-    }
-
-    // ==========================================================================
-    // RENDERIZADO DEL RESUMEN DE COMPRA
-    // ==========================================================================
     function renderResumenCompra() {
         if (!itemsContainer || !cartCountBadge) return;
-
         itemsContainer.innerHTML = "";
 
-        if (miCarrito.length === 0) {
+        if (itemsCarrito.length === 0) {
             itemsContainer.innerHTML = `
-            <li class="list-group-item text-center text-muted py-3">
-                Tu carrito está vacío
-            </li>
-        `;
+                <li class="list-group-item text-center text-muted py-3">
+                    Tu carrito está vacío
+                </li>`;
             cartCountBadge.textContent = "0";
             return;
         }
 
-        let totalGeneral = 0;
-        let totalArticulos = 0;
+        let totalGeneral = 0, totalArticulos = 0;
 
-        miCarrito.forEach(producto => {
-
-            const cantidad = producto.cantidad || 1;
-            const subtotal = producto.precio * cantidad;
+        itemsCarrito.forEach(item => {
+            const nombre = modoDb ? item.nombreProducto : item.nombre;
+            const precio = parseFloat(modoDb ? item.precioUnitario : item.precio);
+            const cantidad = item.cantidad || 1;
+            const imagen = item.imagen || 'img/default-product.png';
+            const talla = item.talla || '';
+            const colorHex = modoDb ? (item.codigoColor || '') : (item.color || '');
+            const subtotal = precio * cantidad;
 
             totalGeneral += subtotal;
             totalArticulos += cantidad;
 
             itemsContainer.innerHTML += `
-            <li class="list-group-item checkout-item">
-
-                <img
-                    src="${producto.imagen || 'img/default-product.png'}"
-                    alt="${producto.nombre}"
-                    class="checkout-product-image">
-
-                <div class="checkout-product-info">
-
-                    <h6 class="fw-bold mb-1">
-                        ${producto.nombre}
-                    </h6>
-
-                    <small class="text-muted d-block">
-                        Cantidad: ${cantidad}
-                    </small>
-
-                    ${producto.talla
-                    ? `
-                            <small class="text-muted d-block">
-                                Talla: ${producto.talla}
-                            </small>
-                        `
-                    : ""
-                }
-
-                    ${producto.color
-                    ? `
-                            <small class="text-muted d-flex align-items-center gap-2">
-                                Color:
-                                <span
-                                    class="checkout-color-dot"
-                                    style="background:${producto.color}">
-                                </span>
-                            </small>
-                        `
-                    : ""
-                }
-
-                </div>
-
-                <div class="checkout-subtotal">
-                    $${subtotal.toFixed(2)}
-                </div>
-
-            </li>
-        `;
+                <li class="list-group-item checkout-item">
+                    <img src="${imagen}" alt="${nombre}" class="checkout-product-image">
+                    <div class="checkout-product-info">
+                        <h6 class="fw-bold mb-1">${nombre}</h6>
+                        <small class="text-muted d-block">Cantidad: ${cantidad}</small>
+                        ${talla ? `<small class="text-muted d-block">Talla: ${talla}</small>` : ''}
+                        ${colorHex ? `<small class="text-muted d-flex align-items-center gap-2">
+                                          Color:
+                                          <span class="checkout-color-dot"
+                                                style="background:${colorHex}"></span>
+                                      </small>` : ''}
+                    </div>
+                    <div class="checkout-subtotal">$${subtotal.toFixed(2)}</div>
+                </li>`;
         });
 
         itemsContainer.innerHTML += `
-        <li
-            class="list-group-item
-                   d-flex
-                   justify-content-between
-                   align-items-center
-                   bg-light
-                   py-3">
-
-            <span class="fw-bold">
-                Total
-            </span>
-
-            <strong class="total-pagar">
-                $${totalGeneral.toFixed(2)} MXN
-            </strong>
-
-        </li>
-    `;
+            <li class="list-group-item d-flex justify-content-between align-items-center bg-light py-3">
+                <span class="fw-bold">Total</span>
+                <strong class="total-pagar">$${totalGeneral.toFixed(2)} MXN</strong>
+            </li>`;
 
         cartCountBadge.textContent = totalArticulos;
     }
 
-    // Función auxiliar para mostrar las alertas estilizadas de Bootstrap
     function mostrarAlerta(mensaje, tipo) {
-        if (alertContainer) {
-            alertContainer.innerHTML = `
-                <div class="alert alert-${tipo} alert-dismissible fade show shadow-sm" role="alert">
-                    <i class="bi bi-exclamation-triangle-fill me-2"></i> ${mensaje}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            `;
-        } else {
+        if (!alertContainer) {
             alert(mensaje);
+            return;
         }
+
+        alertContainer.innerHTML = `
+        <div class="alert alert-${tipo} alert-dismissible fade show shadow-sm" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            ${mensaje}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    `;
+
+        setTimeout(() => {
+            const alerta = alertContainer.querySelector('.alert');
+
+            if (alerta) {
+                alerta.classList.remove('show');
+
+                setTimeout(() => {
+                    alertContainer.innerHTML = '';
+                }, 300); // espera la animación fade
+            }
+        }, 4000);
     }
 
-    // ==========================================================================
-    // 4. VALIDACIÓN INTERNA Y CONTROL DE ENVÍO (SUBMIT)
-    // ==========================================================================
     if (checkoutForm) {
-        checkoutForm.addEventListener("submit", (e) => {
+        checkoutForm.addEventListener("submit", async (e) => {
             e.preventDefault();
 
-            let formularioValido = true;
-            let mensajeError = "";
-
-            // Limpiar estados de error o validación previos
+            // Validación
+            let valido = true, mensajeError = "";
             checkoutForm.classList.remove("was-validated");
-            Object.values({ ...camposTexto, ...camposNumeros }).forEach(campo => {
-                if (campo) campo.classList.remove("is-invalid");
-            });
+            Object.values({ ...camposTexto, ...camposNumeros })
+                .forEach(c => c?.classList.remove("is-invalid"));
 
-            // --- VALIDACIÓN DE CAMPOS DE TEXTO (SÓLO LETRAS) ---
-            for (const [key, campo] of Object.entries(camposTexto)) {
-                if (campo) {
-                    const valor = campo.value.trim();
-                    if (valor === "" || !regexSoloLetras.test(valor)) {
-                        campo.classList.add("is-invalid");
-                        formularioValido = false;
-                    }
+            for (const [, campo] of Object.entries(camposTexto)) {
+                if (campo && (!campo.value.trim() || !regexSoloLetras.test(campo.value.trim()))) {
+                    campo.classList.add("is-invalid");
+                    valido = false;
                 }
             }
-
-            // --- VALIDACIÓN DE NÚMERO DE TARJETA (16 DÍGITOS) ---
-            if (camposNumeros.tarjetaNumero) {
-                const numero = camposNumeros.tarjetaNumero.value.replace(/\s/g, "");
-                if (!regexTarjeta.test(numero)) {
-                    camposNumeros.tarjetaNumero.classList.add("is-invalid");
-                    formularioValido = false;
-                    mensajeError += "* El Número de Tarjeta debe tener exactamente 16 dígitos numéricos.<br>";
-                }
+            const numTarjeta = camposNumeros.tarjetaNumero?.value.replace(/\s/g, "");
+            if (!regexTarjeta.test(numTarjeta)) {
+                camposNumeros.tarjetaNumero?.classList.add("is-invalid");
+                valido = false;
+                mensajeError += "* El número de tarjeta debe tener 16 dígitos.<br>";
+            }
+            if (!regexExpiracion.test(camposNumeros.tarjetaExpiracion?.value)) {
+                camposNumeros.tarjetaExpiracion?.classList.add("is-invalid");
+                valido = false;
+                mensajeError += "* Fecha de expiración inválida (MM/AA).<br>";
+            }
+            if (!regexCVV.test(camposNumeros.tarjetaCVV?.value)) {
+                camposNumeros.tarjetaCVV?.classList.add("is-invalid");
+                valido = false;
+                mensajeError += "* El CVV debe tener 3 o 4 dígitos.<br>";
             }
 
-            // --- VALIDACIÓN DE FECHA DE EXPIRACIÓN (MM/AA) ---
-            if (camposNumeros.tarjetaExpiracion) {
-                if (!regexExpiracion.test(camposNumeros.tarjetaExpiracion.value)) {
-                    camposNumeros.tarjetaExpiracion.classList.add("is-invalid");
-                    formularioValido = false;
-                    mensajeError += "* La fecha de expiración debe tener el formato MM/AA (Ej: 12/26).<br>";
-                }
-            }
-
-            // --- VALIDACIÓN DE CÓDIGO CVV (3 o 4 DÍGITOS) ---
-            if (camposNumeros.tarjetaCVV) {
-                if (!regexCVV.test(camposNumeros.tarjetaCVV.value)) {
-                    camposNumeros.tarjetaCVV.classList.add("is-invalid");
-                    formularioValido = false;
-                    mensajeError += "* El código CVV debe tener 3 o 4 dígitos numéricos.<br>";
-                }
-            }
-
-            // --- VERIFICACIÓN DE ATRIBUTOS REQUIRED GLOBALES ---
-            if (!checkoutForm.checkValidity() || !formularioValido) {
+            if (!checkoutForm.checkValidity() || !valido) {
                 e.stopPropagation();
                 checkoutForm.classList.add("was-validated");
-
-                const errorTexto = mensajeError !== "" ?
-                    `Por favor, corrige las credenciales de pago:<br>${mensajeError}` :
-                    "Por favor, rellena todos los campos requeridos correctamente.";
-
-                mostrarAlerta(errorTexto, "danger");
+                mostrarAlerta(
+                    mensajeError
+                        ? `Por favor, corrige los datos de pago:<br>${mensajeError}`
+                        : "Por favor, rellena todos los campos correctamente.",
+                    "danger"
+                );
                 return;
             }
 
-            // CONTROL DE SEGURIDAD: Evitar transacciones sin artículos
-            if (miCarrito.length === 0) {
+            if (itemsCarrito.length === 0) {
                 mostrarAlerta("No puedes procesar un pago con el carrito vacío.", "warning");
                 return;
             }
 
-            // Cambiar visualmente el botón "PAGAR AHORA" para denotar carga en la red
+            // Spinner
             const botonEnvio = checkoutForm.querySelector('button[type="submit"]');
             if (botonEnvio) {
                 botonEnvio.disabled = true;
-                botonEnvio.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> PROCESANDO PAGO...';
+                botonEnvio.innerHTML = `
+                    <span class="spinner-border spinner-border-sm" role="status"></span>
+                    PROCESANDO PAGO...`;
             }
 
-            // Simulación de pasarela bancaria segura (2.5 segundos)
-            setTimeout(() => {
-                // Vaciar persistencia del carrito tras la compra exitosa
-                localStorage.removeItem("kinetix_cart");
-                miCarrito = [];
-                renderResumenCompra(); // Actualiza la UI de fondo a ceros
+            // Simulación de pasarela (2.5 s) → luego registrar en BD
+            setTimeout(async () => {
+                try {
+                    // ── Construir PedidoRequest desde el formulario ───────────
+                    const nombre = document.getElementById("firstName")?.value.trim() || '';
+                    const apellidos = document.getElementById("lastName")?.value.trim() || '';
 
-                // Desplegar de forma nativa el Modal de confirmación de Bootstrap
-                const modalElement = document.getElementById('modalExitoPago');
-                if (modalElement) {
-                    const modalExito = bootstrap.Modal.getOrCreateInstance(modalElement);
-                    modalExito.show();
+                    const calle = document.getElementById("calle")?.value.trim() || '';
+                    const numExt = document.getElementById("numeroExterior")?.value.trim() || '';
+                    const numInt = document.getElementById("numeroInterior")?.value.trim() || '';
+                    const colonia = document.getElementById("colonia")?.value.trim() || '';
+                    const ciudad = document.getElementById("city")?.value.trim() || '';
+                    const estado = document.getElementById("state")?.value.trim() || '';
+                    const zip = document.getElementById("zip")?.value.trim() || '';
+
+                    const pedidoRequest = {
+                        nombreDestinatario: `${nombre} ${apellidos}`.trim(),
+
+                        calle: calle,
+                        numeroExterior: numExt,
+                        numeroInterior: numInt,
+
+                        colonia: colonia,
+                        ciudad: ciudad,
+                        estado: estado,
+                        codigoPostal: zip,
+
+                        pais: "México",
+                        metodoPago: document.querySelector('input[name="metodoPago"]:checked')?.value
+                    };
+
+                    // crearPedidoDB crea: dirección → pedido → pedido_productos
+                    const pedidoResponse = await crearPedidoDB(pedidoRequest);
+                    console.log('✅ Pedido creado:', pedidoResponse);
+
+                    // Limpiar localStorage
+                    localStorage.removeItem('kinetix_cart');
+                    itemsCarrito = [];
+                    renderResumenCompra();
+
+                } catch (err) {
+                    console.error('Error al crear pedido:', err);
+                    mostrarAlerta(
+                        'Hubo un problema al confirmar tu pedido. Contacta soporte.',
+                        'danger'
+                    );
+                    if (botonEnvio) {
+                        botonEnvio.disabled = false;
+                        botonEnvio.textContent = 'PAGAR AHORA';
+                    }
+                    return;
                 }
 
-                // 3. Redirección forzada al hacer click al botón de cierre del modal
-                const btnCerrarExito = document.getElementById('btn-cerrar-exito');
-                if (btnCerrarExito) {
-                    btnCerrarExito.addEventListener('click', () => {
-                        window.location.href = "index.html";
+                // Modal de éxito
+                const modalElement = document.getElementById('modalExitoPago');
+                if (modalElement) {
+                    bootstrap.Modal.getOrCreateInstance(modalElement).show();
+                    document.getElementById('btn-cerrar-exito')
+                        ?.addEventListener('click', () => {
+                            window.location.href = "index.html";
+                        });
+                    modalElement.addEventListener('hidden.bs.modal', () => {
+                        window.location.href = "catalogo.html";
                     });
                 }
 
-                // Respaldo de seguridad: si cierran el modal clickeando fuera de él
-                modalElement.addEventListener('hidden.bs.modal', () => {
-                    window.location.href = "index.html";
-                });
-
-                // Limpieza del formulario base
                 checkoutForm.reset();
                 checkoutForm.classList.remove("was-validated");
 
@@ -315,6 +272,5 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Ejecución inicial al montar el archivo
     renderResumenCompra();
 });

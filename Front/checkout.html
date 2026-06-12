@@ -18,78 +18,207 @@
 
     <main class="container py-5">
         <div class="row g-5">
+
+            <!-- ── Resumen del carrito ──────────────────────────────────── -->
             <div class="col-md-5 col-lg-4 order-md-last">
                 <h4 class="d-flex justify-content-between align-items-center mb-3">
                     <span class="text-black fw-bold">Tu Carrito</span>
                     <span class="badge bg-dark rounded-pill" id="checkout-cart-count">0</span>
                 </h4>
-                <ul class="list-group mb-3 shadow-sm" id="checkout-cart-items">
-                </ul>
+                <ul class="list-group mb-3 shadow-sm" id="checkout-cart-items"></ul>
             </div>
 
+            <!-- ── Formulario de pago ───────────────────────────────────── -->
             <div class="col-md-7 col-lg-8">
                 <div class="card border-0 shadow-lg p-4">
                     <h2 class="mb-4 fw-bold text-orange text-center text-md-start">DETALLES DE PAGO</h2>
 
                     <form id="checkoutForm" novalidate>
-                        <h5 class="mb-3 fw-bold text-dark border-bottom pb-2">1. Dirección de Envío</h5>
+
+                        <!-- 1. Dirección de envío -->
+                        <h5 class="mb-3 fw-bold text-dark border-bottom pb-2">
+                            1. Dirección de Envío
+                        </h5>
                         <div class="row g-3 mb-4">
+
                             <div class="col-sm-6">
                                 <label for="firstName" class="form-label fw-semibold">Nombre(s)</label>
-                                <input type="text" class="form-control" id="firstName" required>
+                                <input type="text" class="form-control" id="firstName"
+                                       placeholder="Ej. María" required>
+                                <div class="invalid-feedback">Ingresa un nombre válido (solo letras).</div>
                             </div>
+
                             <div class="col-sm-6">
                                 <label for="lastName" class="form-label fw-semibold">Apellidos</label>
-                                <input type="text" class="form-control" id="lastName" required>
+                                <input type="text" class="form-control" id="lastName"
+                                       placeholder="Ej. García López" required>
+                                <div class="invalid-feedback">Ingresa apellidos válidos (solo letras).</div>
                             </div>
-                            <div class="col-12">
-                                <label for="address" class="form-label fw-semibold">Dirección</label>
-                                <input type="text" class="form-control" id="address"
-                                    placeholder="Calle, Número, Colonia" required>
+
+                            <!-- Calle — mapea a direcciones_usuario.calle -->
+                            <div class="col-md-8">
+                                <label for="calle" class="form-label fw-semibold">Calle</label>
+                                <input type="text" class="form-control" id="calle"
+                                       placeholder="Ej. Av. Insurgentes Sur" required>
+                                <div class="invalid-feedback">Ingresa el nombre de la calle.</div>
                             </div>
-                            <div class="col-md-5">
+
+                            <!-- Número exterior — mapea a direcciones_usuario.numero_exterior -->
+                            <div class="col-md-2">
+                                <label for="numeroExterior" class="form-label fw-semibold">No. Ext.</label>
+                                <input type="text" class="form-control" id="numeroExterior"
+                                       placeholder="123" required>
+                                <div class="invalid-feedback">Requerido.</div>
+                            </div>
+
+                            <!-- Número interior — mapea a direcciones_usuario.numero_interior (opcional) -->
+                            <div class="col-md-2">
+                                <label for="numeroInterior" class="form-label fw-semibold">No. Int.</label>
+                                <input type="text" class="form-control" id="numeroInterior"
+                                       placeholder="4B">
+                            </div>
+
+                            <!-- Colonia — mapea a direcciones_usuario.colonia -->
+                            <div class="col-md-6">
+                                <label for="colonia" class="form-label fw-semibold">Colonia</label>
+                                <input type="text" class="form-control" id="colonia"
+                                       placeholder="Ej. Del Valle" required>
+                                <div class="invalid-feedback">Ingresa la colonia.</div>
+                            </div>
+
+                            <!-- Ciudad — se guarda también en colonia si no existe campo propio -->
+                            <div class="col-md-6">
                                 <label for="city" class="form-label fw-semibold">Ciudad / Municipio</label>
-                                <input type="text" class="form-control" id="city" required>
+                                <input type="text" class="form-control" id="city"
+                                       placeholder="Ej. Ciudad de México" required>
+                                <div class="invalid-feedback">Ingresa la ciudad.</div>
                             </div>
-                            <div class="col-md-4">
+
+                            <!-- Estado — mapea a direcciones_usuario.estado -->
+                            <div class="col-md-5">
                                 <label for="state" class="form-label fw-semibold">Estado</label>
-                                <input type="text" class="form-control" id="state" required>
+                                <input type="text" class="form-control" id="state"
+                                       placeholder="Ej. CDMX" required>
+                                <div class="invalid-feedback">Ingresa el estado (solo letras).</div>
                             </div>
+
+                            <!-- C.P. — mapea a direcciones_usuario.codigo_postal -->
                             <div class="col-md-3">
                                 <label for="zip" class="form-label fw-semibold">C.P.</label>
-                                <input type="text" class="form-control" id="zip" placeholder="00000" required>
+                                <input type="text" class="form-control" id="zip"
+                                       placeholder="00000" maxlength="10" required>
+                                <div class="invalid-feedback">Ingresa el código postal.</div>
                             </div>
+
+                            <!-- Referencia — mapea a direcciones_usuario.referencia (opcional) -->
+                            <div class="col-md-4">
+                                <label for="referencia" class="form-label fw-semibold">
+                                    Referencia <small class="text-muted fw-normal">(opcional)</small>
+                                </label>
+                                <input type="text" class="form-control" id="referencia"
+                                       placeholder="Ej. Entre calles X y Z">
+                            </div>
+
                         </div>
 
-                        <h5 class="mb-3 fw-bold text-dark border-bottom pb-2">2. Método de Pago</h5>
+                        <!-- 2. Método de pago -->
+                        <h5 class="mb-3 fw-bold text-dark border-bottom pb-2">
+                            2. Método de Pago
+                        </h5>
+
+                        <!-- Selector de método — valores coinciden con enum pagos.metodo_pago -->
                         <div class="row g-3 mb-4">
+
                             <div class="col-12">
-                                <label for="cc-name" class="form-label fw-semibold">Nombre en la tarjeta</label>
-                                <input type="text" class="form-control" id="cc-name" required>
-                                <small class="text-muted">Nombre completo como se muestra en la tarjeta</small>
+                                <label class="form-label fw-semibold">Selecciona tu método</label>
+                                <div class="d-flex gap-3 flex-wrap" id="contenedor-metodos-pago">
+
+                                    <input type="radio" class="btn-check" name="metodoPago"
+                                           id="metodo-tarjeta" value="tarjeta" checked>
+                                    <label class="btn btn-outline-dark d-flex align-items-center gap-2 px-4"
+                                           for="metodo-tarjeta">
+                                        <i class="bi bi-credit-card fs-5"></i> Tarjeta
+                                    </label>
+
+                                    <input type="radio" class="btn-check" name="metodoPago"
+                                           id="metodo-paypal" value="paypal">
+                                    <label class="btn btn-outline-dark d-flex align-items-center gap-2 px-4"
+                                           for="metodo-paypal">
+                                        <i class="bi bi-paypal fs-5"></i> PayPal
+                                    </label>
+
+                                    <input type="radio" class="btn-check" name="metodoPago"
+                                           id="metodo-mercadopago" value="mercadopago">
+                                    <label class="btn btn-outline-dark d-flex align-items-center gap-2 px-4"
+                                           for="metodo-mercadopago">
+                                        <i class="bi bi-bag-check fs-5"></i> MercadoPago
+                                    </label>
+
+                                </div>
                             </div>
-                            <div class="col-md-6">
-                                <label for="cc-number" class="form-label fw-semibold">Número de tarjeta</label>
-                                <input type="text" class="form-control" id="cc-number" placeholder="ffff ffff ffff ffff"
-                                    maxlength="16" required>
+
+                            <!-- Campos de tarjeta — se muestran solo si método = tarjeta -->
+                            <div id="campos-tarjeta">
+                                <div class="row g-3 mt-1">
+
+                                    <div class="col-12">
+                                        <label for="cc-name" class="form-label fw-semibold">
+                                            Nombre en la tarjeta
+                                        </label>
+                                        <input type="text" class="form-control" id="cc-name"
+                                               placeholder="Igual que en la tarjeta" required>
+                                        <div class="invalid-feedback">Ingresa el nombre de la tarjeta.</div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="cc-number" class="form-label fw-semibold">
+                                            Número de tarjeta
+                                        </label>
+                                        <input type="text" class="form-control" id="cc-number"
+                                               placeholder="1234 5678 9012 3456"
+                                               maxlength="16" required>
+                                        <div class="invalid-feedback">Debe tener 16 dígitos.</div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <label for="cc-expiration" class="form-label fw-semibold">
+                                            Expiración
+                                        </label>
+                                        <input type="text" class="form-control" id="cc-expiration"
+                                               placeholder="MM/AA" maxlength="5" required>
+                                        <div class="invalid-feedback">Formato MM/AA.</div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <label for="cc-cvv" class="form-label fw-semibold">CVV</label>
+                                        <input type="text" class="form-control" id="cc-cvv"
+                                               placeholder="000" maxlength="4" required>
+                                        <div class="invalid-feedback">3 o 4 dígitos.</div>
+                                    </div>
+
+                                </div>
                             </div>
-                            <div class="col-md-3">
-                                <label for="cc-expiration" class="form-label fw-semibold">Expiración</label>
-                                <input type="text" class="form-control" id="cc-expiration" placeholder="MM/AA"
-                                    maxlength="5" required>
+
+                            <!-- Placeholder para PayPal / MercadoPago -->
+                            <div id="campos-externo" class="d-none">
+                                <div class="alert alert-info d-flex align-items-center gap-2 mt-2" role="alert">
+                                    <i class="bi bi-info-circle-fill fs-5"></i>
+                                    <span>
+                                        Serás redirigido a la pasarela de pago seleccionada
+                                        al confirmar tu pedido.
+                                    </span>
+                                </div>
                             </div>
-                            <div class="col-md-3">
-                                <label for="cc-cvv" class="form-label fw-semibold">CVV</label>
-                                <input type="text" class="form-control" id="cc-cvv" placeholder="000" maxlength="4"
-                                    required>
-                            </div>
+
                         </div>
 
                         <div id="checkout-alert-container"></div>
 
-                        <button class="btn btn-checkout-submit w-100 py-3 fw-bold text-white mt-3" type="submit">
+                        <button class="btn btn-checkout-submit w-100 py-3 fw-bold text-white mt-3"
+                                type="submit">
                             PAGAR AHORA
                         </button>
+
                     </form>
                 </div>
             </div>
@@ -98,8 +227,10 @@
 
     <div id="footer-container"></div>
 
-    <div class="modal fade" id="modalExitoPago" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="modalExitoPagoLabel" aria-hidden="true">
+    <!-- Modal de éxito -->
+    <div class="modal fade" id="modalExitoPago"
+         data-bs-backdrop="static" data-bs-keyboard="false"
+         tabindex="-1" aria-labelledby="modalExitoPagoLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow-lg">
                 <div class="modal-header modal-header-exito text-white text-center d-block py-3">
@@ -108,16 +239,16 @@
                 <div class="modal-content-body text-center p-4">
                     <i class="bi bi-check-circle-fill display-1 d-block mb-3 text-orange"></i>
                     <h4 class="fw-bold mb-2 text-dark">¡Gracias por tu compra!</h4>
-                    <p class="text-muted">Tu pago ha sido procesado con éxito. Oficialmente ya eres parte del
+                    <p class="text-muted">
+                        Tu pago ha sido procesado con éxito. Oficialmente ya eres parte del
                         <strong>Team KinetixFit</strong>.
                     </p>
-                    <p class="small text-secondary">Tu comprobante y detalles de envío han sido enviados a tu correo
-                        electrónico.</p>
+                    <p class="small text-secondary" id="modal-referencia-pago"></p>
                 </div>
                 <div class="modal-footer justify-content-center border-0 pb-4">
                     <button type="button" id="btn-cerrar-exito"
-                        class="btn btn-exito px-5 py-2 fw-bold rounded-pill shadow-sm">
-                        VOLVER AL INICIO
+                            class="btn btn-exito px-5 py-2 fw-bold rounded-pill shadow-sm">
+                        VOLVER Al CATALOGO
                     </button>
                 </div>
             </div>
@@ -126,8 +257,9 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="./js/layout.js"></script>
+    <script src="./js/carritoApi.js"></script>
     <script src="./js/checkout.js"></script>
     <script src="./js/auth.js"></script>
-</body>
 
+</body>
 </html>
